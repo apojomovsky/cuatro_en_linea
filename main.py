@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 import sys
 
+class ColumnIsFull(Exception):
+    pass
+
 class Tablero(object):
     def __init__(self, intRows, intColumns):
         if intRows > 0 and intColumns > 0:
@@ -23,7 +26,7 @@ class Tablero(object):
             rowIndex = self.rows - list(reversed([row[columnIndex - 1] for row in self.gameboard])).index(None) - 1
             self.gameboard[rowIndex][columnIndex - 1] = color
         except ValueError:
-            print "The column you're trying to access is already full."
+            raise ColumnIsFull()
 
     def read_entry(self, rowIndex, columnIndex):
         try:
