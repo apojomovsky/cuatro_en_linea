@@ -1,16 +1,35 @@
-import unittest
-from main import Tablero
-from main import ColumnIsFull
+#!/usr/bin/env python
 
-class TestTablero(unittest.TestCase):
+import unittest
+from main import GameBoard
+from main import ColumnIsFull
+from main import OutOfIndex
+
+class TestGameBoard(unittest.TestCase):
     def test_put_chip(self):
-        tablero = Tablero(2,2)
-        tablero.put_chip(2, 'rojo')
-        self.assertEqual(tablero.read_entry(2, 2), 'rojo')
-        tablero.put_chip(2, 'azul')
-        self.assertEqual(tablero.read_entry(1, 2), 'azul')
+        game = GameBoard()
+        game.put_chip(2, 'rojo')
+        self.assertEqual(game.read_entry(6, 2), 'rojo')
+        game.put_chip(2, 'azul')
+        self.assertEqual(game.read_entry(5, 2), 'azul')
+        game.put_chip(2, 'azul')
+        game.put_chip(2, 'azul')
+        game.put_chip(2, 'azul')
+        game.put_chip(2, 'azul')
         with self.assertRaises(ColumnIsFull):
-            tablero.put_chip(2, 'amarillo')
+            game.put_chip(2, 'amarillo')
+
+    def test_read_entry(self):
+        game = GameBoard()
+        game.put_chip(1, 'rojo')
+        self.assertEqual(game.read_entry(6, 1), 'rojo')
+        self.assertEqual(game.read_entry(5, 1), None)
+        game.put_chip(1, 'azul')
+        self.assertEqual(game.read_entry(5, 1), 'azul')
+        with self.assertRaises(OutOfIndex):
+          game.read_entry(7, 7)
+          game.read_entry(6, 8)
+
 
 if __name__ == '__main__':
     unittest.main()
