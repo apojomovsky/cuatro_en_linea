@@ -6,6 +6,7 @@ from gameboard import ColumnIsFull
 from gameboard import OutOfIndex
 
 class TestGameBoard(unittest.TestCase):
+
     def test_put_chip(self):
         game = GameBoard()
         # test if red chip is put at the bottom of the column
@@ -34,7 +35,7 @@ class TestGameBoard(unittest.TestCase):
         self.assertEqual(game.read_entry(1, 1), 'red')
 
         # test that there is an empty cell above the red one
-        self.assertEqual(game.read_entry(2, 1), None)
+        self.assertEqual(game.read_entry(2, 1), '-')
 
         # put a blue chipe above the red and test if true
         game.put_chip(1, 'blue')
