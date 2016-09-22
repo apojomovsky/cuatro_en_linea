@@ -29,10 +29,20 @@ class GameBoard(object):
         self.winner = None
 
     def generate_matrix(self, rows, columns, fill):
+        """Return a numpy matrix of the desired dimensions
+
+        Args:
+            rows: the desired number of rows
+            columns: the desired number of columns
+            fill: the desired character or string to fill the matrix with
+        Returns:
+            a numpy array
+        """
         charar = np.full((rows, columns), fill, dtype='a5')
         return charar
 
     def show(self):
+        """Print the game board in a nice format"""
         for row in self.matrix:
             for entry in row:
                 print '{:4}'.format(entry),
@@ -43,6 +53,12 @@ class GameBoard(object):
         return self.matrix[:, columnIndex - 1][::-1]
 
     def put_chip(self, columnIndex, color):
+        """Inserts a new chip into the game matrix
+
+        Args:
+            columnIndex: the column where the chip is being put
+            color: the color of the chip
+        """
         try:
             rowIndex = self.ROWSCOUNT - \
                 list(self.retreive_column(columnIndex)).index('-') - 1
@@ -51,6 +67,15 @@ class GameBoard(object):
             raise ColumnIsFull(columnIndex)
 
     def read_entry(self, rowIndex, columnIndex):
+        """Read a determined entry from the game matrix
+
+        Args:
+            rows: the desired number of rows
+            columns: the desired number of columns
+            fill: the desired character or string to fill the matrix with
+        Returns:
+            the value encountered on the entry
+        """
         if rowIndex <= self.ROWSCOUNT:
             if columnIndex <= self.COLUMNSCOUNT:
                 entry = self.matrix[self.ROWSCOUNT - rowIndex][columnIndex - 1]
@@ -60,15 +85,24 @@ class GameBoard(object):
             raise OutOfIndex({'type': 'row', 'index': rowIndex})
         return entry
 
-    def array_in_array(self, array1, array2):
-        for i in range(len(array2) - len(array1) + 1):
-            if array1.tolist() == array2[i:len(array1) + i].tolist():
+    def array_in_array(self, array_small, array_big):
+        """Check if an array is part of another array
+
+        Args:
+            array_small: the array to be checked as part of array_big
+            array_big: the array where array_small will be searched
+        Returns:
+            a boolean value with the result of the search
+        """
+        for i in range(len(array_big) - len(array_small) + 1):
+            if array_small.tolist() == array_big[i:len(array_small) + i].tolist():
                 return True
             else:
                 continue
         return False
 
     def check_rows(self):
+        """Check if there's a winner row-wise"""
         for i in range(self.ROWSCOUNT):
             if self.array_in_array(self.TEST_ARRAY_RED, self.matrix[i]):
                 self.winner = 'red'
@@ -79,6 +113,7 @@ class GameBoard(object):
         return False
 
     def check_columns(self):
+        """Check if there's a winner column-wise"""
         for i in range(self.COLUMNSCOUNT):
             if self.array_in_array(
                     self.TEST_ARRAY_RED,
@@ -93,6 +128,7 @@ class GameBoard(object):
         return False
 
     def check_diagonals(self):
+        """Check if there's a winner diagonal-wise"""
         for i in range(-2, 4):
             if self.array_in_array(
                 self.TEST_ARRAY_RED,
@@ -113,6 +149,7 @@ class GameBoard(object):
         return False
 
     def winner_exists(self):
+        """Check if there's a winner of the game and prints a message"""
         self.check_rows()
         self.check_columns()
         self.check_diagonals()
