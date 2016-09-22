@@ -3,14 +3,19 @@
 import sys
 import numpy as np
 
+
 class ColumnIsFull(Exception):
-    def __init___(self,columnIndex):
+
+    def __init___(self, columnIndex):
         self.failedColumnIndex = columnIndex
 
+
 class OutOfIndex(Exception):
-    def __init___(self,errArguments):
+
+    def __init___(self, errArguments):
         self.arrayType = errArguments['type']
         self.index = errArguments['index']
+
 
 class GameBoard(object):
     ROWSCOUNT = 6
@@ -19,7 +24,8 @@ class GameBoard(object):
     TEST_ARRAY_BLUE = np.full(4, 'blue', dtype='a5')
 
     def __init__(self):
-        self.matrix = self.generate_matrix(self.ROWSCOUNT, self.COLUMNSCOUNT, '-')
+        self.matrix = self.generate_matrix(
+            self.ROWSCOUNT, self.COLUMNSCOUNT, '-')
         self.winner = None
 
     def generate_matrix(self, rows, columns, fill):
@@ -34,11 +40,12 @@ class GameBoard(object):
         print
 
     def retreive_column(self, columnIndex):
-        return self.matrix[:,columnIndex - 1][::-1]
+        return self.matrix[:, columnIndex - 1][::-1]
 
     def put_chip(self, columnIndex, color):
         try:
-            rowIndex = self.ROWSCOUNT - list(self.retreive_column(columnIndex)).index('-') - 1
+            rowIndex = self.ROWSCOUNT - \
+                list(self.retreive_column(columnIndex)).index('-') - 1
             self.matrix[rowIndex][columnIndex - 1] = color.lower()
         except ValueError:
             raise ColumnIsFull(columnIndex)
@@ -55,7 +62,7 @@ class GameBoard(object):
 
     def array_in_array(self, array1, array2):
         for i in range(len(array2) - len(array1) + 1):
-            if array1.tolist() == array2[i:len(array1)+i].tolist():
+            if array1.tolist() == array2[i:len(array1) + i].tolist():
                 return True
             else:
                 continue
@@ -73,24 +80,36 @@ class GameBoard(object):
 
     def check_columns(self):
         for i in range(self.COLUMNSCOUNT):
-            if self.array_in_array(self.TEST_ARRAY_RED, self.retreive_column(i)):
+            if self.array_in_array(
+                    self.TEST_ARRAY_RED,
+                    self.retreive_column(i)):
                 self.winner = 'red'
                 return True
-            if self.array_in_array(self.TEST_ARRAY_BLUE, self.retreive_column(i)):
+            if self.array_in_array(
+                    self.TEST_ARRAY_BLUE,
+                    self.retreive_column(i)):
                 self.winner = 'blue'
                 return True
         return False
 
     def check_diagonals(self):
-        for i in range(-2,4):
-            if self.array_in_array(self.TEST_ARRAY_RED, self.matrix.diagonal(i)) or \
-               self.array_in_array(self.TEST_ARRAY_RED, np.flipud(self.matrix).diagonal(i)):
-                    self.winner = 'red'
-                    return True
-            if self.array_in_array(self.TEST_ARRAY_BLUE, self.matrix.diagonal(i)) or \
-               self.array_in_array(self.TEST_ARRAY_BLUE, np.flipud(self.matrix).diagonal(i)):
-                    self.winner = 'blue'
-                    return True
+        for i in range(-2, 4):
+            if self.array_in_array(
+                self.TEST_ARRAY_RED,
+                self.matrix.diagonal(i)) or self.array_in_array(
+                self.TEST_ARRAY_RED,
+                np.flipud(
+                    self.matrix).diagonal(i)):
+                self.winner = 'red'
+                return True
+            if self.array_in_array(
+                self.TEST_ARRAY_BLUE,
+                self.matrix.diagonal(i)) or self.array_in_array(
+                self.TEST_ARRAY_BLUE,
+                np.flipud(
+                    self.matrix).diagonal(i)):
+                self.winner = 'blue'
+                return True
         return False
 
     def winner_exists(self):
