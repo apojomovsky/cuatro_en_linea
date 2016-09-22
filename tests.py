@@ -1,51 +1,59 @@
 #!/usr/bin/env python
 
 import unittest
+import numpy as np
 from gameboard import GameBoard
 from gameboard import ColumnIsFull
 from gameboard import OutOfIndex
 
 class TestGameBoard(unittest.TestCase):
 
+    def setUp(self):
+        self.game = GameBoard()
+        self.reference_matrix = np.array([['-'   , '-'   , '-'   , '-'   , '-', '-', '-'], \
+                                          ['blue', '-'   , '-'   , '-'   , '-', '-', '-'], \
+                                          ['red' , '-'   , 'red' , '-'   , '-', '-', '-'], \
+                                          ['blue', 'blue', 'red' , 'red' , '-', '-', '-'], \
+                                          ['red' , 'red' , 'red' , 'blue', '-', '-', '-'], \
+                                          ['red' , 'blue', 'blue', 'blue', '-', '-', '-']], dtype='a5')
+
     def test_put_chip(self):
-        game = GameBoard()
-        # test if red chip is put at the bottom of the column
-        game.put_chip(2, 'red')
-        self.assertEqual(game.read_entry(1, 2), 'red')
-
-        # test if blue chip is put above the red one
-        game.put_chip(2, 'blue')
-        self.assertEqual(game.read_entry(2, 2), 'blue')
-
-        # fill the column with blue chips
-        game.put_chip(2, 'blue')
-        game.put_chip(2, 'blue')
-        game.put_chip(2, 'blue')
-        game.put_chip(2, 'blue')
-
-        # test if column is full
+        self.game.put_chip(3, 'red')
+        self.assertEqual(self.game.matrix[:,2][5], 'red')
+        self.game.put_chip(3, 'blue')
+        self.assertEqual(self.game.matrix[:,2][4], 'blue')
+        self.game.matrix = self.reference_matrix
+        self.game.put_chip(1, 'red')
         with self.assertRaises(ColumnIsFull):
-            game.put_chip(2, 'yellow')
+            self.game.put_chip(1, 'red')
 
     def test_read_entry(self):
-        game = GameBoard()
-
-        # put a red chip into column 1 and test if true
-        game.put_chip(1, 'red')
-        self.assertEqual(game.read_entry(1, 1), 'red')
-
-        # test that there is an empty cell above the red one
-        self.assertEqual(game.read_entry(2, 1), '-')
-
-        # put a blue chipe above the red and test if true
-        game.put_chip(1, 'blue')
-        self.assertEqual(game.read_entry(2, 1), 'blue')
-
-        # test invalid entries to raise an error
+        self.game.matrix = self.reference_matrix
+        self.assertEqual(self.game.read_entry(1,1),'red')
+        self.assertEqual(self.game.read_entry(2,1),'red')
+        self.assertEqual(self.game.read_entry(1,2),'blue')
         with self.assertRaises(OutOfIndex):
-          game.read_entry(7, 7)
-          game.read_entry(6, 8)
+            self.game.read_entry(7,1)
+        with self.assertRaises(OutOfIndex):
+            self.game.read_entry(1,8)
 
+    def test_check_rows(self):
+        self.game.matrix = self.reference_matrix
+        self.assertEqual(self.game.check_rows(), False)
+        self.game.matrix[:,4][5] = 'blue'
+        self.assertEqual(self.game.check_rows(), True)
+
+    def test_check_columns(self):
+        self.game.matrix = self.reference_matrix
+        self.assertEqual(self.game.check_columns(), False)
+        self.game.matrix[:,2][1] = 'red'
+        self.assertEqual(self.game.check_columns(), True)
+
+    def test_check_diagonals(self):
+        self.game.matrix = self.reference_matrix
+        self.assertEqual(self.game.check_diagonals(), False)
+        self.game.matrix[:,3][2] = 'red'
+        self.assertEqual(self.game.check_diagonals(), True)
 
 if __name__ == '__main__':
     unittest.main()

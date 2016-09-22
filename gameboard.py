@@ -81,12 +81,22 @@ class GameBoard(object):
                 return True
         return False
 
-#    def check_diagonals(self):
+    def check_diagonals(self):
+        for i in range(-2,4):
+            if self.array_in_array(self.TEST_ARRAY_RED, self.matrix.diagonal(i)) or \
+               self.array_in_array(self.TEST_ARRAY_RED, np.flipud(self.matrix).diagonal(i)):
+                    self.winner = 'red'
+                    return True
+            if self.array_in_array(self.TEST_ARRAY_BLUE, self.matrix.diagonal(i)) or \
+               self.array_in_array(self.TEST_ARRAY_BLUE, np.flipud(self.matrix).diagonal(i)):
+                    self.winner = 'blue'
+                    return True
+        return False
 
     def winner_exists(self):
         self.check_rows()
         self.check_columns()
-        #check_diagonals()
+        self.check_diagonals()
         if self.winner:
             print "Color {0} is the new winner!".format(self.winner.capitalize())
             sys.exit(1)
