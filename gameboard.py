@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 
 import sys
-import numpy as np
+import numpy
 
 
 class ColumnIsFull(Exception):
 
-    def __init___(self, columnIndex):
-        self.failedColumnIndex = columnIndex
+    def __init___(self, column_index):
+        self.failedcolumn_index = column_index
 
 
 class OutOfIndex(Exception):
@@ -20,15 +20,15 @@ class OutOfIndex(Exception):
 class GameBoard(object):
     ROWSCOUNT = 6
     COLUMNSCOUNT = 7
-    TEST_ARRAY_RED = np.full(4, 'red', dtype='a5')
-    TEST_ARRAY_BLUE = np.full(4, 'blue', dtype='a5')
+    TEST_ARRAY_RED = numpy.full(4, 'red', dtype='a5')
+    TEST_ARRAY_BLUE = numpy.full(4, 'blue', dtype='a5')
 
     def __init__(self):
-        self.matrix = self.generate_matrix(
+        self._matrix = self._generate_matrix(
             self.ROWSCOUNT, self.COLUMNSCOUNT, '-')
-        self.winner = None
+        self._winner = None
 
-    def generate_matrix(self, rows, columns, fill):
+    def _generate_matrix(self, rows, columns, fill):
         """Return a numpy matrix of the desired dimensions
 
         Args:
@@ -38,54 +38,22 @@ class GameBoard(object):
         Returns:
             a numpy array
         """
-        charar = np.full((rows, columns), fill, dtype='a5')
-        return charar
+        char_array = numpy.full((rows, columns), fill, dtype='a5')
+        return char_array
 
     def show(self):
         """Print the game board in a nice format"""
-        for row in self.matrix:
+        for row in self._matrix:
             for entry in row:
                 print '{:4}'.format(entry),
             print
         print
 
-    def retreive_column(self, columnIndex):
-        return self.matrix[:, columnIndex - 1][::-1]
+    def _retreive_column(self, column_index):
+        return self._matrix[:, column_index - 1][::-1]
 
-    def put_chip(self, columnIndex, color):
-        """Inserts a new chip into the game matrix
 
-        Args:
-            columnIndex: the column where the chip is being put
-            color: the color of the chip
-        """
-        try:
-            rowIndex = self.ROWSCOUNT - \
-                list(self.retreive_column(columnIndex)).index('-') - 1
-            self.matrix[rowIndex][columnIndex - 1] = color.lower()
-        except ValueError:
-            raise ColumnIsFull(columnIndex)
-
-    def read_entry(self, rowIndex, columnIndex):
-        """Read a determined entry from the game matrix
-
-        Args:
-            rows: the desired number of rows
-            columns: the desired number of columns
-            fill: the desired character or string to fill the matrix with
-        Returns:
-            the value encountered on the entry
-        """
-        if rowIndex <= self.ROWSCOUNT:
-            if columnIndex <= self.COLUMNSCOUNT:
-                entry = self.matrix[self.ROWSCOUNT - rowIndex][columnIndex - 1]
-            else:
-                raise OutOfIndex({'type': 'column', 'number': columnIndex})
-        else:
-            raise OutOfIndex({'type': 'row', 'index': rowIndex})
-        return entry
-
-    def array_in_array(self, array_small, array_big):
+    def _array_in_array(self, array_small, array_big):
         """Check if an array is part of another array
 
         Args:
@@ -101,60 +69,125 @@ class GameBoard(object):
                 continue
         return False
 
-    def check_rows(self):
+    def _check_rows(self):
         """Check if there's a winner row-wise"""
         for i in range(self.ROWSCOUNT):
-            if self.array_in_array(self.TEST_ARRAY_RED, self.matrix[i]):
-                self.winner = 'red'
+            if self._array_in_array(self.TEST_ARRAY_RED, self._matrix[i]):
+                self._winner = 'red'
                 return True
-            if self.array_in_array(self.TEST_ARRAY_BLUE, self.matrix[i]):
-                self.winner = 'blue'
+            if self._array_in_array(self.TEST_ARRAY_BLUE, self._matrix[i]):
+                self._winner = 'blue'
                 return True
         return False
 
-    def check_columns(self):
+    def _check_columns(self):
         """Check if there's a winner column-wise"""
         for i in range(self.COLUMNSCOUNT):
-            if self.array_in_array(
+            if self._array_in_array(
                     self.TEST_ARRAY_RED,
-                    self.retreive_column(i)):
-                self.winner = 'red'
+                    self._retreive_column(i)):
+                self._winner = 'red'
                 return True
-            if self.array_in_array(
+            if self._array_in_array(
                     self.TEST_ARRAY_BLUE,
-                    self.retreive_column(i)):
-                self.winner = 'blue'
+                    self._retreive_column(i)):
+                self._winner = 'blue'
                 return True
         return False
 
-    def check_diagonals(self):
+    def _check_diagonals(self):
         """Check if there's a winner diagonal-wise"""
         for i in range(-2, 4):
-            if self.array_in_array(
+            if self._array_in_array(
                 self.TEST_ARRAY_RED,
-                self.matrix.diagonal(i)) or self.array_in_array(
+                self._matrix.diagonal(i)) or self._array_in_array(
                 self.TEST_ARRAY_RED,
-                np.flipud(
-                    self.matrix).diagonal(i)):
-                self.winner = 'red'
+                numpy.flipud(
+                    self._matrix).diagonal(i)):
+                self._winner = 'red'
                 return True
-            if self.array_in_array(
+            if self._array_in_array(
                 self.TEST_ARRAY_BLUE,
-                self.matrix.diagonal(i)) or self.array_in_array(
+                self._matrix.diagonal(i)) or self._array_in_array(
                 self.TEST_ARRAY_BLUE,
-                np.flipud(
-                    self.matrix).diagonal(i)):
-                self.winner = 'blue'
+                numpy.flipud(
+                    self._matrix).diagonal(i)):
+                self._winner = 'blue'
                 return True
         return False
+
+    def _validate_matrix(self, matrix_to_test):
+        """Checks if an input matrix have valid characters and structure
+
+        Args:
+            matrix_to_test: numpy array with dtype='a5'
+        Returns
+            a boolean value
+        """
+        valid_entries = ('-', 'blue', 'red')
+        if matrix_to_test.shape != (6,7):
+            return False
+        for row in matrix_to_test:
+            for entry in row:
+                if entry in valid_entries:
+                    pass
+                else:
+                    return False
+        # TODO: Add structure validation (no floating entries on matrix)
+        return True
+
+    def set_board_from_matrix(self, external_matrix):
+        """Set the internal game matrix with an external one, only if valid
+
+        Args:
+            external_matrix: numpy array with dtype='a5'
+        Returns
+            a boolean value
+        """
+        if self._validate_matrix(external_matrix):
+            self._matrix = external_matrix
+            return True
+        return False
+
+    def put_chip(self, column_index, color):
+        """Inserts a new chip into the game matrix
+
+        Args:
+            column_index: the column where the chip is being put
+            color: the color of the chip
+        """
+        try:
+            rowIndex = self.ROWSCOUNT - \
+                list(self._retreive_column(column_index)).index('-') - 1
+            self._matrix[rowIndex][column_index - 1] = color.lower()
+        except ValueError:
+            raise ColumnIsFull(column_index)
+
+    def read_entry(self, rowIndex, column_index):
+        """Read a determined entry from the game matrix
+
+        Args:
+            rows: the desired number of rows
+            columns: the desired number of columns
+            fill: the desired character or string to fill the matrix with
+        Returns
+            the value encountered on the entry
+        """
+        if rowIndex <= self.ROWSCOUNT:
+            if column_index <= self.COLUMNSCOUNT:
+                entry = self._matrix[self.ROWSCOUNT - rowIndex][column_index - 1]
+            else:
+                raise OutOfIndex({'type': 'column', 'number': column_index})
+        else:
+            raise OutOfIndex({'type': 'row', 'index': rowIndex})
+        return entry
 
     def winner_exists(self):
         """Check if there's a winner of the game and prints a message"""
-        self.check_rows()
-        self.check_columns()
-        self.check_diagonals()
-        if self.winner:
-            print "Color {0} is the new winner!".format(self.winner.capitalize())
-            sys.exit(1)
+        self._check_rows()
+        self._check_columns()
+        self._check_diagonals()
+        if self._winner:
+            return True
         else:
-            print "Nope"
+            return False
