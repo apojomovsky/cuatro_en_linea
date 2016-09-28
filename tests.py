@@ -5,6 +5,7 @@ import numpy
 from gameboard import GameBoard
 from gameboard import ColumnIsFull
 from gameboard import OutOfIndex
+from match import Match
 
 
 class TestGameBoard(unittest.TestCase):
@@ -102,6 +103,15 @@ class TestGameBoard(unittest.TestCase):
         self.assertEqual(self.game.winner_exists(), False)
         self.game.put_chip(1, 'red')
         self.assertEqual(self.game.winner_exists(), True)
+
+
+class TestMatch(unittest.TestCase):
+    def setUp(self):
+        self.match = Match()
+
+    def test_automatic_playing(self):
+        self.assertTrue(self.match.automatic_playing())
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -20,8 +20,8 @@ class OutOfIndex(Exception):
 class GameBoard(object):
     ROWSCOUNT = 6
     COLUMNSCOUNT = 7
-    TEST_ARRAY_RED = numpy.full(4, 'red', dtype='a5')
-    TEST_ARRAY_BLUE = numpy.full(4, 'blue', dtype='a5')
+    FOUR_RED_IN_A_ROW = numpy.full(4, 'red', dtype='a5')
+    FOUR_BLUE_IN_A_ROW = numpy.full(4, 'blue', dtype='a5')
 
     def __init__(self):
         self._matrix = self._generate_matrix(
@@ -41,19 +41,11 @@ class GameBoard(object):
         char_array = numpy.full((rows, columns), fill, dtype='a5')
         return char_array
 
-    def show(self):
-        """Print the game board in a nice format"""
-        for row in self._matrix:
-            for entry in row:
-                print '{:4}'.format(entry),
-            print
-        print
-
     def _retreive_column(self, column_index):
         return self._matrix[:, column_index - 1][::-1]
 
 
-    def _array_in_array(self, array_small, array_big):
+    def _array_contains(self, array_small, array_big):
         """Check if an array is part of another array
 
         Args:
@@ -69,50 +61,34 @@ class GameBoard(object):
                 continue
         return False
 
-    def _check_rows(self):
+    def _winner_in_array(self, testing_array):
+        if self._array_contains(self.FOUR_RED_IN_A_ROW, testing_array):
+            self._winner = 'red'
+            return True
+        elif self._array_contains(self.FOUR_BLUE_IN_A_ROW, testing_array):
+            self._winner = 'blue'
+            return True
+        else:
+            return False
+
+    def _check_rows_for_winner(self):
         """Check if there's a winner row-wise"""
         for i in range(self.ROWSCOUNT):
-            if self._array_in_array(self.TEST_ARRAY_RED, self._matrix[i]):
-                self._winner = 'red'
-                return True
-            if self._array_in_array(self.TEST_ARRAY_BLUE, self._matrix[i]):
-                self._winner = 'blue'
+            if self._winner_in_array(self._matrix[i]):
                 return True
         return False
 
-    def _check_columns(self):
+    def _check_columns_for_winner(self):
         """Check if there's a winner column-wise"""
         for i in range(self.COLUMNSCOUNT):
-            if self._array_in_array(
-                    self.TEST_ARRAY_RED,
-                    self._retreive_column(i)):
-                self._winner = 'red'
-                return True
-            if self._array_in_array(
-                    self.TEST_ARRAY_BLUE,
-                    self._retreive_column(i)):
-                self._winner = 'blue'
+            if self._winner_in_array(self._retreive_column(i)):
                 return True
         return False
 
-    def _check_diagonals(self):
+    def _check_diagonals_for_winner(self):
         """Check if there's a winner diagonal-wise"""
         for i in range(-2, 4):
-            if self._array_in_array(
-                self.TEST_ARRAY_RED,
-                self._matrix.diagonal(i)) or self._array_in_array(
-                self.TEST_ARRAY_RED,
-                numpy.flipud(
-                    self._matrix).diagonal(i)):
-                self._winner = 'red'
-                return True
-            if self._array_in_array(
-                self.TEST_ARRAY_BLUE,
-                self._matrix.diagonal(i)) or self._array_in_array(
-                self.TEST_ARRAY_BLUE,
-                numpy.flipud(
-                    self._matrix).diagonal(i)):
-                self._winner = 'blue'
+            if self._winner_in_array(self._matrix.diagonal(i)) or self._winner_in_array(numpy.flipud(self._matrix).diagonal(i)):
                 return True
         return False
 
@@ -133,8 +109,16 @@ class GameBoard(object):
                     pass
                 else:
                     return False
-        # TODO: Add structure validation (no floating entries on matrix)
+        # TODO: Add structure validation (no "floating" entries in matrix)
         return True
+
+    def show(self):
+        """Print the game board in a nice format"""
+        for row in self._matrix:
+            for entry in row:
+                print '{:4}'.format(entry),
+            print
+        print
 
     def set_board_from_matrix(self, external_matrix):
         """Set the internal game matrix with an external one, only if valid
@@ -184,9 +168,9 @@ class GameBoard(object):
 
     def winner_exists(self):
         """Check if there's a winner of the game and prints a message"""
-        self._check_rows()
-        self._check_columns()
-        self._check_diagonals()
+        self._check_rows_for_winner()
+        self._check_columns_for_winner()
+        self._check_diagonals_for_winner()
         if self._winner:
             return True
         else:
