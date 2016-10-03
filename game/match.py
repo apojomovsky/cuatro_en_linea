@@ -1,4 +1,4 @@
-from gameboard import GameBoard
+from .gameboard import GameBoard
 import time
 
 class Match(object):

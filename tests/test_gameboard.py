@@ -1,37 +1,32 @@
 #!/usr/bin/env python
 
 import unittest
-from gameboard import GameBoard
-from gameboard import ColumnIsFull
-from gameboard import OutOfIndex
-from match import Match
-
+from game.gameboard import GameBoard
+from game.gameboard import ColumnIsFull
+from game.gameboard import OutOfIndex
 
 class TestGameBoard(unittest.TestCase):
 
     def setUp(self):
         self.board = GameBoard()
-
         self.board_test_rows = GameBoard.from_matrix([
-                    [None,    'red',  'red',  'red',   None,   None, None],
+                    [None,   'red',  'red',  'red',   None,   None, None],
                     ['red', 'blue',  'red', 'blue',   None,   None, None],
                     ['blue', 'red', 'blue',  'red',   None,   None, None],
                     ['blue', 'red',  'red', 'blue',   None,   None, None],
                     ['red', 'blue',  'red', 'blue',   None,   None, None],
-                    ['blue', 'red', 'blue',  'red', 'red', 'red', None]])
-
+                    ['blue', 'red', 'blue',  'red',  'red',  'red', None]])
         self.board_test_columns = GameBoard.from_matrix([
-                    [None,    None, None, None, None, None,    None],
+                    [None,   None, None, None, None, None,   None],
                     ['blue', None, None, None, None, None, 'blue'],
                     ['blue', None, None, None, None, None, 'blue'],
                     ['blue', None, None, None, None, None, 'blue'],
                     ['red',  None, None, None, None, None,  'red'],
                     ['red',  None, None, None, None, None,  'red']])
-
         self.board_test_diagonals = GameBoard.from_matrix([
-                    [None,       None,    None,    None,    None,    None,    None],
-                    ['red',   'red',    None,    None,    None,  'red', 'blue'],
-                    ['blue', 'blue',  'red',    None,  'red', 'blue',  'red'],
+                    [None,     None,   None,   None,   None,   None,   None],
+                    ['red',   'red',   None,   None,   None,  'red', 'blue'],
+                    ['blue', 'blue',  'red',   None,  'red', 'blue',  'red'],
                     ['red',  'blue',  'red',  'red',  'red', 'blue', 'blue'],
                     ['blue',  'red', 'blue', 'blue', 'blue',  'red',  'red'],
                     ['red',  'blue', 'blue',  'red', 'blue',  'red', 'blue']])
@@ -94,14 +89,6 @@ class TestGameBoard(unittest.TestCase):
         self.assertEqual(self.board_test_diagonals.winner_exists(), False)
         self.board_test_diagonals.put_chip(7, 'red')
         self.assertEqual(self.board_test_diagonals.winner_exists(), True)
-
-
-class TestMatch(unittest.TestCase):
-    def setUp(self):
-        self.match = Match()
-
-    def test_automatic_playing(self):
-        self.assertTrue(self.match.automatic_playing())
 
 
 if __name__ == '__main__':

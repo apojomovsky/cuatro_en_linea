@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 import numpy
 
-
 class ColumnIsFull(Exception):
 
     def __init___(self, column_index):
