@@ -20,8 +20,6 @@ class OutOfIndex(Exception):
 class GameBoard(object):
     ROWSCOUNT = 6
     COLUMNSCOUNT = 7
-    FOUR_RED_IN_A_ROW = numpy.full(4, 'red', dtype='a5')
-    FOUR_BLUE_IN_A_ROW = numpy.full(4, 'blue', dtype='a5')
 
     def __init__(self):
         self._matrix = self._generate_matrix(
@@ -62,10 +60,12 @@ class GameBoard(object):
         return False
 
     def _winner_in_array(self, testing_array):
-        if self._array_contains(self.FOUR_RED_IN_A_ROW, testing_array):
+        FOUR_RED_IN_A_ROW = numpy.full(4, 'red', dtype='a5')
+        FOUR_BLUE_IN_A_ROW = numpy.full(4, 'blue', dtype='a5')
+        if self._array_contains(FOUR_RED_IN_A_ROW, testing_array):
             self._winner = 'red'
             return True
-        elif self._array_contains(self.FOUR_BLUE_IN_A_ROW, testing_array):
+        elif self._array_contains(FOUR_BLUE_IN_A_ROW, testing_array):
             self._winner = 'blue'
             return True
         else:
