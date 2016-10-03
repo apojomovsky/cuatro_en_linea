@@ -21,7 +21,7 @@ class GameBoard(object):
 
     def __init__(self):
         self._matrix = self._generate_matrix(
-            self.ROWSCOUNT, self.COLUMNSCOUNT, '-')
+            self.ROWSCOUNT, self.COLUMNSCOUNT, None)
         self._winner = None
 
     def put_chip(self, column_index, color):
@@ -33,7 +33,7 @@ class GameBoard(object):
         """
         try:
             rowIndex = self.ROWSCOUNT - \
-                list(self._retreive_column(column_index)).index('-') - 1
+                list(self._retreive_column(column_index)).index(None) - 1
             self._matrix[rowIndex][column_index - 1] = color.lower()
         except ValueError:
             raise ColumnIsFull(column_index)
@@ -79,12 +79,13 @@ class GameBoard(object):
         """Set the internal game matrix with an external one, only if valid
 
         Args:
-            external_matrix: numpy array with dtype='a5'
+            external_matrix: numpy array with dtype=object
         Returns
             a boolean value
         """
-        if self._validate_matrix(matrix):
-            self._matrix = matrix
+        numpy_matrix = numpy.asarray(matrix)
+        if self._validate_matrix(numpy_matrix):
+            self._matrix = numpy_matrix
             return True
         return False
 
@@ -98,7 +99,7 @@ class GameBoard(object):
         Returns:
             a numpy array
         """
-        char_array = numpy.full((rows, columns), fill, dtype='a5')
+        char_array = numpy.full((rows, columns), fill, dtype=object)
         return char_array
 
     def _retreive_column(self, column_index):
@@ -122,8 +123,8 @@ class GameBoard(object):
         return False
 
     def _winner_in_array(self, testing_array):
-        FOUR_RED_IN_A_ROW = numpy.full(4, 'red', dtype='a5')
-        FOUR_BLUE_IN_A_ROW = numpy.full(4, 'blue', dtype='a5')
+        FOUR_RED_IN_A_ROW = numpy.full(4, 'red', dtype=object)
+        FOUR_BLUE_IN_A_ROW = numpy.full(4, 'blue', dtype=object)
         if self._array_contains(FOUR_RED_IN_A_ROW, testing_array):
             self._winner = 'red'
             return True
@@ -158,11 +159,11 @@ class GameBoard(object):
         """Checks if an input matrix have valid characters and structure
 
         Args:
-            matrix_to_test: numpy array with dtype='a5'
+            matrix_to_test: numpy array with dtype=object
         Returns
             a boolean value
         """
-        valid_entries = ('-', 'blue', 'red')
+        valid_entries = (None, 'blue', 'red')
         if matrix_to_test.shape != (6,7):
             return False
         for row in matrix_to_test:

@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 import unittest
-import numpy
 from gameboard import GameBoard
 from gameboard import ColumnIsFull
 from gameboard import OutOfIndex
@@ -13,29 +12,29 @@ class TestGameBoard(unittest.TestCase):
     def setUp(self):
         self.board = GameBoard()
 
-        self.board_test_rows = GameBoard.from_matrix(numpy.array([
-                    ['-',    'red',  'red',  'red',   '-',   '-', '-'],
-                    ['red', 'blue',  'red', 'blue',   '-',   '-', '-'],
-                    ['blue', 'red', 'blue',  'red',   '-',   '-', '-'],
-                    ['blue', 'red',  'red', 'blue',   '-',   '-', '-'],
-                    ['red', 'blue',  'red', 'blue',   '-',   '-', '-'],
-                    ['blue', 'red', 'blue',  'red', 'red', 'red', '-']], dtype='a5'))
+        self.board_test_rows = GameBoard.from_matrix([
+                    [None,    'red',  'red',  'red',   None,   None, None],
+                    ['red', 'blue',  'red', 'blue',   None,   None, None],
+                    ['blue', 'red', 'blue',  'red',   None,   None, None],
+                    ['blue', 'red',  'red', 'blue',   None,   None, None],
+                    ['red', 'blue',  'red', 'blue',   None,   None, None],
+                    ['blue', 'red', 'blue',  'red', 'red', 'red', None]])
 
-        self.board_test_columns = GameBoard.from_matrix(numpy.array([
-                    ['-',    '-', '-', '-', '-', '-',    '-'],
-                    ['blue', '-', '-', '-', '-', '-', 'blue'],
-                    ['blue', '-', '-', '-', '-', '-', 'blue'],
-                    ['blue', '-', '-', '-', '-', '-', 'blue'],
-                    ['red',  '-', '-', '-', '-', '-',  'red'],
-                    ['red',  '-', '-', '-', '-', '-',  'red']], dtype='a5'))
+        self.board_test_columns = GameBoard.from_matrix([
+                    [None,    None, None, None, None, None,    None],
+                    ['blue', None, None, None, None, None, 'blue'],
+                    ['blue', None, None, None, None, None, 'blue'],
+                    ['blue', None, None, None, None, None, 'blue'],
+                    ['red',  None, None, None, None, None,  'red'],
+                    ['red',  None, None, None, None, None,  'red']])
 
-        self.board_test_diagonals = GameBoard.from_matrix(numpy.array([
-                    ['-',       '-',    '-',    '-',    '-',    '-',    '-'],
-                    ['red',   'red',    '-',    '-',    '-',  'red', 'blue'],
-                    ['blue', 'blue',  'red',    '-',  'red', 'blue',  'red'],
+        self.board_test_diagonals = GameBoard.from_matrix([
+                    [None,       None,    None,    None,    None,    None,    None],
+                    ['red',   'red',    None,    None,    None,  'red', 'blue'],
+                    ['blue', 'blue',  'red',    None,  'red', 'blue',  'red'],
                     ['red',  'blue',  'red',  'red',  'red', 'blue', 'blue'],
                     ['blue',  'red', 'blue', 'blue', 'blue',  'red',  'red'],
-                    ['red',  'blue', 'blue',  'red', 'blue',  'red', 'blue']], dtype='a5'))
+                    ['red',  'blue', 'blue',  'red', 'blue',  'red', 'blue']])
 
     def test_put_chip_on_empty_board(self):
         self.board.put_chip(3, 'red')

@@ -20,7 +20,7 @@ class Match(object):
 
     def automatic_playing(self):
         for column in range(1, 8):
-            while self.game.read_entry(6, column) == '-':
+            while self.game.read_entry(6, column) == None:
                 if not self.game.winner_exists():
                     self.game.put_chip(column, self.active_player)
                     self.next_turn()
