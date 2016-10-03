@@ -1,6 +1,4 @@
 #!/usr/bin/env python
-
-import sys
 import numpy
 
 
@@ -13,7 +11,7 @@ class ColumnIsFull(Exception):
 class OutOfIndex(Exception):
 
     def __init___(self, errArguments):
-        self.arrayType = errArguments['type']
+        self.array_type = errArguments['type']
         self.index = errArguments['index']
 
 
@@ -25,6 +23,27 @@ class GameBoard(object):
         self._matrix = self._generate_matrix(
             self.ROWSCOUNT, self.COLUMNSCOUNT, '-')
         self._winner = None
+
+    @classmethod
+    def from_matrix(cls, external_matrix):
+        board = GameBoard()
+        if board.set_board_from_matrix(external_matrix):
+            return board
+        else:
+            return False
+
+    def set_board_from_matrix(self, matrix):
+        """Set the internal game matrix with an external one, only if valid
+
+        Args:
+            external_matrix: numpy array with dtype='a5'
+        Returns
+            a boolean value
+        """
+        if self._validate_matrix(matrix):
+            self._matrix = matrix
+            return True
+        return False
 
     def _generate_matrix(self, rows, columns, fill):
         """Return a numpy matrix of the desired dimensions
@@ -119,19 +138,6 @@ class GameBoard(object):
                 print '{:4}'.format(entry),
             print
         print
-
-    def set_board_from_matrix(self, external_matrix):
-        """Set the internal game matrix with an external one, only if valid
-
-        Args:
-            external_matrix: numpy array with dtype='a5'
-        Returns
-            a boolean value
-        """
-        if self._validate_matrix(external_matrix):
-            self._matrix = external_matrix
-            return True
-        return False
 
     def put_chip(self, column_index, color):
         """Inserts a new chip into the game matrix

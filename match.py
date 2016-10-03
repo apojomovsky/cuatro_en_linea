@@ -23,7 +23,6 @@ class Match(object):
             while self.game.read_entry(6, column) == '-':
                 if not self.game.winner_exists():
                     self.game.put_chip(column, self.active_player)
-                    self.game.show()
                     self.next_turn()
                 else:
                     return True
