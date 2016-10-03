@@ -24,6 +24,49 @@ class GameBoard(object):
             self.ROWSCOUNT, self.COLUMNSCOUNT, '-')
         self._winner = None
 
+    def put_chip(self, column_index, color):
+        """Inserts a new chip into the game matrix
+
+        Args:
+            column_index: the column where the chip is being put
+            color: the color of the chip
+        """
+        try:
+            rowIndex = self.ROWSCOUNT - \
+                list(self._retreive_column(column_index)).index('-') - 1
+            self._matrix[rowIndex][column_index - 1] = color.lower()
+        except ValueError:
+            raise ColumnIsFull(column_index)
+
+    def read_entry(self, rowIndex, column_index):
+        """Read a determined entry from the game matrix
+
+        Args:
+            rows: the desired number of rows
+            columns: the desired number of columns
+            fill: the desired character or string to fill the matrix with
+        Returns
+            the value encountered on the entry
+        """
+        if rowIndex <= self.ROWSCOUNT:
+            if column_index <= self.COLUMNSCOUNT:
+                entry = self._matrix[self.ROWSCOUNT - rowIndex][column_index - 1]
+            else:
+                raise OutOfIndex({'type': 'column', 'number': column_index})
+        else:
+            raise OutOfIndex({'type': 'row', 'index': rowIndex})
+        return entry
+
+    def winner_exists(self):
+        """Check if there's a winner of the game and prints a message"""
+        self._check_rows_for_winner()
+        self._check_columns_for_winner()
+        self._check_diagonals_for_winner()
+        if self._winner:
+            return True
+        else:
+            return False
+
     @classmethod
     def from_matrix(cls, external_matrix):
         board = GameBoard()
@@ -138,46 +181,3 @@ class GameBoard(object):
                 print '{:4}'.format(entry),
             print
         print
-
-    def put_chip(self, column_index, color):
-        """Inserts a new chip into the game matrix
-
-        Args:
-            column_index: the column where the chip is being put
-            color: the color of the chip
-        """
-        try:
-            rowIndex = self.ROWSCOUNT - \
-                list(self._retreive_column(column_index)).index('-') - 1
-            self._matrix[rowIndex][column_index - 1] = color.lower()
-        except ValueError:
-            raise ColumnIsFull(column_index)
-
-    def read_entry(self, rowIndex, column_index):
-        """Read a determined entry from the game matrix
-
-        Args:
-            rows: the desired number of rows
-            columns: the desired number of columns
-            fill: the desired character or string to fill the matrix with
-        Returns
-            the value encountered on the entry
-        """
-        if rowIndex <= self.ROWSCOUNT:
-            if column_index <= self.COLUMNSCOUNT:
-                entry = self._matrix[self.ROWSCOUNT - rowIndex][column_index - 1]
-            else:
-                raise OutOfIndex({'type': 'column', 'number': column_index})
-        else:
-            raise OutOfIndex({'type': 'row', 'index': rowIndex})
-        return entry
-
-    def winner_exists(self):
-        """Check if there's a winner of the game and prints a message"""
-        self._check_rows_for_winner()
-        self._check_columns_for_winner()
-        self._check_diagonals_for_winner()
-        if self._winner:
-            return True
-        else:
-            return False
