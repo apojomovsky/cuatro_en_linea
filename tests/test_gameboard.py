@@ -31,6 +31,14 @@ class TestGameBoard(unittest.TestCase):
                     ['blue',  'red', 'blue', 'blue', 'blue',  'red',  'red'],
                     ['red',  'blue', 'blue',  'red', 'blue',  'red', 'blue']])
 
+    def test_column_is_full(self):
+        self.assertFalse(self.board_test_diagonals.column_is_full(1))
+        self.board_test_diagonals.put_chip(1, 'blue')
+        self.assertTrue(self.board_test_diagonals.column_is_full(1))
+        self.assertFalse(self.board_test_diagonals.column_is_full(7))
+        self.board_test_diagonals.put_chip(7, 'blue')
+        self.assertTrue(self.board_test_diagonals.column_is_full(7))
+
     def test_put_chip_on_empty_board(self):
         self.board.put_chip(3, 'red')
         self.assertEqual(self.board.read_entry(1, 3), 'red')
@@ -89,7 +97,3 @@ class TestGameBoard(unittest.TestCase):
         self.assertEqual(self.board_test_diagonals.winner_exists(), False)
         self.board_test_diagonals.put_chip(7, 'red')
         self.assertEqual(self.board_test_diagonals.winner_exists(), True)
-
-
-if __name__ == '__main__':
-    unittest.main()

@@ -1,29 +1,23 @@
+#!/usr/bin/env python
 from .gameboard import GameBoard
-import time
+from .player import Player
 
 class Match(object):
     def __init__(self):
         self.game = GameBoard()
+        self.players = {'red': Player('red', self.game), 'blue': Player('blue', self.game)}
         self.start_time = time.time()
-        self.is_running = True
-        self.active_player = 'blue'
-
-    def elapsed_time(self):
-        return time.time() - self.start_time()
+        self._active_player = self.players.get('red')
 
     def next_turn(self):
-        if self.active_player == 'blue':
-            self.active_player = 'red'
+        if self._active_player == 'blue':
+            self._active_player = 'red'
         else:
-            self.active_player = 'blue'
-        return self.active_player
+            self._active_player = 'blue'
 
-    def automatic_playing(self):
-        for column in range(1, 8):
-            while self.game.read_entry(6, column) == None:
-                if not self.game.winner_exists():
-                    self.game.put_chip(column, self.active_player)
-                    self.next_turn()
-                else:
-                    return True
-        return False
+    def play_match(self):
+        while not self.game.winner_exists():
+            self.next_turn()
+            self.players.get(self._active_player).play()
+            self.game.show()
+        return self.game.who_won()

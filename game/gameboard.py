@@ -30,11 +30,11 @@ class GameBoard(object):
             column_index: the column where the chip is being put
             color: the color of the chip
         """
-        try:
+        if not self.column_is_full(column_index):
             rowIndex = self.ROWSCOUNT - \
                 list(self._retreive_column(column_index)).index(None) - 1
             self._matrix[rowIndex][column_index - 1] = color.lower()
-        except ValueError:
+        else:
             raise ColumnIsFull(column_index)
 
     def read_entry(self, rowIndex, column_index):
@@ -65,6 +65,11 @@ class GameBoard(object):
             return True
         else:
             return False
+
+    def who_won(self):
+        if self.winner_exists():
+            return self._winner
+
 
     @classmethod
     def from_matrix(cls, external_matrix):
@@ -101,9 +106,11 @@ class GameBoard(object):
         char_array = numpy.full((rows, columns), fill, dtype=object)
         return char_array
 
+    def column_is_full(self, column_index):
+        return self._retreive_column(column_index)[5] is not None
+
     def _retreive_column(self, column_index):
         return self._matrix[:, column_index - 1][::-1]
-
 
     def _array_contains(self, array_small, array_big):
         """Check if an array is part of another array
