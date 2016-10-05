@@ -6,7 +6,7 @@ class Player(object):
         self._gameboard = gameboard
         self._color = color
 
-    def get_color(self):
+    def color(self):
         return self._color
 
     def play(self):

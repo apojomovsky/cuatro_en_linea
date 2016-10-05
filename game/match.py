@@ -10,10 +10,13 @@ class Match(object):
         self._active_player = self.players.get('red')
 
     def next_turn(self):
-        if self._active_player == 'blue':
-            self._active_player = 'red'
+        if self._active_player == self.players.get('blue'):
+            self._active_player = self.players.get('red')
         else:
-            self._active_player = 'blue'
+            self._active_player = self.players.get('blue')
+
+    def whos_turn(self):
+        return self._active_player.color()
 
     def play_match(self):
         while not self.game.winner_exists():

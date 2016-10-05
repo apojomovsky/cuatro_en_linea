@@ -8,4 +8,8 @@ class TestMatch(unittest.TestCase):
         self.match = Match()
 
     def test_next_turn(self):
-        
+        self.assertEqual(self.match.whos_turn(), 'red')
+        self.match.next_turn()
+        self.assertEqual(self.match.whos_turn(), 'blue')
+        self.match.next_turn()
+        self.assertEqual(self.match.whos_turn(), 'red')

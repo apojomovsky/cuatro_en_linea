@@ -67,12 +67,15 @@ class GameBoard(object):
             return False
 
     def who_won(self):
+        """Returns the color of the winner if it exists"""
         if self.winner_exists():
             return self._winner
+        return False
 
 
     @classmethod
     def from_matrix(cls, external_matrix):
+        """Returns an instance of GameBoard with a custom _matrix attribute"""
         board = GameBoard()
         if board.set_board_from_matrix(external_matrix):
             return board
@@ -107,9 +110,11 @@ class GameBoard(object):
         return char_array
 
     def column_is_full(self, column_index):
+        """Checks if the column on a given index is full or not"""
         return self._retreive_column(column_index)[5] is not None
 
     def _retreive_column(self, column_index):
+        """Returns an inverted column for a given index"""
         return self._matrix[:, column_index - 1][::-1]
 
     def _array_contains(self, array_small, array_big):
@@ -129,6 +134,7 @@ class GameBoard(object):
         return False
 
     def _winner_in_array(self, testing_array):
+        """Check if there's a four-in-a-row occurrence on a given array"""
         FOUR_RED_IN_A_ROW = numpy.full(4, 'red', dtype=object)
         FOUR_BLUE_IN_A_ROW = numpy.full(4, 'blue', dtype=object)
         if self._array_contains(FOUR_RED_IN_A_ROW, testing_array):
