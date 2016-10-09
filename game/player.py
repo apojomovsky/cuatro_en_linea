@@ -13,5 +13,4 @@ class Player(object):
         for index in range(1, GameBoard.COLUMNSCOUNT + 1):
             if not self._gameboard.column_is_full(index):
                 self._gameboard.put_chip(index, self._color)
-                self._gameboard.show()
                 return True

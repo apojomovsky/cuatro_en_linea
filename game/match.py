@@ -22,5 +22,4 @@ class Match(object):
         while not self.game.winner_exists():
             self.next_turn()
             self.players.get(self._active_player).play()
-            self.game.show()
         return self.game.who_won()
