@@ -31,14 +31,6 @@ class TestGameBoard(unittest.TestCase):
                     ['blue',  'red', 'blue', 'blue', 'blue',  'red',  'red'],
                     ['red',  'blue', 'blue',  'red', 'blue',  'red', 'blue']])
 
-    def test_column_is_full(self):
-        self.assertFalse(self.board_test_diagonals.column_is_full(1))
-        self.board_test_diagonals.put_chip(1, 'blue')
-        self.assertTrue(self.board_test_diagonals.column_is_full(1))
-        self.assertFalse(self.board_test_diagonals.column_is_full(7))
-        self.board_test_diagonals.put_chip(7, 'blue')
-        self.assertTrue(self.board_test_diagonals.column_is_full(7))
-
     def test_put_chip_on_empty_board(self):
         self.board.put_chip(3, 'red')
         self.assertEqual(self.board.read_entry(1, 3), 'red')
@@ -57,6 +49,32 @@ class TestGameBoard(unittest.TestCase):
         with self.assertRaises(ColumnIsFull):
             self.board_test_rows.put_chip(2, 'red')
 
+    def test_put_chip_on_first_non_full_column_from_left_to_right(self):
+        self.board_test_rows.put_chip_on_first_non_full_column('red')
+        self.assertEqual(self.board_test_rows.read_entry(6, 1), 'red')
+        self.board_test_rows.put_chip_on_first_non_full_column('red')
+        self.assertEqual(self.board_test_rows.read_entry(2, 5), 'red')
+
+    def test_put_chip_on_first_non_full_column_from_right_to_left(self):
+        self.board_test_columns.put_chip_on_first_non_full_column('red',1)
+        self.assertEqual(self.board_test_columns.read_entry(6, 7), 'red')
+        self.board_test_columns.put_chip_on_first_non_full_column('red',1)
+        self.assertEqual(self.board_test_columns.read_entry(1, 6), 'red')
+
+    def test_put_chip_on_first_non_full_row_from_left_to_right(self):
+        self.board_test_rows.put_chip_on_first_non_full_row('red')
+        self.assertEqual(self.board_test_rows.read_entry(1, 7), 'red')
+        self.board_test_rows.put_chip_on_first_non_full_row('red')
+        self.assertEqual(self.board_test_rows.read_entry(2, 5), 'red')
+
+    def test_put_chip_on_first_non_full_row_from_right_to_left(self):
+        self.board_test_columns.put_chip_on_first_non_full_row('red',1)
+        self.assertEqual(self.board_test_columns.read_entry(1, 7), 'red')
+        self.board_test_columns.put_chip_on_first_non_full_row('red',1)
+        self.assertEqual(self.board_test_columns.read_entry(2, 7), 'red')
+        self.board_test_columns.put_chip_on_first_non_full_row('red',1)
+        self.assertEqual(self.board_test_columns.read_entry(2, 7), 'red')
+
     def test_read_entry_from_valid_position(self):
         self.assertEqual(self.board_test_diagonals.read_entry(1, 1), 'red')
         self.assertEqual(self.board_test_diagonals.read_entry(2, 1), 'blue')
@@ -67,6 +85,14 @@ class TestGameBoard(unittest.TestCase):
             self.board_test_diagonals.read_entry(7, 1)
         with self.assertRaises(OutOfIndex):
             self.board_test_diagonals.read_entry(1, 8)
+
+    def test_column_is_full(self):
+        self.assertFalse(self.board_test_diagonals.column_is_full(1))
+        self.board_test_diagonals.put_chip(1, 'blue')
+        self.assertTrue(self.board_test_diagonals.column_is_full(1))
+        self.assertFalse(self.board_test_diagonals.column_is_full(7))
+        self.board_test_diagonals.put_chip(7, 'blue')
+        self.assertTrue(self.board_test_diagonals.column_is_full(7))
 
     def test_winner_exists_from_rows_on_left_corner(self):
         self.assertEqual(self.board_test_rows.winner_exists(), False)

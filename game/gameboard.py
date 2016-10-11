@@ -37,6 +37,30 @@ class GameBoard(object):
         else:
             raise ColumnIsFull(column_index)
 
+    def put_chip_on_first_non_full_column(self, color, right_to_left=0):
+        if right_to_left:
+            index_list = range(self.COLUMNSCOUNT, 0, -1)
+        else:
+            index_list = range(1, self.COLUMNSCOUNT + 1)
+        for index in index_list:
+            if not self.column_is_full(index):
+                self.put_chip(index, color)
+                return True
+        return False
+
+    def put_chip_on_first_non_full_row(self, color, right_to_left=0):
+        rows_index_list = range(1, self.ROWSCOUNT + 1)
+        if right_to_left:
+            columns_index_list = range(self.COLUMNSCOUNT, 0, -1)
+        else:
+            columns_index_list = range(1, self.COLUMNSCOUNT + 1)
+        for row_index in rows_index_list:
+            for column_index in columns_index_list:
+                if self.read_entry(row_index, column_index) is None:
+                    self.put_chip(column_index, color)
+                    return True
+        return False
+
     def read_entry(self, rowIndex, column_index):
         """Read a determined entry from the game matrix
 
@@ -66,12 +90,23 @@ class GameBoard(object):
         else:
             return False
 
-    def who_won(self):
+    def winner_color(self):
         """Returns the color of the winner if it exists"""
         if self.winner_exists():
             return self._winner
         return False
 
+    def board_is_full(self):
+        """Checks whether a board is full or not"""
+        if not None in self._matrix:
+            return True
+        return False
+
+    def game_over(self):
+        """Checks whether the game is over or not"""
+        if self.winner_exists() or self.board_is_full():
+            return True
+        return False
 
     @classmethod
     def from_matrix(cls, external_matrix):
@@ -112,6 +147,13 @@ class GameBoard(object):
     def column_is_full(self, column_index):
         """Checks if the column on a given index is full or not"""
         return self._retreive_column(column_index)[5] is not None
+
+    def row_is_full(self, row_index):
+        """Checks if the row on a given index is full or not"""
+        for entry in self._matrix[row_index +1]:
+            if not entry:
+                return False
+        return True
 
     def _retreive_column(self, column_index):
         """Returns an inverted column for a given index"""

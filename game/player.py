@@ -2,15 +2,12 @@
 from game.gameboard import GameBoard
 
 class Player(object):
-    def __init__(self, color, gameboard):
-        self._gameboard = gameboard
+    def __init__(self, color):
         self._color = color
 
     def color(self):
         return self._color
 
-    def play(self):
-        for index in range(1, GameBoard.COLUMNSCOUNT + 1):
-            if not self._gameboard.column_is_full(index):
-                self._gameboard.put_chip(index, self._color)
-                return True
+    def play(self, board):
+        if not board.game_over():
+            board.put_chip_on_first_non_full_column(self._color)
