@@ -98,9 +98,11 @@ class GameBoard(object):
 
     def board_is_full(self):
         """Checks whether a board is full or not"""
-        if not None in self._matrix:
-            return True
-        return False
+        for row in self._matrix:
+            for entry in row:
+                if entry is None:
+                    return False
+        return True
 
     def game_over(self):
         """Checks whether the game is over or not"""

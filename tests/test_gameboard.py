@@ -31,6 +31,14 @@ class TestGameBoard(unittest.TestCase):
                     ['blue',  'red', 'blue', 'blue', 'blue',  'red',  'red'],
                     ['red',  'blue', 'blue',  'red', 'blue',  'red', 'blue']])
 
+        self.board_almost_full = GameBoard.from_matrix([
+                    ['blue',  'red', 'blue',   None, 'blue',  'red', 'blue'],
+                    ['red',   'red', 'blue',  'red', 'blue',  'red', 'blue'],
+                    ['blue', 'blue',  'red', 'blue',  'red', 'blue',  'red'],
+                    ['red',  'blue',  'red',  'red',  'red', 'blue', 'blue'],
+                    ['blue',  'red', 'blue', 'blue', 'blue',  'red',  'red'],
+                    ['red',  'blue', 'blue',  'red', 'blue',  'red', 'blue']])
+
     def test_put_chip_on_empty_board(self):
         self.board.put_chip(3, 'red')
         self.assertEqual(self.board.read_entry(1, 3), 'red')
@@ -93,6 +101,21 @@ class TestGameBoard(unittest.TestCase):
         self.assertFalse(self.board_test_diagonals.column_is_full(7))
         self.board_test_diagonals.put_chip(7, 'blue')
         self.assertTrue(self.board_test_diagonals.column_is_full(7))
+
+    def test_board_is_full(self):
+        self.assertFalse(self.board_test_columns.board_is_full())
+        self.board_almost_full.put_chip(4, 'blue')
+        self.assertTrue(self.board_almost_full.board_is_full())
+
+    def test_game_over_on_full_board(self):
+        self.assertFalse(self.board_test_columns.game_over())
+        self.board_almost_full.put_chip(4, 'blue')
+        self.assertTrue(self.board_almost_full.game_over())
+
+    def test_game_over_on_winner(self):
+        self.assertEqual(self.board_test_rows.game_over(), False)
+        self.board_test_rows.put_chip(1, 'red')
+        self.assertEqual(self.board_test_rows.game_over(), True)
 
     def test_winner_exists_from_rows_on_left_corner(self):
         self.assertEqual(self.board_test_rows.winner_exists(), False)
