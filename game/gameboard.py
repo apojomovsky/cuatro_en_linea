@@ -37,7 +37,7 @@ class GameBoard(object):
         else:
             raise ColumnIsFull(column_index)
 
-    def put_chip_on_first_non_full_column(self, color, right_to_left=0):
+    def put_chip_on_first_non_full_column(self, color, right_to_left=False):
         if right_to_left:
             index_list = range(self.COLUMNSCOUNT, 0, -1)
         else:
@@ -48,7 +48,7 @@ class GameBoard(object):
                 return True
         return False
 
-    def put_chip_on_first_non_full_row(self, color, right_to_left=0):
+    def put_chip_on_first_non_full_row(self, color, right_to_left=False):
         rows_index_list = range(1, self.ROWSCOUNT + 1)
         if right_to_left:
             columns_index_list = range(self.COLUMNSCOUNT, 0, -1)
