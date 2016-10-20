@@ -14,6 +14,14 @@ class Player(object):
                 return True
         return False
 
-    def play(self, board):
-        if not board.game_over():
-            board.put_chip_on_first_non_full_column(self._color)
+    def play_on_first_non_full_column(self, board, right_to_left=False):
+        if right_to_left:
+            board.put_chip(board.retrieve_first_non_full_column(right_to_left), self._color)
+        else:
+            board.put_chip(board.retrieve_first_non_full_column(), self._color)
+
+    def play_on_emptiest_column(self, board, right_to_left=False):
+        if right_to_left:
+            board.put_chip(board.retrieve_emptiest_column(right_to_left), self._color)
+        else:
+            board.put_chip(board.retrieve_emptiest_column(), self._color)

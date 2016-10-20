@@ -32,23 +32,22 @@ class GameBoard(object):
         """
         if not self.column_is_full(column_index):
             rowIndex = self.ROWSCOUNT - \
-                list(self._retreive_column(column_index)).index(None) - 1
+                list(self._retrieve_column(column_index)).index(None) - 1
             self._matrix[rowIndex][column_index - 1] = color.lower()
         else:
             raise ColumnIsFull(column_index)
 
-    def put_chip_on_first_non_full_column(self, color, right_to_left=False):
+    def retrieve_first_non_full_column(self, right_to_left=False):
         if right_to_left:
             index_list = range(self.COLUMNSCOUNT, 0, -1)
         else:
             index_list = range(1, self.COLUMNSCOUNT + 1)
         for index in index_list:
             if not self.column_is_full(index):
-                self.put_chip(index, color)
-                return True
+                return index
         return False
 
-    def put_chip_on_first_non_full_row(self, color, right_to_left=False):
+    def retrieve_emptiest_column(self, right_to_left=False):
         rows_index_list = range(1, self.ROWSCOUNT + 1)
         if right_to_left:
             columns_index_list = range(self.COLUMNSCOUNT, 0, -1)
@@ -57,8 +56,7 @@ class GameBoard(object):
         for row_index in rows_index_list:
             for column_index in columns_index_list:
                 if self.read_entry(row_index, column_index) is None:
-                    self.put_chip(column_index, color)
-                    return True
+                    return column_index
         return False
 
     def read_entry(self, rowIndex, column_index):
@@ -148,7 +146,7 @@ class GameBoard(object):
 
     def column_is_full(self, column_index):
         """Checks if the column on a given index is full or not"""
-        return self._retreive_column(column_index)[5] is not None
+        return self._retrieve_column(column_index)[5] is not None
 
     def row_is_full(self, row_index):
         """Checks if the row on a given index is full or not"""
@@ -157,7 +155,7 @@ class GameBoard(object):
                 return False
         return True
 
-    def _retreive_column(self, column_index):
+    def _retrieve_column(self, column_index):
         """Returns an inverted column for a given index"""
         return self._matrix[:, column_index - 1][::-1]
 
@@ -200,7 +198,7 @@ class GameBoard(object):
     def _check_columns_for_winner(self):
         """Check if there's a winner column-wise"""
         for i in range(self.COLUMNSCOUNT):
-            if self._winner_in_array(self._retreive_column(i)):
+            if self._winner_in_array(self._retrieve_column(i)):
                 return True
         return False
 
