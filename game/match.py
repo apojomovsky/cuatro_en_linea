@@ -16,15 +16,16 @@ class Match(object):
         self._switch_to_next_player()
 
     def play_next_turn(self):
-        if self.is_over():
+        if self._board.game_over():
             raise GameIsOver(self.who_won)
         else:
             self._active_player.play(self._board)
-        if not self.is_over():
+            self._board.show()
+        if not self._board.game_over():
             self._switch_to_next_player()
 
     def play_full_match(self):
-        while not self.is_over():
+        while not self._board.game_over():
             self.play_next_turn()
         return self.who_won()
 

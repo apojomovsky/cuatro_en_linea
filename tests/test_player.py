@@ -27,11 +27,6 @@ class TestPlayer(unittest.TestCase):
                     ['blue',  'red',  'red', 'red',  None,  'blue', 'red'],
                     ['red',  'blue', 'blue', 'red', 'blue', 'blue', 'blue']])
 
-    def test_is_winner(self):
-        self.assertFalse(self.player_blue.is_winner(self.board_player_blue_wins))
-        self.player_blue.play_on_emptiest_column(self.board_player_blue_wins)
-        self.assertTrue(self.player_blue.is_winner(self.board_player_blue_wins))
-
 
     def test_play_on_first_non_full_column_left_to_right(self):
         self.assertFalse(self.player_blue.is_winner(self.board_player_blue_wins))

@@ -25,3 +25,11 @@ class Player(object):
             board.put_chip(board.retrieve_emptiest_column(right_to_left), self._color)
         else:
             board.put_chip(board.retrieve_emptiest_column(), self._color)
+
+class PlayerWithStrategyOne(Player):
+    def play(self, board, right_to_left=False):
+        self.play_on_first_non_full_column(board, right_to_left=False)
+
+class PlayerWithStrategyTwo(Player):
+    def play(self, board, right_to_left=False):
+        self.play_on_emptiest_column(board, right_to_left=False)
