@@ -20,7 +20,6 @@ class Match(object):
             raise GameIsOver(self.who_won)
         else:
             self._active_player.play(self._board)
-            self._board.show()
         if not self._board.game_over():
             self._switch_to_next_player()
 
