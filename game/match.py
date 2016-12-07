@@ -27,7 +27,6 @@ class Match(object):
     def play_full_match(self):
         while not self._board.game_over():
             self.play_next_turn()
-            self._board.show()
         return self.who_won()
 
     def is_over(self):

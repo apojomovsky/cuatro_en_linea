@@ -18,6 +18,7 @@ class Player(object):
 
     @abstractmethod
     def play(self):
+        """This method must be overridden"""
         pass
 
 class PlayerWithStrategyOne(Player):

@@ -6,7 +6,6 @@ from game.player import GameBoard
 
 class TestPlayer(unittest.TestCase):
     def setUp(self):
-        self.board = GameBoard()
         self.player_blue = PlayerWithStrategyOne('blue')
         self.player_red = PlayerWithStrategyOne('red')
 
@@ -20,5 +19,8 @@ class TestPlayer(unittest.TestCase):
                     ['red',   'red',  'red', 'blue',  'red', 'blue', None]])
         self.match = Match(self.player_blue, self.player_red, self.board_player_blue_wins)
         self.assertFalse(self.player_blue.is_winner(self.board_player_blue_wins))
-        self.match.play_full_match()
+        for i in range(8):
+            self.match.play_next_turn()
+            self.assertFalse(self.player_blue.is_winner(self.board_player_blue_wins))
+        self.match.play_next_turn()
         self.assertTrue(self.player_blue.is_winner(self.board_player_blue_wins))

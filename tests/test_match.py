@@ -2,7 +2,6 @@
 import unittest
 from game.match import Match
 from game.match import GameIsOver
-from game.player import Player
 from game.player import PlayerWithStrategyOne
 from game.player import PlayerWithStrategyTwo
 from game.gameboard import GameBoard
