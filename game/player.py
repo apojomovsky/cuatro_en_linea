@@ -1,7 +1,10 @@
 #!/usr/bin/env python
+from abc import ABCMeta, abstractmethod
 from game.gameboard import GameBoard
 
 class Player(object):
+    __metaclass__ = ABCMeta
+
     def __init__(self, color):
         self._color = color.lower()
 
@@ -9,27 +12,18 @@ class Player(object):
         return self._color
 
     def is_winner(self, board):
-        if board.game_over:
-            if board.winner_color() == self._color:
-                return True
+        if board.game_over() and board.winner_color() == self._color:
+            return True
         return False
 
-    def play_on_first_non_full_column(self, board, right_to_left=False):
-        if right_to_left:
-            board.put_chip(board.retrieve_first_non_full_column(right_to_left), self._color)
-        else:
-            board.put_chip(board.retrieve_first_non_full_column(), self._color)
-
-    def play_on_emptiest_column(self, board, right_to_left=False):
-        if right_to_left:
-            board.put_chip(board.retrieve_emptiest_column(right_to_left), self._color)
-        else:
-            board.put_chip(board.retrieve_emptiest_column(), self._color)
+    @abstractmethod
+    def play(self):
+        pass
 
 class PlayerWithStrategyOne(Player):
-    def play(self, board, right_to_left=False):
-        self.play_on_first_non_full_column(board, right_to_left=False)
+    def play(self, board):
+        board.put_chip(board.retrieve_first_non_full_column(), self._color)
 
 class PlayerWithStrategyTwo(Player):
-    def play(self, board, right_to_left=False):
-        self.play_on_emptiest_column(board, right_to_left=False)
+    def play(self, board):
+        board.put_chip(board.retrieve_emptiest_column(), self._color)

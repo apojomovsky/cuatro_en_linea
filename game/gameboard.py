@@ -37,27 +37,23 @@ class GameBoard(object):
         else:
             raise ColumnIsFull(column_index)
 
-    def retrieve_first_non_full_column(self, right_to_left=False):
-        if right_to_left:
-            index_list = range(self.COLUMNSCOUNT, 0, -1)
-        else:
-            index_list = range(1, self.COLUMNSCOUNT + 1)
+    def retrieve_first_non_full_column(self):
+        """Docstring goes here
+        """
+        index_list = range(1, self.COLUMNSCOUNT + 1)
         for index in index_list:
             if not self.column_is_full(index):
                 return index
-        return False
 
-    def retrieve_emptiest_column(self, right_to_left=False):
+    def retrieve_emptiest_column(self):
+        """Docstring goes here
+        """
         rows_index_list = range(1, self.ROWSCOUNT + 1)
-        if right_to_left:
-            columns_index_list = range(self.COLUMNSCOUNT, 0, -1)
-        else:
-            columns_index_list = range(1, self.COLUMNSCOUNT + 1)
+        columns_index_list = range(1, self.COLUMNSCOUNT + 1)
         for row_index in rows_index_list:
             for column_index in columns_index_list:
                 if self.read_entry(row_index, column_index) is None:
                     return column_index
-        return False
 
     def read_entry(self, rowIndex, column_index):
         """Read a determined entry from the game matrix
@@ -164,7 +160,7 @@ class GameBoard(object):
 
         Args:
             array_small: the array to be checked as part of array_big
-            array_big: the array where array_small will be searched
+            array_big: the array where array_small is attempted to be found
         Returns:
             a boolean value with the result of the search
         """

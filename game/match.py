@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 from .gameboard import GameBoard
-from .player import Player
+from .player import PlayerWithStrategyOne, PlayerWithStrategyTwo
 from itertools import cycle
 
 class GameIsOver(Exception): # Where should this exception be placed?
@@ -8,7 +8,8 @@ class GameIsOver(Exception): # Where should this exception be placed?
         self.winner = winner
 
 class Match(object):
-    def __init__(self, player_one = Player('red'), player_two = Player('blue'), board = GameBoard()):
+    def __init__(self, player_one = PlayerWithStrategyOne('red'),
+                 player_two = PlayerWithStrategyTwo('blue'), board = GameBoard()):
         self._board = board
         self._active_player = None
         self._players = [player_one, player_two]
@@ -26,6 +27,7 @@ class Match(object):
     def play_full_match(self):
         while not self._board.game_over():
             self.play_next_turn()
+            self._board.show()
         return self.who_won()
 
     def is_over(self):

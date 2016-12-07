@@ -37,13 +37,13 @@ class TestMatch(unittest.TestCase):
         with self.assertRaises(GameIsOver):
             self.match_red_won_from_row.play_next_turn()
 
-    def test_play_full_match_when_red_wins(self):
+    def test_play_full_match_and_red_wins(self):
         self.assertFalse(self.match.is_over())
         self.match.play_full_match()
         self.assertTrue(self.match.is_over())
         self.assertEqual(self.match.who_won(), self.player_red)
 
-    def test_play_match_when_blue_wins(self):
+    def test_play_match_and_blue_wins(self):
         self.match_blue_win_with_row = Match(self.player_blue, self.player_red, GameBoard.from_matrix([
                     [None,   None, None, None, None, None,   None],
                     ['blue', None, None, None, None, None, 'blue'],
@@ -56,7 +56,7 @@ class TestMatch(unittest.TestCase):
         self.assertTrue(self.match_blue_win_with_row.is_over())
         self.assertEqual(self.match_blue_win_with_row.who_won(), self.player_blue)
 
-    def test_who_won_when_blue_wins(self):
+    def test_who_won_when_blue_won(self):
         self.match_with_almost_full_board = Match(self.player_blue, self.player_red, GameBoard.from_matrix([
                     ['blue', 'blue',  'red',   None, 'blue', 'blue', 'blue'],
                     ['red',   'red', 'blue',  'red', 'blue',  'red', 'blue'],
