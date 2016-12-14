@@ -40,9 +40,9 @@ class TestPlayer(unittest.TestCase):
                     ['blue', 'blue',   None, 'blue',  None, None, None],
                     ['red',  'blue',  'red', 'blue',  None, None, None],
                     ['blue',  'red', 'blue',  'red', 'red', None, None]])
-        self.assertFalse(self.player_blue.is_winner(board))
+        self.assertFalse(self.player_red.is_winner(board))
         self.player_blue.play(board)
-        self.assertFalse(self.player_blue.is_winner(board))
+        self.assertFalse(self.player_red.is_winner(board))
 
     def test_player_with_strategy_one_red_not_winning_on_row(self):
         board = GameBoard.from_matrix([
