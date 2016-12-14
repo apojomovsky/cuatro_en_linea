@@ -17,14 +17,6 @@ class Player(object):
         return False
 
     @abstractmethod
-    def play(self):
+    def play(self, board):
         """This method must be overridden"""
         pass
-
-class PlayerWithStrategyOne(Player):
-    def play(self, board):
-        board.put_chip(board.retrieve_first_non_full_column(), self._color)
-
-class PlayerWithStrategyTwo(Player):
-    def play(self, board):
-        board.put_chip(board.retrieve_emptiest_column(), self._color)

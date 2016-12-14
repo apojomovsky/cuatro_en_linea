@@ -1,6 +1,7 @@
 #!/usr/bin/env python
-from .gameboard import GameBoard
-from .player import PlayerWithStrategyOne, PlayerWithStrategyTwo
+from gameboard import GameBoard
+from game.player_with_strategy_one import PlayerWithStrategyOne
+from game.player_with_strategy_two import PlayerWithStrategyTwo
 from itertools import cycle
 
 class GameIsOver(Exception): # Where should this exception be placed?
