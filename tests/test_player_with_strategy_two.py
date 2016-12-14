@@ -9,18 +9,65 @@ class TestPlayer(unittest.TestCase):
         self.player_blue = PlayerWithStrategyTwo('blue')
         self.player_red = PlayerWithStrategyTwo('red')
 
-    def test_player_wins_with_strategy_two(self):
-        self.board_player_red_wins = GameBoard.from_matrix([
-                    ['blue', 'blue', None,  None,   None,   None, None],
-                    ['red',   'red',  None, None, 'blue', 'blue', None],
-                    ['blue',  'red', None,  None,  'red', 'blue', None],
-                    ['blue',  'red', 'blue',  None, 'blue',  'red', None],
-                    ['blue', 'blue', 'blue',  None,  'red', 'blue', None],
-                    ['red',   'red',  'red', 'blue',  'red', 'blue', None]])
-        self.match = Match(self.player_blue, self.player_red, self.board_player_red_wins)
-        self.assertFalse(self.player_red.is_winner(self.board_player_red_wins))
-        for i in range(5):
-            self.match.play_next_turn()
-            self.assertFalse(self.player_red.is_winner(self.board_player_red_wins))
-        self.match.play_next_turn()
-        self.assertTrue(self.player_red.is_winner(self.board_player_red_wins))
+    def test_player_with_strategy_two_blue_wins_on_right_almost_upper_corner(self):
+        board = GameBoard.from_matrix([
+                    ['red',    None,   None,   None,   None,   None,   None],
+                    ['red',   'red', 'blue',  'red',  'red',  'red',   None],
+                    ['red',  'blue',  'red',  'red', 'blue', 'blue', 'blue'],
+                    ['blue', 'blue',  'red', 'blue',  'red', 'blue', 'blue'],
+                    ['red',  'blue',  'red', 'blue',  'red', 'blue', 'blue'],
+                    ['blue',  'red', 'blue',  'red',  'red',  'red',  'red']])
+        self.assertFalse(self.player_blue.is_winner(board))
+        self.player_blue.play(board)
+        self.assertTrue(self.player_blue.is_winner(board))
+
+
+    def test_player_with_strategy_two_blue_wins_on_left_lower_corner(self):
+        board = GameBoard.from_matrix([
+                    [None,   None,   None,   None,  None, None,   None],
+                    [None,   None,   None,   None,  None, None,   None],
+                    [None,   None,   None,   None,  None, None, 'red'],
+                    [None,  'red',   None,   None,  None, None, 'blue'],
+                    [None, 'blue',   None, 'blue',  None, None, 'blue'],
+                    [None, 'blue', 'blue', 'blue',  None, None,  'red']])
+        self.assertFalse(self.player_blue.is_winner(board))
+        self.player_blue.play(board)
+        self.assertTrue(self.player_blue.is_winner(board))
+
+    '''
+    def test_player_with_strategy_two_blue_wins_on_left_corner(self):
+        self.board = GameBoard.from_matrix([
+                    [None,    None,    None,  None, 'blue',  'blue',   None],
+                    ['blue',   None,   None,  'red',  'red',  'red', 'blue'],
+                    ['blue', 'blue',   None,  'red', 'blue', 'blue', 'blue'],
+                    ['blue', 'blue',  'red', 'blue',  'red', 'blue', 'blue'],
+                    ['red',  'blue',  'red', 'blue',  'red', 'blue',  'red'],
+                    ['blue',  'red', 'blue',  'red',  'red',  'red',  'red']])
+        self.assertFalse(self.player_blue.is_winner(self.board))
+        self.player_blue.play(self.board)
+        self.assertTrue(self.player_blue.is_winner(self.board))
+
+    def test_player_with_strategy_two_red_not_winning_on_column(self):
+        self.board = GameBoard.from_matrix([
+                    [None,     None,   None,   None,  None, None, None],
+                    [None,     None,   None,   None,  None, None, None],
+                    ['red',  'blue',   None, 'blue',  None, None, None],
+                    ['blue', 'blue',   None, 'blue',  None, None, None],
+                    ['red',  'blue',  'red', 'blue',  None, None, None],
+                    ['blue',  'red', 'blue',  'red', 'red', None, None]])
+        self.assertFalse(self.player_blue.is_winner(self.board))
+        self.player_blue.play(self.board)
+        self.assertFalse(self.player_blue.is_winner(self.board))
+
+    def test_player_with_strategy_two_red_not_winning_on_row(self):
+        self.board = GameBoard.from_matrix([
+                    [None,    None,    None,   None,  None,  None, None],
+                    [None,    None,    None,   None,  None,  None, None],
+                    [None,    None,    None,   None,  None,  None, None],
+                    ['red',   'red',  'red',   None,  None,  None, None],
+                    ['blue', 'blue', 'blue', 'blue',  None,  None, None],
+                    ['blue', 'blue', 'blue',  'red', 'red', 'red', None]])
+        self.assertFalse(self.player_red.is_winner(self.board))
+        self.player_red.play(self.board)
+        self.assertFalse(self.player_red.is_winner(self.board))
+    '''
