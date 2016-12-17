@@ -2,8 +2,8 @@
 import unittest
 from game.match import Match
 from game.match import GameIsOver
-from game.player import PlayerWithStrategyOne
-from game.player import PlayerWithStrategyTwo
+from game.player_with_strategy_one import PlayerWithStrategyOne
+from game.player_with_strategy_two import PlayerWithStrategyTwo
 from game.gameboard import GameBoard
 
 class TestMatch(unittest.TestCase):
