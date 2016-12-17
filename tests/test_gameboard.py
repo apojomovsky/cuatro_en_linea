@@ -122,6 +122,53 @@ class TestGameBoard(unittest.TestCase):
         self.assertEqual(self.board_test_diagonals.winner_exists(), True)
 
     def test_equality_of_empty_boards(self):
-        board_1 = GameBoard()
-        board_2 = GameBoard()
+        board_1 = GameBoard.from_matrix([
+                    [None, None, None, None, None, None, None],
+                    [None, None, None, None, None, None, None],
+                    [None, None, None, None, None, None, None],
+                    [None, None, None, None, None, None, None],
+                    [None, None, None, None, None, None, None],
+                    [None, None, None, None, None, None, None]])
+        board_2 = GameBoard.from_matrix([
+                    [None, None, None, None, None, None, None],
+                    [None, None, None, None, None, None, None],
+                    [None, None, None, None, None, None, None],
+                    [None, None, None, None, None, None, None],
+                    [None, None, None, None, None, None, None],
+                    [None, None, None, None, None, None, None]])
         self.assertTrue(board_1 == board_2)
+
+    def test_equality_of_loaded_boards(self):
+        board_1 = GameBoard.from_matrix([
+                    ['blue', 'blue', 'blue',  'red',   None,   None, None],
+                    ['red',   'red',  'red', 'blue', 'blue',   None, None],
+                    ['blue',  'red', 'blue',  'red', 'blue',   None, None],
+                    ['blue',  'red', 'blue',  'red',  'red',  'red', None],
+                    ['blue', 'blue',  'red', 'blue',  'red', 'blue', None],
+                    ['red',   'red',  'red', 'blue',  'red', 'blue', None]])
+        board_2 = GameBoard.from_matrix([
+                    ['blue', 'blue', 'blue',  'red',   None,   None, None],
+                    ['red',   'red',  'red', 'blue', 'blue',   None, None],
+                    ['blue',  'red', 'blue',  'red', 'blue',   None, None],
+                    ['blue',  'red', 'blue',  'red',  'red',  'red', None],
+                    ['blue', 'blue',  'red', 'blue',  'red', 'blue', None],
+                    ['red',   'red',  'red', 'blue',  'red', 'blue', None]])
+        self.assertTrue(board_1 == board_2)
+
+
+    def test_non_equality_of_very_similar_boards(self):
+        board_1 = GameBoard.from_matrix([
+                    ['blue', 'blue', 'blue',  'red',   None,   None, None],
+                    ['red',   'red',  'red', 'blue', 'blue',   None, None],
+                    ['blue',  'red', 'blue',  'red', 'blue',   None, None],
+                    ['blue',  'red', 'blue',  'red',  'red',  'red', None],
+                    ['blue', 'blue',  'red', 'blue',  'red', 'blue', None],
+                    ['red',   'red',  'red', 'blue',  'red', 'blue', 'red']])
+        board_2 = GameBoard.from_matrix([
+                    ['blue', 'blue', 'blue',  'red',   None,   None,  None],
+                    ['red',   'red',  'red', 'blue', 'blue',   None,  None],
+                    ['blue',  'red', 'blue',  'red', 'blue',   None,  None],
+                    ['blue',  'red', 'blue',  'red',  'red',  'red',  None],
+                    ['blue', 'blue',  'red', 'blue',  'red', 'blue',  None],
+                    ['red',   'red',  'red', 'blue',  'red', 'blue', 'blue']])
+        self.assertFalse(board_1 == board_2)
