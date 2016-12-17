@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 import unittest
-from game.match import Match
 from game.player_with_strategy_two import PlayerWithStrategyTwo
-from game.player import GameBoard
+from game.gameboard import GameBoard
 
 class TestPlayer(unittest.TestCase):
     def setUp(self):
