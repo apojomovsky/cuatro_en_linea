@@ -17,10 +17,8 @@ class TestPlayer(unittest.TestCase):
                     ['red',  'blue',  'red', 'blue',  'red', 'blue', 'blue'],
                     ['blue',  'red', 'blue',  'red',  'red',  'red',  'red']])
         self.assertEqual(board.read_entry(5, 7), None)
-        self.assertFalse(self.player_blue.is_winner(board))
         self.player_blue.play(board)
         self.assertEqual(board.read_entry(5, 7), 'blue')
-        self.assertTrue(self.player_blue.is_winner(board))
 
 
     def test_player_with_strategy_two_blue_wins_on_left_lower_corner(self):
@@ -32,10 +30,8 @@ class TestPlayer(unittest.TestCase):
                     [None, 'blue',   None, 'blue',  None, None, 'blue'],
                     [None, 'blue', 'blue', 'blue',  None, None,  'red']])
         self.assertEqual(board.read_entry(1, 1), None)
-        self.assertFalse(self.player_blue.is_winner(board))
         self.player_blue.play(board)
         self.assertEqual(board.read_entry(1, 1), 'blue')
-        self.assertTrue(self.player_blue.is_winner(board))
 
 
     def test_player_with_strategy_two_red_not_winning_on_column(self):
@@ -49,12 +45,10 @@ class TestPlayer(unittest.TestCase):
         self.assertEqual(board.read_entry(4, 2), None)
         self.assertEqual(board.read_entry(5, 3), None)
         self.assertEqual(board.read_entry(5, 4), None)
-        self.assertFalse(self.player_red.is_winner(board))
         self.player_red.play(board)
         self.assertEqual(board.read_entry(4, 2), 'red')
         self.assertEqual(board.read_entry(5, 3), None)
         self.assertEqual(board.read_entry(5, 4), None)
-        self.assertFalse(self.player_red.is_winner(board))
 
     def test_player_with_strategy_two_red_not_winning_on_row(self):
         board = GameBoard.from_matrix([
@@ -68,10 +62,8 @@ class TestPlayer(unittest.TestCase):
         self.assertEqual(board.read_entry(4, 2), None)
         self.assertEqual(board.read_entry(5, 3), None)
         self.assertEqual(board.read_entry(5, 7), None)
-        self.assertFalse(self.player_red.is_winner(board))
         self.player_red.play(board)
         self.assertEqual(board.read_entry(3, 1), 'red')
         self.assertEqual(board.read_entry(4, 2), None)
         self.assertEqual(board.read_entry(5, 3), None)
         self.assertEqual(board.read_entry(5, 7), None)
-        self.assertFalse(self.player_red.is_winner(board))
