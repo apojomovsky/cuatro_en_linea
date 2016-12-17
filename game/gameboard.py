@@ -98,7 +98,7 @@ class GameBoard(object):
                     return False
         return True
 
-    def game_over(self):
+    def is_game_over(self):
         """Checks whether the game is over or not"""
         if self.winner_exists() or self.board_is_full():
             return True

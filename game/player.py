@@ -12,7 +12,7 @@ class Player(object):
         return self._color
 
     def is_winner(self, board):
-        return board.game_over() and board.winner_color() == self._color
+        return board.is_game_over() and board.winner_color() == self._color
 
     @abstractmethod
     def play(self):
