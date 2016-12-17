@@ -24,7 +24,8 @@ class GameBoard(object):
         self._winner = None
 
     def __eq__(self, other_board):
-        numpy.array_equal(self.retrieve_matrix(), other_board.retrieve_matrix())
+        """ Checks if the _matrix from both gameboards have the same shape and elements"""
+        return numpy.array_equal(self.retrieve_matrix(), other_board.retrieve_matrix())
 
     def put_chip(self, column_index, color):
         """Inserts a new chip into the game matrix
