@@ -100,9 +100,7 @@ class GameBoard(object):
 
     def is_game_over(self):
         """Checks whether the game is over or not"""
-        if self.winner_exists() or self.board_is_full():
-            return True
-        return False
+        return self.winner_exists() or self.board_is_full()
 
     @classmethod
     def from_matrix(cls, external_matrix):
