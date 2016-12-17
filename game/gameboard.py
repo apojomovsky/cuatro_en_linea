@@ -23,6 +23,9 @@ class GameBoard(object):
             self.ROWSCOUNT, self.COLUMNSCOUNT, None)
         self._winner = None
 
+    def __eq__(self, other_board):
+        numpy.array_equal(self.retrieve_matrix(), other_board.retrieve_matrix())
+
     def put_chip(self, column_index, color):
         """Inserts a new chip into the game matrix
 
@@ -101,6 +104,9 @@ class GameBoard(object):
     def is_game_over(self):
         """Checks whether the game is over or not"""
         return self.winner_exists() or self.board_is_full()
+
+    def retrieve_matrix(self):
+        return self._matrix
 
     @classmethod
     def from_matrix(cls, external_matrix):

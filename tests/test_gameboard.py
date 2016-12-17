@@ -120,3 +120,8 @@ class TestGameBoard(unittest.TestCase):
         self.assertEqual(self.board_test_diagonals.winner_exists(), False)
         self.board_test_diagonals.put_chip(7, 'red')
         self.assertEqual(self.board_test_diagonals.winner_exists(), True)
+
+    def test_equality_of_empty_boards(self):
+        board_1 = GameBoard()
+        board_2 = GameBoard()
+        self.assertTrue(board_1 == board_2)
