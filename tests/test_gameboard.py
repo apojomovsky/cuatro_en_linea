@@ -82,14 +82,14 @@ class TestGameBoard(unittest.TestCase):
         self.assertTrue(self.board_almost_full.board_is_full())
 
     def test_game_over_on_full_board(self):
-        self.assertFalse(self.board_test_columns.game_over())
+        self.assertFalse(self.board_test_columns.is_game_over())
         self.board_almost_full.put_chip(4, 'blue')
-        self.assertTrue(self.board_almost_full.game_over())
+        self.assertTrue(self.board_almost_full.is_game_over())
 
     def test_game_over_on_winner(self):
-        self.assertEqual(self.board_test_rows.game_over(), False)
+        self.assertEqual(self.board_test_rows.is_game_over(), False)
         self.board_test_rows.put_chip(1, 'red')
-        self.assertEqual(self.board_test_rows.game_over(), True)
+        self.assertEqual(self.board_test_rows.is_game_over(), True)
 
     def test_winner_exists_from_rows_on_left_corner(self):
         self.assertEqual(self.board_test_rows.winner_exists(), False)
