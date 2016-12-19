@@ -8,31 +8,43 @@ class TestPlayer(unittest.TestCase):
         self.player_blue = PlayerWithStrategyTwo('blue')
         self.player_red = PlayerWithStrategyTwo('red')
 
-    def test_player_with_strategy_two_blue_wins_on_right_almost_upper_corner(self):
+    def test_player_with_strategy_two_on_almost_full_board(self):
         board = GameBoard.from_matrix([
                     ['red',    None,   None,   None,   None,   None,   None],
                     ['red',   'red', 'blue',  'red',  'red',  'red',   None],
                     ['red',  'blue',  'red',  'red', 'blue', 'blue', 'blue'],
-                    ['blue', 'blue',  'red', 'blue',  'red', 'blue', 'blue'],
+                    ['blue', 'blue',  'red', 'blue',  'red', 'blue',  'red'],
                     ['red',  'blue',  'red', 'blue',  'red', 'blue', 'blue'],
                     ['blue',  'red', 'blue',  'red',  'red',  'red',  'red']])
-        self.assertEqual(board.read_entry(5, 7), None)
+        expected_board = GameBoard.from_matrix([
+                    ['red',   'red',   None,   None,   None,   None,   None],
+                    ['red',   'red', 'blue',  'red',  'red',  'red', 'blue'],
+                    ['red',  'blue',  'red',  'red', 'blue', 'blue', 'blue'],
+                    ['blue', 'blue',  'red', 'blue',  'red', 'blue',  'red'],
+                    ['red',  'blue',  'red', 'blue',  'red', 'blue', 'blue'],
+                    ['blue',  'red', 'blue',  'red',  'red',  'red',  'red']])
         self.player_blue.play(board)
-        self.assertEqual(board.read_entry(5, 7), 'blue')
+        self.player_red.play(board)
+        self.assertEqual(board, expected_board)
 
-
-    def test_player_with_strategy_two_blue_wins_on_left_lower_corner(self):
+    def test_player_with_strategy_two_on_semi_empty_board(self):
         board = GameBoard.from_matrix([
-                    [None,   None,   None,   None,  None, None,   None],
-                    [None,   None,   None,   None,  None, None,   None],
-                    [None,   None,   None,   None,  None, None, 'red'],
-                    [None,  'red',   None,   None,  None, None, 'blue'],
-                    [None, 'blue',   None, 'blue',  None, None, 'blue'],
-                    [None, 'blue', 'blue', 'blue',  None, None,  'red']])
-        self.assertEqual(board.read_entry(1, 1), None)
+                    [None,    None,   None,   None,  None, None,   None],
+                    [None,    None,   None,   None,  None, None,   None],
+                    [None,    None,   None,   None,  None, None,   None],
+                    [None,    None,   None,   None,  None, None,   None],
+                    [None,  'blue',   None, 'blue',  None, None, 'blue'],
+                    ['red', 'blue', 'blue', 'blue', 'red', None,  'red']])
+        expected_board = GameBoard.from_matrix([
+                    [None,    None,   None,   None,  None, None,   None],
+                    [None,    None,   None,   None,  None, None,   None],
+                    [None,    None,   None,   None,  None, None,   None],
+                    [None,    None,   None,   None,  None, None,   None],
+                    ['red',  'blue',   None, 'blue',  None, None, 'blue'],
+                    ['red', 'blue', 'blue', 'blue', 'red', 'blue',  'red']])
         self.player_blue.play(board)
-        self.assertEqual(board.read_entry(1, 1), 'blue')
-
+        self.player_red.play(board)
+        self.assertEqual(board, expected_board)
 
     def test_player_with_strategy_two_red_not_winning_on_column(self):
         board = GameBoard.from_matrix([
@@ -42,13 +54,16 @@ class TestPlayer(unittest.TestCase):
                     ['blue', 'blue',  'red',  'red',   'red', 'blue', 'blue'],
                     ['red',  'blue',  'red',  'red',  'blue', 'blue', 'blue'],
                     ['blue',  'red', 'blue',  'blue', 'blue',  'red',  'red']])
-        self.assertEqual(board.read_entry(4, 2), None)
-        self.assertEqual(board.read_entry(5, 3), None)
-        self.assertEqual(board.read_entry(5, 4), None)
+        expected_board = GameBoard.from_matrix([
+                    ['red',    None,   None,   None,    None,   None,   None],
+                    ['blue', 'blue',   None,   None,    None,   None,   None],
+                    ['blue',  'red',  'red',  'red',  'blue', 'blue', 'blue'],
+                    ['blue', 'blue',  'red',  'red',   'red', 'blue', 'blue'],
+                    ['red',  'blue',  'red',  'red',  'blue', 'blue', 'blue'],
+                    ['blue',  'red', 'blue',  'blue', 'blue',  'red',  'red']])
         self.player_red.play(board)
-        self.assertEqual(board.read_entry(4, 2), 'red')
-        self.assertEqual(board.read_entry(5, 3), None)
-        self.assertEqual(board.read_entry(5, 4), None)
+        self.player_blue.play(board)
+        self.assertEqual(board, expected_board)
 
     def test_player_with_strategy_two_red_not_winning_on_row(self):
         board = GameBoard.from_matrix([
@@ -58,12 +73,13 @@ class TestPlayer(unittest.TestCase):
                     [None,  'blue',  'red', 'blue',  'blue', 'red', 'blue'],
                     ['red', 'blue',  'red', 'blue',  'red', 'blue', 'blue'],
                     ['blue', 'red', 'blue',  'red',  'red',  'red',  'red']])
-        self.assertEqual(board.read_entry(3, 1), None)
-        self.assertEqual(board.read_entry(4, 2), None)
-        self.assertEqual(board.read_entry(5, 3), None)
-        self.assertEqual(board.read_entry(5, 7), None)
+        expected_board = GameBoard.from_matrix([
+                    [None,    None,   None,   None,   None,   None,   None],
+                    [None,    None,   None,  'red',  'red',  'red',   None],
+                    ['blue',  None,  'red',  'red',  'red', 'blue', 'blue'],
+                    ['red', 'blue',  'red', 'blue',  'blue', 'red', 'blue'],
+                    ['red', 'blue',  'red', 'blue',  'red', 'blue', 'blue'],
+                    ['blue', 'red', 'blue',  'red',  'red',  'red',  'red']])
         self.player_red.play(board)
-        self.assertEqual(board.read_entry(3, 1), 'red')
-        self.assertEqual(board.read_entry(4, 2), None)
-        self.assertEqual(board.read_entry(5, 3), None)
-        self.assertEqual(board.read_entry(5, 7), None)
+        self.player_blue.play(board)
+        self.assertEqual(board, expected_board)
