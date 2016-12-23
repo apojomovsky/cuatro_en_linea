@@ -19,13 +19,23 @@ class GameBoard(object):
     COLUMNSCOUNT = 7
 
     def __init__(self):
-        self._matrix = self._generate_matrix(
+        self._matrix = self.generate_matrix(
             self.ROWSCOUNT, self.COLUMNSCOUNT, None)
         self._winner = None
 
     def __eq__(self, other_board):
         """ Checks if the _matrix from both gameboards have the same shape and elements"""
-        return numpy.array_equal(self.retrieve_matrix(), other_board.retrieve_matrix())
+        if isinstance(other_board, self.__class__):
+            return numpy.array_equal(self.retrieve_matrix(),
+                                     other_board.retrieve_matrix())
+        return NotImplemented
+
+    def __ne__(self, other_board):
+        """ Checks if the _matrix from both gameboards are differents"""
+        if isinstance(other_board, self.__class__):
+            return not numpy.array_equal(self.retrieve_matrix(),
+                                         other_board.retrieve_matrix())
+        return NotImplemented
 
     def put_chip(self, column_index, color):
         """Inserts a new chip into the game matrix
@@ -118,6 +128,18 @@ class GameBoard(object):
         else:
             return False
 
+    @classmethod
+    def empty(cls):
+        """Returns an instance of GameBoard with an empty _matrix attribute"""
+        board = GameBoard()
+        empty_matrix = board.generate_matrix(board.ROWSCOUNT,
+                                             board.COLUMNSCOUNT,
+                                             None)
+        if board.set_board_from_matrix(empty_matrix):
+            return board
+        else:
+            return False
+
     def set_board_from_matrix(self, matrix):
         """Set the internal game matrix with an external one, only if valid
 
@@ -132,7 +154,7 @@ class GameBoard(object):
             return True
         return False
 
-    def _generate_matrix(self, rows, columns, fill):
+    def generate_matrix(self, rows, columns, fill):
         """Return a numpy matrix of the desired dimensions
 
         Args:
