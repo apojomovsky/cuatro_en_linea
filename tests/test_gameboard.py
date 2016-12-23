@@ -1,12 +1,10 @@
 #!/usr/bin/env python
-
 import unittest
 from game.gameboard import GameBoard
 from game.gameboard import ColumnIsFull
 from game.gameboard import OutOfIndex
 
 class TestGameBoard(unittest.TestCase):
-
     def setUp(self):
         self.board = GameBoard()
         self.board_test_rows = GameBoard.from_matrix([
@@ -170,3 +168,4 @@ class TestGameBoard(unittest.TestCase):
                     ['blue', 'blue',  'red', 'blue',  'red', 'blue',  None],
                     ['red',   'red',  'red', 'blue',  'red', 'blue', 'blue']])
         self.assertTrue(board_1 != board_2)
+        

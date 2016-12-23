@@ -2,14 +2,15 @@
 import unittest
 from game.match import Match
 from game.match import GameIsOver
-from game.player_with_strategy_one import PlayerWithStrategyOne
-from game.player_with_strategy_two import PlayerWithStrategyTwo
+from game.player import Player
+from game.strategy_one import StrategyOne
+from game.strategy_two import StrategyTwo
 from game.gameboard import GameBoard
 
 class TestMatch(unittest.TestCase):
     def setUp(self):
-        self.player_red = PlayerWithStrategyOne('red')
-        self.player_blue = PlayerWithStrategyTwo('blue')
+        self.player_red = Player('red', StrategyOne())
+        self.player_blue = Player('blue', StrategyTwo())
         self.match = Match(self.player_red, self.player_blue)
 
     def test_play_next_turn_on_running_match(self):

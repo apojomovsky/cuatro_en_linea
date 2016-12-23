@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 import unittest
-from game.player_with_strategy_two import PlayerWithStrategyTwo
+from game.player import Player
 from game.gameboard import GameBoard
+from game.strategy_two import StrategyTwo
 
 class TestPlayer(unittest.TestCase):
     def setUp(self):
-        self.player_blue = PlayerWithStrategyTwo('blue')
-        self.player_red = PlayerWithStrategyTwo('red')
+        self.player_blue = Player('blue', StrategyTwo())
+        self.player_red = Player('red', StrategyTwo())
 
     def test_player_with_strategy_two_on_almost_full_board(self):
         board = GameBoard.from_matrix([
@@ -83,3 +84,4 @@ class TestPlayer(unittest.TestCase):
         self.player_red.play(board)
         self.player_blue.play(board)
         self.assertEqual(board, expected_board)
+        
