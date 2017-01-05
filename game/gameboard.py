@@ -32,10 +32,7 @@ class GameBoard(object):
 
     def __ne__(self, other_board):
         """ Checks if the _matrix from both gameboards are differents"""
-        if isinstance(other_board, self.__class__):
-            return not numpy.array_equal(self.retrieve_matrix(),
-                                         other_board.retrieve_matrix())
-        return NotImplemented
+        return not self.__eq__(other_board)
 
     def put_chip(self, column_index, color):
         """Inserts a new chip into the game matrix
@@ -149,7 +146,7 @@ class GameBoard(object):
             a boolean value
         """
         numpy_matrix = numpy.asarray(matrix)
-        if self._validate_matrix(numpy_matrix):
+        if self.validate_matrix(numpy_matrix):
             self._matrix = numpy_matrix
             return True
         return False
@@ -228,18 +225,20 @@ class GameBoard(object):
     def _check_diagonals_for_winner(self):
         """Check if there's a winner diagonal-wise"""
         for i in range(-2, 4):
-            if self._winner_in_array(self._matrix.diagonal(i)) or self._winner_in_array(numpy.flipud(self._matrix).diagonal(i)):
+            if self._winner_in_array(self._matrix.diagonal(i)) or \
+               self._winner_in_array(numpy.flipud(self._matrix).diagonal(i)):
                 return True
         return False
 
-    def _validate_matrix(self, matrix_to_test):
+    def validate_matrix(self, matrix_to_test):
         """Checks if an input matrix have valid characters and structure
 
         Args:
-            matrix_to_test: numpy array with dtype=object
+            matrix_to_test: list
         Returns
             a boolean value
         """
+        matrix_to_test = numpy.asarray(matrix_to_test)
         valid_entries = (None, 'blue', 'red')
         if matrix_to_test.shape != (6,7):
             return False
@@ -249,7 +248,12 @@ class GameBoard(object):
                     pass
                 else:
                     return False
-        # TODO: Add structure validation (no "floating" entries in matrix)
+        for i in range(7):
+            column = matrix_to_test[:, i]
+            indices = [i for i, x in enumerate(column) if x == None]
+            if indices:
+                if indices != [x for x in range(len(indices))]:
+                    return False
         return True
 
     def show(self):
