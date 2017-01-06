@@ -120,8 +120,8 @@ class TestGameBoard(unittest.TestCase):
         self.assertEqual(self.board_test_diagonals.winner_exists(), True)
 
     def test_equality_of_empty_boards(self):
-        board_1 = GameBoard.empty()
-        board_2 = GameBoard.empty()
+        board_1 = GameBoard()
+        board_2 = GameBoard()
         self.assertTrue(board_1 == board_2)
 
     def test_equality_of_two_loaded_boards(self):
@@ -168,4 +168,3 @@ class TestGameBoard(unittest.TestCase):
                     ['blue', 'blue',  'red', 'blue',  'red', 'blue',  None],
                     ['red',   'red',  'red', 'blue',  'red', 'blue', 'blue']])
         self.assertTrue(board_1 != board_2)
-        

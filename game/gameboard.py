@@ -128,18 +128,6 @@ class GameBoard(object):
         else:
             return False
 
-    @classmethod
-    def empty(cls):
-        """Returns an instance of GameBoard with an empty _matrix attribute"""
-        board = GameBoard()
-        empty_matrix = board.generate_matrix(board.ROWSCOUNT,
-                                             board.COLUMNSCOUNT,
-                                             None)
-        if board.set_board_from_matrix(empty_matrix):
-            return board
-        else:
-            return False
-
     def set_board_from_matrix(self, matrix):
         """Set the internal game matrix with an external one, only if valid
 
