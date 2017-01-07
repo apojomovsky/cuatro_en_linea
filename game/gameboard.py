@@ -28,7 +28,7 @@ class GameBoard(object):
         if isinstance(other_board, self.__class__):
             return numpy.array_equal(self.retrieve_matrix(),
                                      other_board.retrieve_matrix())
-        return NotImplemented
+        return False
 
     def __ne__(self, other_board):
         """ Checks if the _matrix from both gameboards are differents"""
