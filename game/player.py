@@ -13,9 +13,6 @@ class Player(object):
     def color(self):
         return self._color
 
-    def set_strategy(self, new_strategy):
-        self._strategy = new_strategy
-
     def is_winner(self, board):
         return board.is_game_over() and board.winner_color() == self._color
 
