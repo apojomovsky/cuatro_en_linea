@@ -18,14 +18,13 @@ class TestPlayer(unittest.TestCase):
                     ['red',  'blue',  'red', 'blue',  'red', 'blue', 'blue'],
                     ['blue',  'red', 'blue',  'red',  'red',  'red',  'red']])
         expected_board = GameBoard.from_matrix([
-                    ['red',   'red',   None,   None,   None,   None,   None],
+                    ['red',    None,   None,   None,   None,   None,   None],
                     ['red',   'red', 'blue',  'red',  'red',  'red', 'blue'],
                     ['red',  'blue',  'red',  'red', 'blue', 'blue', 'blue'],
                     ['blue', 'blue',  'red', 'blue',  'red', 'blue',  'red'],
                     ['red',  'blue',  'red', 'blue',  'red', 'blue', 'blue'],
                     ['blue',  'red', 'blue',  'red',  'red',  'red',  'red']])
         self.player_blue.play(board)
-        self.player_red.play(board)
         self.assertEqual(board, expected_board)
 
     def test_player_with_strategy_two_on_semi_empty_board(self):
@@ -37,14 +36,13 @@ class TestPlayer(unittest.TestCase):
                     [None,  'blue',   None, 'blue',  None, None, 'blue'],
                     ['red', 'blue', 'blue', 'blue', 'red', None,  'red']])
         expected_board = GameBoard.from_matrix([
-                    [None,    None,   None,   None,  None, None,   None],
-                    [None,    None,   None,   None,  None, None,   None],
-                    [None,    None,   None,   None,  None, None,   None],
-                    [None,    None,   None,   None,  None, None,   None],
-                    ['red',  'blue',   None, 'blue',  None, None, 'blue'],
-                    ['red', 'blue', 'blue', 'blue', 'red', 'blue',  'red']])
+                    [None,    None,   None,   None,  None, None,    None],
+                    [None,    None,   None,   None,  None, None,    None],
+                    [None,    None,   None,   None,  None, None,    None],
+                    [None,    None,   None,   None,  None, None,    None],
+                    [None,  'blue',   None, 'blue',  None, None,  'blue'],
+                    ['red', 'blue', 'blue', 'blue', 'red', 'blue', 'red']])
         self.player_blue.play(board)
-        self.player_red.play(board)
         self.assertEqual(board, expected_board)
 
     def test_player_with_strategy_two_red_not_winning_on_column(self):
@@ -57,13 +55,12 @@ class TestPlayer(unittest.TestCase):
                     ['blue',  'red', 'blue',  'blue', 'blue',  'red',  'red']])
         expected_board = GameBoard.from_matrix([
                     ['red',    None,   None,   None,    None,   None,   None],
-                    ['blue', 'blue',   None,   None,    None,   None,   None],
+                    ['blue',   None,   None,   None,    None,   None,   None],
                     ['blue',  'red',  'red',  'red',  'blue', 'blue', 'blue'],
                     ['blue', 'blue',  'red',  'red',   'red', 'blue', 'blue'],
                     ['red',  'blue',  'red',  'red',  'blue', 'blue', 'blue'],
                     ['blue',  'red', 'blue',  'blue', 'blue',  'red',  'red']])
         self.player_red.play(board)
-        self.player_blue.play(board)
         self.assertEqual(board, expected_board)
 
     def test_player_with_strategy_two_red_not_winning_on_row(self):
@@ -77,11 +74,9 @@ class TestPlayer(unittest.TestCase):
         expected_board = GameBoard.from_matrix([
                     [None,    None,   None,   None,   None,   None,   None],
                     [None,    None,   None,  'red',  'red',  'red',   None],
-                    ['blue',  None,  'red',  'red',  'red', 'blue', 'blue'],
+                    [None,    None,  'red',  'red',  'red', 'blue', 'blue'],
                     ['red', 'blue',  'red', 'blue',  'blue', 'red', 'blue'],
                     ['red', 'blue',  'red', 'blue',  'red', 'blue', 'blue'],
                     ['blue', 'red', 'blue',  'red',  'red',  'red',  'red']])
         self.player_red.play(board)
-        self.player_blue.play(board)
         self.assertEqual(board, expected_board)
-        
