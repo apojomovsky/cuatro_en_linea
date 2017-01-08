@@ -146,6 +146,56 @@ class TestGameBoard(unittest.TestCase):
             ['blue', 'blue',  'red', 'blue',  'red',   'blue',  None],
             ['red',   'red',  'red', 'blue',  'red',   'blue',  None]]))
 
+    def test_count_same_color_on_top_of_first_column(self):
+        board = GameBoard.from_matrix([
+                    [None,   None, None, None, None, None, None],
+                    ['blue', None, None, None, None, None, None],
+                    ['blue', None, None, None, None, None, None],
+                    ['blue', None, None, None, None, None, None],
+                    ['red',  None, None, None, None, None, None],
+                    ['red',  None, None, None, None, None, None]])
+        self.assertEqual(3, board.count_same_color_on_top(1, 'blue'))
+
+    def test_count_same_color_on_top_of_empty_column(self):
+        board = GameBoard.from_matrix([
+                    [None,   None,   None, None, None, None, None],
+                    ['blue', None,   None, None, None, None, None],
+                    ['blue', None,   None, None, None, None, None],
+                    ['blue', None,   None, None, None, None, None],
+                    ['red',  None, 'blue', None, None, None, None],
+                    ['red',  None,  'red', None, None, None, None]])
+        self.assertEqual(0, board.count_same_color_on_top(2, 'blue'))
+
+    def test_count_free_entries_on_empty_column(self):
+        board = GameBoard.from_matrix([
+                    [None,   None,   None, None, None, None, None],
+                    ['blue', None,   None, None, None, None, None],
+                    ['blue', None,   None, None, None, None, None],
+                    ['blue', None,   None, None, None, None, None],
+                    ['red',  None, 'blue', None, None, None, None],
+                    ['red',  None,  'red', None, None, None, None]])
+        self.assertEqual(6, board.count_free_entries_on_column(2))
+
+    def test_count_free_entries_on_full_column(self):
+        board = GameBoard.from_matrix([
+                    ['red',  None, None, None, None, None, None],
+                    ['blue', None, None, None, None, None, None],
+                    ['blue', None, None, None, None, None, None],
+                    ['blue', None, None, None, None, None, None],
+                    ['red',  None, None, None, None, None, None],
+                    ['red',  None, None, None, None, None, None]])
+        self.assertEqual(0, board.count_free_entries_on_column(1))
+
+    def test_count_free_entries_on_almost_free_column(self):
+        board = GameBoard.from_matrix([
+                    [None,  None, None, None, None, None, None],
+                    [None,  None, None, None, None, None, None],
+                    [None,  None, None, None, None, None, None],
+                    [None,  None, None, None, None, None, None],
+                    [None,  None, None, None, None, None, None],
+                    ['red', None, None, None, None, None, None]])
+        self.assertEqual(5, board.count_free_entries_on_column(1))
+
     def test_equality_of_empty_boards(self):
         board_1 = GameBoard()
         board_2 = GameBoard()

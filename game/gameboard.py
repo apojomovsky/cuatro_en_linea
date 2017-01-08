@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import numpy
+from itertools import groupby
 
 class ColumnIsFull(Exception):
 
@@ -49,7 +50,8 @@ class GameBoard(object):
             raise ColumnIsFull(column_index)
 
     def retrieve_first_non_full_column(self):
-        """Docstring goes here
+        """Returns the index of the first non-full column
+           found, looking from left to right on the board
         """
         index_list = range(1, self.COLUMNSCOUNT + 1)
         for index in index_list:
@@ -57,7 +59,7 @@ class GameBoard(object):
                 return index
 
     def retrieve_emptiest_column(self):
-        """Docstring goes here
+        """Returns the index of the emptiest column found on the board
         """
         rows_index_list = range(1, self.ROWSCOUNT + 1)
         columns_index_list = range(1, self.COLUMNSCOUNT + 1)
@@ -65,6 +67,47 @@ class GameBoard(object):
             for column_index in columns_index_list:
                 if self.read_entry(row_index, column_index) is None:
                     return column_index
+
+    def count_same_color_on_top(self, column_index, color):
+        """Reads the number of chips of the given color
+           that are placed on top of the given column
+        Args:
+            column_index: the number of columnt to test
+            color: the color to test
+        Returns
+            an integer with the count of same color chips on top
+        """
+        column = self._retrieve_column(column_index)
+        if numpy.any(column):
+            consecutive_groups = self._retrieve_consecutive_elements_from_array(column)
+            for index, entry in enumerate(consecutive_groups):
+                if None in entry:
+                    consecutive_groups.pop(index)
+            if consecutive_groups[-1][1] == color:
+                return consecutive_groups[-1][0]
+        return 0
+
+    def count_free_entries_on_column(self, column_index):
+        column = self._retrieve_column(column_index)
+        consecutive_groups = self._retrieve_consecutive_elements_from_array(column)
+        if not self.column_is_full(column_index):
+            return consecutive_groups[-1][0]
+        return 0
+
+    def count_same_color_on_row(self):
+        pass
+
+    def _retrieve_consecutive_elements_from_array(self, array):
+        """Reads the consecutive elements from a given array
+        Args:
+            array: a numpy array
+        Returns
+            a list of elements conformed by: (element, number_of_repetitions)
+            element: object of the same kind as the one from the array
+            number_of_repetitions: the number of consecutive repetitions
+        """
+        return [(sum(1 for i in g), k) for k, g in groupby(array)]
+
 
     def read_entry(self, rowIndex, column_index):
         """Read a determined entry from the game matrix
