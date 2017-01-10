@@ -3,12 +3,13 @@ from game.strategy_one import StrategyOne
 
 class Player(object):
 
-    def __init__(self, color, strategy=None):
-        if strategy:
-            self._strategy = strategy
-        else:
-            self._strategy = StrategyOne()
+    def __init__(self, color):
         self._color = color.lower()
+        self._strategy = StrategyOne()
+
+    def set_strategy(self, strategy):
+        self._strategy = strategy
+        self._strategy.set_color(self._color)
 
     def color(self):
         return self._color
@@ -19,3 +20,9 @@ class Player(object):
     def play(self, board):
         column_to_play = self._strategy.return_column(board)
         board.put_chip(column_to_play, self._color)
+
+    @classmethod
+    def with_strategy(self, color, strategy):
+        player = Player(color)
+        player.set_strategy(strategy)
+        return player
