@@ -27,8 +27,21 @@ class TestPlayer(unittest.TestCase):
         self.assertEqual(board, expected_board)
 
     def test_player_is_winner_when_is_true(self):
-        pass
-
+        board = GameBoard.from_matrix([
+                    [None,   None, None,  None,  None, None, None],
+                    [None,   None, None,  None,  None, None, None],
+                    ['blue', None, None,  None,  None, None, None],
+                    ['blue', None, None,  None,  None, None, None],
+                    ['blue', None, None,  None, 'red', None, None],
+                    ['blue', None, None, 'red', 'red', None, None]])
+        self.assertTrue(self.player_blue.is_winner(board))
 
     def test_player_is_winner_when_is_false(self):
-        pass
+        board = GameBoard.from_matrix([
+                    [None,   None, None,  None,  None, None, None],
+                    [None,   None, None,  None,  None, None, None],
+                    [None,   None, None,  None,  None, None, None],
+                    ['blue', None, None,  None,  None, None, None],
+                    ['blue', None, None,  None, 'red', None, None],
+                    ['blue', None, None, 'red', 'red', None, None]])
+        self.assertFalse(self.player_blue.is_winner(board))
