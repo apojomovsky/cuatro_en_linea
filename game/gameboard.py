@@ -239,14 +239,11 @@ class GameBoard(object):
             a boolean value
         """
         matrix_to_test = numpy.asarray(matrix_to_test)
-        valid_entries = (None, 'blue', 'red')
         if matrix_to_test.shape != (6,7):
             return False
         for row in matrix_to_test:
             for entry in row:
-                if entry in valid_entries:
-                    pass
-                else:
+                if not self._is_valid_cell_value(entry):
                     return False
         for i in range(7):
             column = matrix_to_test[:, i]
@@ -255,6 +252,10 @@ class GameBoard(object):
                 if indices != [x for x in range(len(indices))]:
                     return False
         return True
+
+    def _is_valid_cell_value(self, entry):
+        valid_entries = (None, 'blue', 'red')
+        return entry in valid_entries
 
     def show(self):
         """Print the game board in a nice format"""
