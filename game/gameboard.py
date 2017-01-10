@@ -245,15 +245,16 @@ class GameBoard(object):
             for entry in row:
                 if not self._is_valid_cell_value(entry):
                     return False
-        for i in range(7):
-            column = matrix_to_test[:, i]
-            indices = [i for i, x in enumerate(column) if x == None]
+        for column_index in range(self.COLUMNSCOUNT):
+            column = matrix_to_test[:, column_index]
+            indices = [index for index, entry in enumerate(column) if entry == None]
             if indices:
-                if indices != [x for x in range(len(indices))]:
+                if indices != [number for number in range(len(indices))]:
                     return False
         return True
 
     def _is_valid_cell_value(self, entry):
+        """Checks if a given value is a valid entry"""
         valid_entries = (None, 'blue', 'red')
         return entry in valid_entries
 
