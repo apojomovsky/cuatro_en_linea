@@ -88,14 +88,12 @@ class GameBoard(object):
         return 0
 
     def count_free_entries_on_column(self, column_index):
+        """Checks the number of 'None' entries on top of a given column"""
         column = self._retrieve_column(column_index)
         consecutive_groups = self._retrieve_consecutive_elements_from_array(column)
         if not self.column_is_full(column_index):
             return consecutive_groups[-1][0]
         return 0
-
-    def count_same_color_on_row(self):
-        pass
 
     def _retrieve_consecutive_elements_from_array(self, array):
         """Reads the consecutive elements from a given array
