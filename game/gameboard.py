@@ -242,9 +242,8 @@ class GameBoard(object):
         if matrix_to_test.shape != (6,7):
             return False
         for row in matrix_to_test:
-            for entry in row:
-                if not self._is_valid_cell_value(entry):
-                    return False
+            if not all(self._is_valid_cell_value(entry) for entry in row):
+                return False
         for column_index in range(self.COLUMNSCOUNT):
             column = matrix_to_test[:, column_index]
             indices = [index for index, entry in enumerate(column) if entry == None]
