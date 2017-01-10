@@ -146,7 +146,7 @@ class GameBoard(object):
             a boolean value
         """
         numpy_matrix = numpy.asarray(matrix)
-        if self.validate_matrix(numpy_matrix):
+        if self._validate_matrix(numpy_matrix):
             self._matrix = numpy_matrix
             return True
         return False
@@ -230,7 +230,7 @@ class GameBoard(object):
                 return True
         return False
 
-    def validate_matrix(self, matrix_to_test):
+    def _validate_matrix(self, matrix_to_test):
         """Checks if an input matrix have valid characters and structure
 
         Args:
