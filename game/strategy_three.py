@@ -15,7 +15,7 @@ class StrategyThree(Strategy):
 
     def _get_column_closest_to_win(self, board):
         current_max = [0, 0]
-        for column_index in range(GameBoard.COLUMNSCOUNT, 0, -1):
+        for column_index in range(1, GameBoard.COLUMNSCOUNT + 1):
             if self._can_complete_four(board, column_index):
                 same_color_on_top = board.count_same_color_on_top(column_index, self._color)
                 if same_color_on_top > current_max[1]:

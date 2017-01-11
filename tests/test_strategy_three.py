@@ -6,10 +6,10 @@ from game.strategy_three import StrategyThree
 
 class TestPlayer(unittest.TestCase):
     def setUp(self):
-        self.player_blue = Player.with_strategy('blue', StrategyThree())
-        self.player_red = Player.with_strategy('red', StrategyThree())
+        self.strategy_three = StrategyThree()
+        self.strategy_three.set_color('blue')
 
-    def test_strategy_three_red_wins_on_third_column(self):
+    def test_strategy_three_on_sixth_column(self):
         board = GameBoard.from_matrix([
                     ['red',    None,   None,   None,   None,   None,   None],
                     ['blue',   None,   None,   None,   None,   None,   None],
@@ -17,17 +17,9 @@ class TestPlayer(unittest.TestCase):
                     ['blue', 'blue',  'red', 'blue',  'red', 'blue', 'blue'],
                     ['red',  'blue',  'red',  'red', 'blue', 'blue', 'blue'],
                     ['blue',  'red', 'blue', 'blue', 'blue',  'red',  'red']])
-        expected_board = GameBoard.from_matrix([
-                    ['red',    None,   None,   None,   None,   None,   None],
-                    ['blue',   None,  'red',   None,   None,   None,   None],
-                    ['blue',   None,  'red',  'red', 'blue', 'blue', 'blue'],
-                    ['blue', 'blue',  'red', 'blue',  'red', 'blue', 'blue'],
-                    ['red',  'blue',  'red',  'red', 'blue', 'blue', 'blue'],
-                    ['blue',  'red', 'blue', 'blue', 'blue',  'red',  'red']])
-        self.player_red.play(board)
-        self.assertEqual(board, expected_board)
+        self.assertEqual(6, self.strategy_three.return_column(board))
 
-    def test_strategy_three_red_plays_on_third_column_cannot_win_on_first(self):
+    def test_strategy_three_red_on_seventh_column_because_cannot_win_on_first(self):
         board = GameBoard.from_matrix([
                     [None,   None, None, None, None, None,   None],
                     ['blue', None, None, None, None, None,   None],
@@ -35,13 +27,25 @@ class TestPlayer(unittest.TestCase):
                     ['red',  None, None, None, None, None, 'blue'],
                     ['red',  None, None, None, None, None,  'red'],
                     ['red',  None, None, None, None, None,  'red']])
+        self.assertEqual(7, self.strategy_three.return_column(board))
 
-        expected_board = GameBoard.from_matrix([
-                    [None,   None, None, None, None, None,   None],
-                    ['blue', None, None, None, None, None,   None],
-                    ['blue', None, None, None, None, None, 'blue'],
-                    ['red',  None, None, None, None, None, 'blue'],
-                    ['red',  None, None, None, None, None,  'red'],
-                    ['red',  None, None, None, None, None,  'red']])
-        self.player_blue.play(board)
-        self.assertEqual(board, expected_board)
+
+    def test_strategy_three_blue_on_first_column_from_empty_board(self):
+        board = GameBoard.from_matrix([
+                    [None, None, None, None, None, None, None],
+                    [None, None, None, None, None, None, None],
+                    [None, None, None, None, None, None, None],
+                    [None, None, None, None, None, None, None],
+                    [None, None, None, None, None, None, None],
+                    [None, None, None, None, None, None, None]])
+        self.assertEqual(1, self.strategy_three.return_column(board))
+
+    def test_strategy_three_on_impossible_to_win_board_(self):
+        board = GameBoard.from_matrix([
+                    ['red',  'blue',  'red',  'red', 'blue',   None,   None],
+                    ['red',   'red', 'blue',  'red',  'red',   None,   None],
+                    ['red',  'blue',  'red',  'red', 'blue',   None, 'blue'],
+                    ['blue', 'blue',  'red', 'blue',  'red',  'red',  'red'],
+                    ['red',  'blue',  'red', 'blue',  'red', 'blue',  'red'],
+                    ['blue',  'red', 'blue',  'red',  'red',  'red',  'red']])
+        self.assertEqual(6, self.strategy_three.return_column(board))
