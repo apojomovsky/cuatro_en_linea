@@ -9,9 +9,7 @@ class StrategyThree(Strategy):
     def _can_complete_four(self, board, column_index):
         same_color_on_top = board.count_same_color_on_top(column_index, self._color)
         current_free_entries = board.count_free_entries_on_column(column_index)
-        if same_color_on_top + current_free_entries >= 4:
-            return True
-        return False
+        return same_color_on_top + current_free_entries >= 4
 
     def _get_column_closest_to_win(self, board):
         current_max = [0, 0]
