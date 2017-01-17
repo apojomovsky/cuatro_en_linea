@@ -122,7 +122,7 @@ class TestGameBoard(unittest.TestCase):
         self.assertEqual(self.board_test_diagonals.winner_exists(), True)
 
     def test_validate_matrix_with_valid_matrix(self):
-        self.assertTrue(self.board._validate_matrix([
+        self.assertTrue(self.board.set_board_from_matrix([
             ['blue', 'blue', 'blue',  'red',   None,   None, None],
             ['red',   'red',  'red', 'blue', 'blue',   None, None],
             ['blue',  'red', 'blue',  'red', 'blue',   None, None],
@@ -131,7 +131,7 @@ class TestGameBoard(unittest.TestCase):
             ['red',   'red',  'red', 'blue',  'red', 'blue', None]]))
 
     def test_validate_matrix_with_invalid_matrix_wrong_color(self):
-        self.assertFalse(self.board._validate_matrix([
+        self.assertFalse(self.board.set_board_from_matrix([
             ['blue', 'blue', 'blue',  'red',   None,     None, None],
             ['red',   'red',  'red', 'blue', 'blue',     None, None],
             ['blue',  'red', 'blue',  'red', 'blue', 'yellow', None],
@@ -140,7 +140,7 @@ class TestGameBoard(unittest.TestCase):
             ['red',   'red',  'red', 'blue',  'red',   'blue', None]]))
 
     def test_validate_matrix_with_invalid_matrix_wrong_structure(self):
-        self.assertFalse(self.board._validate_matrix([
+        self.assertFalse(self.board.set_board_from_matrix([
             ['blue', 'blue', 'blue',  'red',   None,     None,  None],
             ['red',   'red',  'red', 'blue', 'blue',     None, 'blue'],
             ['blue',  'red', 'blue',  'red', 'blue',     None,  None],
