@@ -4,13 +4,14 @@ from itertools import groupby
 from copy import copy
 
 class ColumnIsFull(Exception):
-
     def __init___(self, column_index):
         self.failedcolumn_index = column_index
 
+class BoardIsFull(Exception):
+    def __init___(self, matrix):
+        self.matrix = matrix
 
 class OutOfIndex(Exception):
-
     def __init___(self, errArguments):
         self.array_type = errArguments['type']
         self.index = errArguments['index']
@@ -57,20 +58,26 @@ class GameBoard(object):
         """Returns the index of the first non-full column
            found, looking from left to right on the board
         """
-        index_list = range(1, self.COLUMNSCOUNT + 1)
-        for index in index_list:
-            if not self.column_is_full(index):
-                return index
+        if not self.board_is_full:
+            index_list = range(1, self.COLUMNSCOUNT + 1)
+            for index in index_list:
+                if not self.column_is_full(index):
+                    return index
+        else:
+            raise BoardIsFull(self._matrix)
 
     def retrieve_emptiest_column(self):
         """Returns the index of the emptiest column found on the board
         """
-        rows_index_list = range(1, self.ROWSCOUNT + 1)
-        columns_index_list = range(1, self.COLUMNSCOUNT + 1)
-        for row_index in rows_index_list:
-            for column_index in columns_index_list:
-                if self.read_entry(row_index, column_index) is None:
-                    return column_index
+        if not self.board_is_full:
+            rows_index_list = range(1, self.ROWSCOUNT + 1)
+            columns_index_list = range(1, self.COLUMNSCOUNT + 1)
+            for row_index in rows_index_list:
+                for column_index in columns_index_list:
+                    if self.read_entry(row_index, column_index) is None:
+                        return column_index
+        else:
+            raise BoardIsFull(self._matrix)
 
     def count_same_color_on_top(self, column_index, color):
         """Reads the number of chips of the given color
