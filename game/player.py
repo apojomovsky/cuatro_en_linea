@@ -1,11 +1,13 @@
 #!/usr/bin/env python
-from abc import ABCMeta, abstractmethod
-from game.gameboard import GameBoard
+from game.strategy_one import StrategyOne
 
 class Player(object):
-    __metaclass__ = ABCMeta
 
-    def __init__(self, color):
+    def __init__(self, color, strategy=None):
+        if strategy:
+            self._strategy = strategy
+        else:
+            self._strategy = StrategyOne()
         self._color = color.lower()
 
     def color(self):
@@ -14,7 +16,6 @@ class Player(object):
     def is_winner(self, board):
         return board.is_game_over() and board.winner_color() == self._color
 
-    @abstractmethod
     def play(self, board):
-        """This method must be overridden"""
-        pass
+        column_to_play = self._strategy.return_column(board)
+        board.put_chip(column_to_play, self._color)

@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 from gameboard import GameBoard
-from game.player_with_strategy_one import PlayerWithStrategyOne
-from game.player_with_strategy_two import PlayerWithStrategyTwo
+from game.player import Player
 from itertools import cycle
 
 class GameIsOver(Exception): # Where should this exception be placed?
@@ -9,8 +8,8 @@ class GameIsOver(Exception): # Where should this exception be placed?
         self.winner = winner
 
 class Match(object):
-    def __init__(self, player_one = PlayerWithStrategyOne('red'),
-                 player_two = PlayerWithStrategyTwo('blue'), board = GameBoard()):
+    def __init__(self, player_one = Player('red'),
+                 player_two = Player('blue'), board = GameBoard()):
         self._board = board
         self._active_player = None
         self._players = [player_one, player_two]
