@@ -2,6 +2,7 @@
 from game.gameboard import GameBoard
 from game.gameboard import OutOfIndex
 from game.strategy_one import StrategyOne
+from game.gameboard import BoardIsFull
 
 class Player(object):
 

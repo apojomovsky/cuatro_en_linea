@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import unittest
 from game.gameboard import GameBoard
+from game.gameboard import BoardIsFull
 from game.strategy_one import StrategyOne
 
 class TestPlayer(unittest.TestCase):
@@ -8,32 +9,47 @@ class TestPlayer(unittest.TestCase):
         self.strategy_one = StrategyOne()
         self.color = 'blue'
 
-    def test_strategy_one_on_sixth_column(self):
+    def test_strategy_two_choses_leftmost_column_on_empty_board(self):
+        board = GameBoard()
+        self.assertEqual(self.strategy_one.return_column(board), 1)
+
+    def test_strategy_one_on_near_empty_board(self):
         board = GameBoard.from_matrix([
-                    ['red',  'blue',  'red',  'red', 'blue',   None,   None],
-                    ['red',   'red', 'blue',  'red',  'red',   None,   None],
-                    ['red',  'blue',  'red',  'red', 'blue', 'blue',   None],
+                    [None,   None, None, None, None, None, None],
+                    [None,   None, None, None, None, None, None],
+                    [None,   None, None, None, None, None, None],
+                    [None,   None, None, None, None, None, None],
+                    [None,   None, None, None, None, None, None],
+                    ['blue', None, None, None, None, None, None]])
+        self.assertEqual(self.strategy_one.return_column(board), 1)
+
+    def test_strategy_one_on_near_full_column(self):
+        board = GameBoard.from_matrix([
+                    [None,   None, None, None, None, None, None],
+                    ['blue', None, None, None, None, None, None],
+                    ['red',  None, None, None, None, None, None],
+                    ['blue', None, None, None, None, None, None],
+                    ['red',  None, None, None, None, None, None],
+                    ['blue', None, None, None, None, None, None]])
+        self.assertEqual(self.strategy_one.return_column(board), 1)
+
+    def test_strategy_one_choses_leftmost_non_full_column(self):
+        board = GameBoard.from_matrix([
+                    ['red',  None, None, None, None, None, None],
+                    ['blue', None, None, None, None, None, None],
+                    ['red',  None, None, None, None, None, None],
+                    ['blue', None, None, None, None, None, None],
+                    ['red',  None, None, None, None, None, None],
+                    ['blue', None, None, None, None, None, None]])
+        self.assertEqual(self.strategy_one.return_column(board), 2)
+
+    def test_strategy_one_raises_exception_on_full_board(self):
+        board = GameBoard.from_matrix([
+                    ['red',  'blue',  'red',  'red', 'blue', 'blue', 'blue'],
+                    ['red',   'red', 'blue',  'red', 'blue',  'red',  'red'],
+                    ['red',  'blue',  'red',  'red', 'blue', 'blue', 'blue'],
                     ['blue', 'blue',  'red', 'blue',  'red',  'red', 'blue'],
                     ['red',  'blue',  'red', 'blue',  'red', 'blue',  'red'],
                     ['blue',  'red', 'blue',  'red',  'red',  'red',  'red']])
-        self.assertEqual(self.strategy_one.return_column(board, self.color), 6)
-
-    def test_strategy_one_on_second_column(self):
-        board = GameBoard.from_matrix([
-                    ['red',    None, None, None, None, None, None],
-                    ['blue',   None, None, None, None, None, None],
-                    ['red',    None, None, None, None, None, None],
-                    ['blue',   None, None, None, None, None, None],
-                    ['red',   'red', None, None, None, None, None],
-                    ['blue', 'blue', None, None, None, None, None]])
-        self.assertEqual(self.strategy_one.return_column(board, self.color), 2)
-
-    def test_strategy_on_first(self):
-        board = GameBoard.from_matrix([
-                    [None,     None,   None,   None,  None, None, None],
-                    ['blue',   None,   None,   None,  None, None, None],
-                    ['red',  'blue',   None, 'blue',  None, None, None],
-                    ['blue', 'blue',   None, 'blue',  None, None, None],
-                    ['red',  'blue',  'red', 'blue',  None, None, None],
-                    ['blue',  'red', 'blue',  'red', 'red', None, None]])
-        self.assertEqual(self.strategy_one.return_column(board, self.color), 1)
+        with self.assertRaises(BoardIsFull):
+            self.strategy_one.return_column(board)

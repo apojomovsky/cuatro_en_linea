@@ -58,7 +58,7 @@ class GameBoard(object):
         """Returns the index of the first non-full column
            found, looking from left to right on the board
         """
-        if not self.board_is_full:
+        if not self.board_is_full():
             index_list = range(1, self.COLUMNSCOUNT + 1)
             for index in index_list:
                 if not self.column_is_full(index):
@@ -69,7 +69,7 @@ class GameBoard(object):
     def retrieve_emptiest_column(self):
         """Returns the index of the emptiest column found on the board
         """
-        if not self.board_is_full:
+        if not self.board_is_full():
             rows_index_list = range(1, self.ROWSCOUNT + 1)
             columns_index_list = range(1, self.COLUMNSCOUNT + 1)
             for row_index in rows_index_list:
