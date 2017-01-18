@@ -9,43 +9,46 @@ class TestPlayer(unittest.TestCase):
         self.strategy_three = StrategyThree()
         self.strategy_three.set_color('blue')
 
-    def test_strategy_three_on_sixth_column(self):
+    def test_strategy_three_choses_column_closest_to_win_for_blue(self):
         board = GameBoard.from_matrix([
-                    ['red',    None,   None,   None,   None,   None,   None],
-                    ['blue',   None,   None,   None,   None,   None,   None],
-                    ['blue',   None,  'red',  'red', 'blue', 'blue', 'blue'],
-                    ['blue', 'blue',  'red', 'blue',  'red', 'blue', 'blue'],
-                    ['red',  'blue',  'red',  'red', 'blue', 'blue', 'blue'],
-                    ['blue',  'red', 'blue', 'blue', 'blue',  'red',  'red']])
+                    [None,  None,   None, None, None, None, None],
+                    [None,  None,   None, None, None, None, None],
+                    [None,  None,   None, None, None, None, None],
+                    ['red', None, 'blue', None, None, None, None],
+                    ['red', None, 'blue', None, None, None, None],
+                    ['red', None, 'blue', None, None, None, None]])
+        self.assertEqual(self.strategy_three.return_column(board), 3)
+
+    def test_strategy_three_choses_sixth_column_because_unable_to_win_on_leftmost(self):
+        board = GameBoard.from_matrix([
+                    [None,   None, None, None, None, None,    None],
+                    ['blue', None, None, None, None, None,    None],
+                    ['blue', None, None, None, None, None,    None],
+                    ['red',  None, None, None, None, None,    None],
+                    ['red',  None, None, None, None, 'blue',  None],
+                    ['red',  None, None, None, None, 'blue', 'blue']])
         self.assertEqual(6, self.strategy_three.return_column(board))
 
-    def test_strategy_three_red_on_seventh_column_because_cannot_win_on_first(self):
+    def test_strategy_three_choses_leftmost_when_more_than_one_evaluates_equal(self):
         board = GameBoard.from_matrix([
-                    [None,   None, None, None, None, None,   None],
-                    ['blue', None, None, None, None, None,   None],
-                    ['blue', None, None, None, None, None,   None],
-                    ['red',  None, None, None, None, None, 'blue'],
-                    ['red',  None, None, None, None, None,  'red'],
-                    ['red',  None, None, None, None, None,  'red']])
-        self.assertEqual(7, self.strategy_three.return_column(board))
+                    [None,   None,   None,   None,  None, None,  None],
+                    [None,   None,   None,   None,  None, None,  None],
+                    [None,   None,   None,   None,  None, None,  None],
+                    [None,   None,   None,   None,  None, None,  None],
+                    [None,   None, 'blue', 'blue',  None, None,  None],
+                    ['red', 'red', 'blue', 'blue', 'red', 'red', None]])
+        self.assertEqual(self.strategy_three.return_column(board), 3)
 
-
-    def test_strategy_three_blue_on_first_column_from_empty_board(self):
-        board = GameBoard.from_matrix([
-                    [None, None, None, None, None, None, None],
-                    [None, None, None, None, None, None, None],
-                    [None, None, None, None, None, None, None],
-                    [None, None, None, None, None, None, None],
-                    [None, None, None, None, None, None, None],
-                    [None, None, None, None, None, None, None]])
+    def test_strategy_three_choses_leftmost_column_from_empty_board(self):
+        board = GameBoard()
         self.assertEqual(1, self.strategy_three.return_column(board))
 
-    def test_strategy_three_on_impossible_to_win_board_(self):
+    def test_strategy_three_choses_first_non_full_column_when_unable_to_win(self):
         board = GameBoard.from_matrix([
-                    ['red',  'blue',  'red',  'red', 'blue',   None,   None],
-                    ['red',   'red', 'blue',  'red',  'red',   None,   None],
-                    ['red',  'blue',  'red',  'red', 'blue',   None, 'blue'],
+                    [None,     None,   None,   None,   None,   None,   None],
+                    ['red',   'red', 'blue',  'red',  'red',  'red', 'blue'],
+                    ['red',  'blue',  'red',  'red', 'blue', 'blue', 'blue'],
                     ['blue', 'blue',  'red', 'blue',  'red',  'red',  'red'],
                     ['red',  'blue',  'red', 'blue',  'red', 'blue',  'red'],
                     ['blue',  'red', 'blue',  'red',  'red',  'red',  'red']])
-        self.assertEqual(6, self.strategy_three.return_column(board))
+        self.assertEqual(1, self.strategy_three.return_column(board))
