@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 from gameboard import GameBoard
-from game.player import Player
+from player import Player
 from itertools import cycle
 
 class GameIsOver(Exception):
