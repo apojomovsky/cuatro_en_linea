@@ -9,9 +9,9 @@ from game.gameboard import GameBoard
 
 class TestMatch(unittest.TestCase):
     def setUp(self):
-        self.player_red = Player.with_strategy('red', StrategyOne())
-        self.player_blue = Player.with_strategy('blue', StrategyTwo())
-        self.match = Match(self.player_red, self.player_blue)
+        self.player_red = Player('red', StrategyOne())
+        self.player_blue = Player('blue', StrategyTwo())
+        self.match = Match(self.player_red, self.player_blue, GameBoard())
 
     def test_play_next_turn_on_running_match(self):
         match_red_win_from_row = Match(self.player_red, self.player_blue,
