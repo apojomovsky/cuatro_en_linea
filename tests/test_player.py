@@ -7,7 +7,7 @@ from mock import MagicMock
 
 class TestPlayer(unittest.TestCase):
     def setUp(self):
-        strategy_dummy = StrategyOne()
+        strategy_dummy = StrategyOne('blue')
         strategy_dummy.return_column = MagicMock(return_value = 1)
         self.player_blue = Player('blue', strategy_dummy)
 

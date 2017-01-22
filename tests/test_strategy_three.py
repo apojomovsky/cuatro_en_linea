@@ -6,8 +6,7 @@ from game.strategy_three import StrategyThree
 
 class TestPlayer(unittest.TestCase):
     def setUp(self):
-        self.strategy_three = StrategyThree()
-        self.strategy_three.set_color('blue')
+        self.strategy_three = StrategyThree('blue')
 
     def test_strategy_three_choses_column_closest_to_win_for_blue(self):
         board = GameBoard.from_matrix([

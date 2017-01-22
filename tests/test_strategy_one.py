@@ -5,7 +5,7 @@ from game.strategy_one import StrategyOne
 
 class TestPlayer(unittest.TestCase):
     def setUp(self):
-        self.strategy_one = StrategyOne()
+        self.strategy_one = StrategyOne('blue')
 
     def test_strategy_one_on_sixth_column(self):
         board = GameBoard.from_matrix([
