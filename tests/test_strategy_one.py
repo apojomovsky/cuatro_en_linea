@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 import unittest
-from game.player import Player
 from game.gameboard import GameBoard
 from game.strategy_one import StrategyOne
 

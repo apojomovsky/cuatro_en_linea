@@ -2,27 +2,24 @@
 import unittest
 from game.player import Player
 from game.gameboard import GameBoard
+from game.strategy_one import StrategyOne
+from mock import MagicMock
 
 class TestPlayer(unittest.TestCase):
     def setUp(self):
-        self.player_blue = Player('blue')
-        self.player_red = Player('red')
+        strategy_dummy = StrategyOne()
+        strategy_dummy.return_column = MagicMock(return_value = 1)
+        self.player_blue = Player('blue', strategy_dummy)
 
-    def test_player_with_default_strategy(self):
-        board = GameBoard.from_matrix([
-                    ['red',  'blue',  'red',  'red', 'blue',   None,  None],
-                    ['red',   'red', 'blue',  'red',  'red',   None,  None],
-                    ['red',  'blue',  'red',  'red', 'blue', 'blue',  None],
-                    ['blue', 'blue',  'red', 'blue',  'red',  'red', 'blue'],
-                    ['red',  'blue',  'red', 'blue',  'red', 'blue',  'red'],
-                    ['blue',  'red', 'blue',  'red',  'red',  'red',  'red']])
+    def test_player_play_with_dummy_strategy(self):
+        board = GameBoard() # empty board
         expected_board = GameBoard.from_matrix([
-                    ['red',  'blue',  'red',  'red', 'blue',   None,  None],
-                    ['red',   'red', 'blue',  'red',  'red', 'blue',  None],
-                    ['red',  'blue',  'red',  'red', 'blue', 'blue',  None],
-                    ['blue', 'blue',  'red', 'blue',  'red',  'red', 'blue'],
-                    ['red',  'blue',  'red', 'blue',  'red', 'blue',  'red'],
-                    ['blue',  'red', 'blue',  'red',  'red',  'red',  'red']])
+                    [None,   None, None, None, None, None, None],
+                    [None,   None, None, None, None, None, None],
+                    [None,   None, None, None, None, None, None],
+                    [None,   None, None, None, None, None, None],
+                    [None,   None, None, None, None, None, None],
+                    ['blue', None, None, None, None, None, None]])
         self.player_blue.play(board)
         self.assertEqual(board, expected_board)
 
