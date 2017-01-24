@@ -104,7 +104,7 @@ class GameBoard(object):
             element: object of the same kind as the one from the array
             number_of_repetitions: the number of consecutive repetitions
         """
-        return [(sum(1 for i in g), k) for k, g in groupby(array)]
+        return [(sum(1 for occurrence in iterator), entry) for entry, iterator in groupby(array)]
 
 
     def read_entry(self, rowIndex, column_index):
@@ -164,7 +164,7 @@ class GameBoard(object):
         if board.set_board_from_matrix(external_matrix):
             return board
         else:
-            return False
+            return None
 
     def set_board_from_matrix(self, matrix):
         """Set the internal game matrix with an external one, only if valid

@@ -10,6 +10,9 @@ class TestPlayer(unittest.TestCase):
         self.color = 'blue'
 
     def test_strategy_three_choses_leftmost_column_from_empty_board(self):
+        """return_column will chose the leftmost column from a group of same level
+           columns. So in empty board, as all are the same, choses the leftmost one.
+        """
         board = GameBoard()
         self.assertEqual(1, self.strategy_three.return_column(board, self.color))
 

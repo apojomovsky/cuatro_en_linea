@@ -146,7 +146,41 @@ class TestGameBoard(unittest.TestCase):
             ['blue', 'blue',  'red', 'blue',  'red',   'blue',  None],
             ['red',   'red',  'red', 'blue',  'red',   'blue',  None]]))
 
-    def test_count_same_color_on_top_of_first_column(self):
+    def test_count_same_color_on_top_of_emtpy_column(self):
+        board = GameBoard() # emtpy board
+        self.assertEqual(0, board.count_same_color_on_top(1, 'blue'))
+
+    def test_count_same_color_on_single_element_column(self):
+        board = GameBoard.from_matrix([
+                    [None,   None, None, None, None, None, None],
+                    [None,   None, None, None, None, None, None],
+                    [None,   None, None, None, None, None, None],
+                    [None,   None, None, None, None, None, None],
+                    [None,   None, None, None, None, None, None],
+                    ['blue', None, None, None, None, None, None]])
+        self.assertEqual(1, board.count_same_color_on_top(1, 'blue'))
+
+    def test_count_same_color_on_column_with_multiple_chips(self):
+        board = GameBoard.from_matrix([
+                    [None,   None, None, None, None, None, None],
+                    [None,   None, None, None, None, None, None],
+                    ['blue', None, None, None, None, None, None],
+                    ['blue', None, None, None, None, None, None],
+                    ['blue', None, None, None, None, None, None],
+                    ['blue', None, None, None, None, None, None]])
+        self.assertEqual(4, board.count_same_color_on_top(1, 'blue'))
+
+    def test_count_same_color_on_on_column_with_no_elements_of_desired_color(self):
+        board = GameBoard.from_matrix([
+                    [None,  None, None, None, None, None, None],
+                    [None,  None, None, None, None, None, None],
+                    [None,  None, None, None, None, None, None],
+                    [None,  None, None, None, None, None, None],
+                    ['red', None, None, None, None, None, None],
+                    ['red', None, None, None, None, None, None]])
+        self.assertEqual(0, board.count_same_color_on_top(1, 'blue'))
+
+    def test_count_same_color_on_column_with_mixed_colors(self):
         board = GameBoard.from_matrix([
                     [None,   None, None, None, None, None, None],
                     ['blue', None, None, None, None, None, None],
@@ -156,24 +190,8 @@ class TestGameBoard(unittest.TestCase):
                     ['red',  None, None, None, None, None, None]])
         self.assertEqual(3, board.count_same_color_on_top(1, 'blue'))
 
-    def test_count_same_color_on_top_of_empty_column(self):
-        board = GameBoard.from_matrix([
-                    [None,   None,   None, None, None, None, None],
-                    ['blue', None,   None, None, None, None, None],
-                    ['blue', None,   None, None, None, None, None],
-                    ['blue', None,   None, None, None, None, None],
-                    ['red',  None, 'blue', None, None, None, None],
-                    ['red',  None,  'red', None, None, None, None]])
-        self.assertEqual(0, board.count_same_color_on_top(2, 'blue'))
-
     def test_count_free_entries_on_empty_column(self):
-        board = GameBoard.from_matrix([
-                    [None,   None,   None, None, None, None, None],
-                    ['blue', None,   None, None, None, None, None],
-                    ['blue', None,   None, None, None, None, None],
-                    ['blue', None,   None, None, None, None, None],
-                    ['red',  None, 'blue', None, None, None, None],
-                    ['red',  None,  'red', None, None, None, None]])
+        board = GameBoard() # empty board
         self.assertEqual(6, board.count_free_entries_on_column(2))
 
     def test_count_free_entries_on_full_column(self):

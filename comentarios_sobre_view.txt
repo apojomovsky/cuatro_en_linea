@@ -1,0 +1,7 @@
+view:
+- show no es responsabilidad de board
+- mi actual archivo view.py es en realidad run_game.py
+- este es el script que dice "voy a correr e juego"
+- tengo que agregar un archivo gameboard_view.py, que toma un board y lo imprime bonito en la pantalla
+- el metodo show tiene que volar de gameboard, porque no se puede testear un print (bueh, se entiende)
+- 
