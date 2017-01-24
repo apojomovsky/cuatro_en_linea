@@ -286,10 +286,3 @@ class GameBoard(object):
         valid_entries = (None, 'blue', 'red')
         return entry in valid_entries
 
-    def show(self):
-        """Print the game board in a nice format"""
-        for row in self._matrix:
-            for entry in row:
-                print '{:4}'.format(entry),
-            print
-        print

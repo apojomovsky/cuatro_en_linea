@@ -1,14 +1,13 @@
-
 #!/usr/bin/env python
 from match import Match
 from gameboard import GameBoard
+from gameboard_view import GameBoardView
 from player import Player
 from strategy_one import StrategyOne
 from strategy_two import StrategyTwo
 import time
 import sys
 
-print sys.path
 
 if __name__ == "__main__":
     player_one = Player('blue', StrategyOne())
