@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+from game.gameboard import GameBoard
+from game.gameboard import OutOfIndex
 from game.strategy_one import StrategyOne
 
 class Player(object):
@@ -12,4 +14,7 @@ class Player(object):
 
     def play(self, board):
         column_to_play = self._strategy.return_column(board, self._color)
-        board.put_chip(column_to_play, self._color)
+        if column_to_play in range(1, GameBoard.COLUMNSCOUNT + 1):
+            board.put_chip(column_to_play, self._color)
+        else:
+            raise OutOfIndex

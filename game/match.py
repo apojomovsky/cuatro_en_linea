@@ -13,9 +13,11 @@ class Match(object):
         self._active_player = None
         self._player_one = player_one
         self._player_two = player_two
-        self._players = [self._player_one, self._player_two]
-        self._player_iterator = cycle(self._players)
+        self._player_iterator = cycle(self._players())
         self._switch_to_next_player()
+
+    def _players(self):
+        return [self._player_one, self._player_two]
 
     def play_next_turn(self):
         if self._board.is_game_over():
@@ -34,7 +36,7 @@ class Match(object):
         return self._board.is_game_over()
 
     def who_won(self):
-        for player in self._players:
+        for player in self._players():
             if player.is_winner(self._board):
                 return player
         return None
