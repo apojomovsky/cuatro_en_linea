@@ -157,6 +157,13 @@ class GameBoard(object):
     def retrieve_matrix(self):
         return self._matrix
 
+    def get_matrix_after_doing(self, function):
+        items = numpy.copy(self._matrix).tolist()
+        board_array = []
+        for row in items:
+            board_array.append(map(function, row))
+        return board_array
+        
     @classmethod
     def from_matrix(cls, external_matrix):
         """Returns an instance of GameBoard with a custom _matrix attribute"""
@@ -285,4 +292,3 @@ class GameBoard(object):
         """Checks if a given value is a valid entry"""
         valid_entries = (None, 'blue', 'red')
         return entry in valid_entries
-

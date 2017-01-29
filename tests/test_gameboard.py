@@ -263,3 +263,21 @@ class TestGameBoard(unittest.TestCase):
                     ['blue', 'blue',  'red', 'blue',  'red', 'blue',  None],
                     ['red',   'red',  'red', 'blue',  'red', 'blue', 'blue']])
         self.assertTrue(board_1 != board_2)
+
+    def test_get_matrix_after_doing(self):
+        upper = lambda x: x.upper() if x is not None else None
+        board = GameBoard.from_matrix([
+                    [None,    None, None, None, None, None, None],
+                    [None,    None, None, None, None, None, None],
+                    [None,    None, None, None, None, None, None],
+                    [None,    None, None, None, None, None, None],
+                    [None,   'red', None, None, None, None, None],
+                    ['red', 'blue', None, None, None, None, None]])
+        expected_matrix = [
+                    [None,    None, None, None, None, None, None],
+                    [None,    None, None, None, None, None, None],
+                    [None,    None, None, None, None, None, None],
+                    [None,    None, None, None, None, None, None],
+                    [None,   'RED', None, None, None, None, None],
+                    ['RED', 'BLUE', None, None, None, None, None]]
+        self.assertEqual(expected_matrix, board.get_matrix_after_doing(upper))
