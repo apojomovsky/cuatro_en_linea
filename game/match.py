@@ -3,18 +3,21 @@ from gameboard import GameBoard
 from game.player import Player
 from itertools import cycle
 
-class GameIsOver(Exception): # Where should this exception be placed?
+class GameIsOver(Exception):
     def __init___(self, winner):
         self.winner = winner
 
 class Match(object):
-    def __init__(self, player_one = Player('red'),
-                 player_two = Player('blue'), board = GameBoard()):
+    def __init__(self, player_one, player_two, board):
         self._board = board
         self._active_player = None
-        self._players = [player_one, player_two]
-        self._player_iterator = cycle(self._players)
+        self._player_one = player_one
+        self._player_two = player_two
+        self._player_iterator = cycle(self._players())
         self._switch_to_next_player()
+
+    def _players(self):
+        return [self._player_one, self._player_two]
 
     def play_next_turn(self):
         if self._board.is_game_over():
@@ -33,7 +36,7 @@ class Match(object):
         return self._board.is_game_over()
 
     def who_won(self):
-        for player in self._players:
+        for player in self._players():
             if player.is_winner(self._board):
                 return player
         return None

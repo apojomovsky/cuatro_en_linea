@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 import unittest
-from game.player import Player
 from game.gameboard import GameBoard
 from game.strategy_one import StrategyOne
 
 class TestPlayer(unittest.TestCase):
     def setUp(self):
         self.strategy_one = StrategyOne()
+        self.color = 'blue'
 
     def test_strategy_one_on_sixth_column(self):
         board = GameBoard.from_matrix([
@@ -16,7 +16,7 @@ class TestPlayer(unittest.TestCase):
                     ['blue', 'blue',  'red', 'blue',  'red',  'red', 'blue'],
                     ['red',  'blue',  'red', 'blue',  'red', 'blue',  'red'],
                     ['blue',  'red', 'blue',  'red',  'red',  'red',  'red']])
-        self.assertEqual(self.strategy_one.return_column(board), 6)
+        self.assertEqual(self.strategy_one.return_column(board, self.color), 6)
 
     def test_strategy_one_on_second_column(self):
         board = GameBoard.from_matrix([
@@ -26,7 +26,7 @@ class TestPlayer(unittest.TestCase):
                     ['blue',   None, None, None, None, None, None],
                     ['red',   'red', None, None, None, None, None],
                     ['blue', 'blue', None, None, None, None, None]])
-        self.assertEqual(self.strategy_one.return_column(board), 2)
+        self.assertEqual(self.strategy_one.return_column(board, self.color), 2)
 
     def test_strategy_on_first(self):
         board = GameBoard.from_matrix([
@@ -36,4 +36,4 @@ class TestPlayer(unittest.TestCase):
                     ['blue', 'blue',   None, 'blue',  None, None, None],
                     ['red',  'blue',  'red', 'blue',  None, None, None],
                     ['blue',  'red', 'blue',  'red', 'red', None, None]])
-        self.assertEqual(self.strategy_one.return_column(board), 1)
+        self.assertEqual(self.strategy_one.return_column(board, self.color), 1)

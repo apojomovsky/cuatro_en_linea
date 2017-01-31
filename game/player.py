@@ -1,21 +1,20 @@
 #!/usr/bin/env python
+from game.gameboard import GameBoard
+from game.gameboard import OutOfIndex
 from game.strategy_one import StrategyOne
 
 class Player(object):
 
-    def __init__(self, color, strategy=None):
-        if strategy:
-            self._strategy = strategy
-        else:
-            self._strategy = StrategyOne()
+    def __init__(self, color, strategy):
         self._color = color.lower()
-
-    def color(self):
-        return self._color
+        self._strategy = strategy
 
     def is_winner(self, board):
         return board.is_game_over() and board.winner_color() == self._color
 
     def play(self, board):
-        column_to_play = self._strategy.return_column(board)
-        board.put_chip(column_to_play, self._color)
+        column_to_play = self._strategy.return_column(board, self._color)
+        if column_to_play in range(1, GameBoard.COLUMNSCOUNT + 1):
+            board.put_chip(column_to_play, self._color)
+        else:
+            raise OutOfIndex
