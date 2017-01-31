@@ -157,13 +157,16 @@ class GameBoard(object):
     def retrieve_matrix(self):
         return self._matrix
 
-    def get_matrix_after_doing(self, function):
-        items = numpy.copy(self._matrix).tolist()
+    def get_matrix_after_doing(self, function = lambda x: x):
+        """Returns a copy of the gameboard matrix after
+           applying a function to each of the entries
+        """
+        items = self._matrix.tolist()
         board_array = []
         for row in items:
             board_array.append(map(function, row))
         return board_array
-        
+
     @classmethod
     def from_matrix(cls, external_matrix):
         """Returns an instance of GameBoard with a custom _matrix attribute"""

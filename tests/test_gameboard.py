@@ -265,6 +265,9 @@ class TestGameBoard(unittest.TestCase):
         self.assertTrue(board_1 != board_2)
 
     def test_get_matrix_after_doing(self):
+        """Iterates over gameboard matrix and applies the upper function to it.
+           Expects a copy of the matrix with the same elements uppercase
+        """
         upper = lambda x: x.upper() if x is not None else None
         board = GameBoard.from_matrix([
                     [None,    None, None, None, None, None, None],
@@ -281,3 +284,23 @@ class TestGameBoard(unittest.TestCase):
                     [None,   'RED', None, None, None, None, None],
                     ['RED', 'BLUE', None, None, None, None, None]]
         self.assertEqual(expected_matrix, board.get_matrix_after_doing(upper))
+
+    def test_get_matrix_after_doing_nothing(self):
+        """Test get_matrix_after_doing method with no argument.
+           Expects a copy of the gameboard matrix
+        """
+        board = GameBoard.from_matrix([
+                    [None,    None, None, None, None, None, None],
+                    [None,    None, None, None, None, None, None],
+                    [None,    None, None, None, None, None, None],
+                    [None,    None, None, None, None, None, None],
+                    [None,   'red', None, None, None, None, None],
+                    ['red', 'blue', None, None, None, None, None]])
+        expected_matrix = [
+                    [None,    None, None, None, None, None, None],
+                    [None,    None, None, None, None, None, None],
+                    [None,    None, None, None, None, None, None],
+                    [None,    None, None, None, None, None, None],
+                    [None,   'red', None, None, None, None, None],
+                    ['red', 'blue', None, None, None, None, None]]
+        self.assertEqual(expected_matrix, board.get_matrix_after_doing())

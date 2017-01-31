@@ -19,7 +19,7 @@ def run(player_one, player_two):
     player_one = Player('blue', lookup_strategies.get(player_one)())
     player_two = Player('red', lookup_strategies.get(player_two)())
     board = GameBoard()
-    view = GameBoardView()
+    view = GameBoardView(board)
     match = Match(player_one, player_two, board)
     while not match.is_over():
         match.play_next_turn()
