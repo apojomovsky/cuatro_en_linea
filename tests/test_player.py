@@ -55,7 +55,7 @@ class TestPlayer(unittest.TestCase):
         self.player_blue.play(board)
         self.assertEqual(board, expected_board)
 
-    def test_player_play_when_strategy_returns_column_zero_raises_exception(self):
+    def test_player_play_when_strategy_returns_zero_raises_exception(self):
         self.strategy_dummy.return_column = MagicMock(return_value = 0)
         self.player_blue = Player('blue', self.strategy_dummy)
         board = GameBoard() # empty board
@@ -69,7 +69,7 @@ class TestPlayer(unittest.TestCase):
         with self.assertRaises(OutOfIndex):
             self.player_blue.play(board)
 
-    def test_player_is_winner_when_board_is_full(self):
+    def test_player_raises_exception_when_attempts_to_play_on_full_board(self):
         board = GameBoard.from_matrix([
                     ['red',  'blue',  'red',  'red', 'blue', 'blue',  'red'],
                     ['red',   'red', 'blue',  'red',  'red', 'blue',  'red'],

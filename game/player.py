@@ -15,7 +15,10 @@ class Player(object):
 
     def play(self, board):
         column_to_play = self._strategy.return_column(board, self._color)
-        if column_to_play in range(1, GameBoard.COLUMNSCOUNT + 1):
-            board.put_chip(column_to_play, self._color)
+        if column_to_play is not None:
+            if column_to_play in range(1, GameBoard.COLUMNSCOUNT + 1):
+                board.put_chip(column_to_play, self._color)
+            else:
+                raise OutOfIndex
         else:
-            raise OutOfIndex
+            raise BoardIsFull

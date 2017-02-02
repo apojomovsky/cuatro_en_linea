@@ -47,12 +47,16 @@ class GameBoard(object):
             column_index: the column where the chip is being put
             color: the color of the chip
         """
-        if not self.column_is_full(column_index):
-            rowIndex = self.ROWSCOUNT - \
-                list(self._retrieve_column(column_index)).index(None) - 1
-            self._matrix[rowIndex][column_index - 1] = color.lower()
+        if not self.board_is_full():
+            if not self.column_is_full(column_index):
+                rowIndex = self.ROWSCOUNT - \
+                    list(self._retrieve_column(column_index)).index(None) - 1
+                self._matrix[rowIndex][column_index - 1] = color.lower()
+            else:
+                raise ColumnIsFull(column_index)
         else:
-            raise ColumnIsFull(column_index)
+            raise BoardIsFull(self._matrix)
+
 
     def retrieve_first_non_full_column(self):
         """Returns the index of the first non-full column

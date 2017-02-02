@@ -15,7 +15,7 @@ class TestStrategyTwo(unittest.TestCase):
         if the board is emtpy
         """
         board = GameBoard()
-        self.assertEqual(self.strategy_two.return_column(board), 1)
+        self.assertEqual(self.strategy_two.return_column(board, self.color), 1)
 
     def test_strategy_two_choses_emptiest_rightmost_column(self):
         """
@@ -29,7 +29,7 @@ class TestStrategyTwo(unittest.TestCase):
                     [None,    None,   None,   None,  None, None,   None],
                     [None,    None,   None,   None,  None, None,   None],
                     ['red', 'blue', 'blue', 'blue', 'red', 'blue', None]])
-        self.assertEqual(self.strategy_two.return_column(board), 7)
+        self.assertEqual(self.strategy_two.return_column(board, self.color), 7)
 
     def test_strategy_two_choses_emptiest_leftmost_column(self):
         """
@@ -43,7 +43,7 @@ class TestStrategyTwo(unittest.TestCase):
                     [None,   None,   None,   None,  None,   None,  None],
                     [None,   None,   None,   None,  None,   None,  None],
                     [None, 'blue', 'blue', 'blue', 'red', 'blue', 'red']])
-        self.assertEqual(self.strategy_two.return_column(board), 1)
+        self.assertEqual(self.strategy_two.return_column(board, self.color), 1)
 
     def test_strategy_two_choses_leftmost_empty_when_more_than_one_equally_empty(self):
         """
@@ -57,7 +57,7 @@ class TestStrategyTwo(unittest.TestCase):
                     [None,     None, None,  None,  None,   None,   None],
                     ['red',  'blue', None,  None, 'blue', 'red', 'blue'],
                     ['blue',  'red', 'red', 'red', 'red', 'blue', 'red']])
-        self.assertEqual(self.strategy_two.return_column(board), 3)
+        self.assertEqual(self.strategy_two.return_column(board, self.color), 3)
 
     def test_strategy_two_choses_emptiests_column_from_mid_loaded_board(self):
         """
@@ -71,7 +71,7 @@ class TestStrategyTwo(unittest.TestCase):
                     ['red', 'blue',  'red',   None,  'red', 'blue', 'blue'],
                     ['red', 'blue',  'red',  'red', 'blue', 'blue', 'blue'],
                     ['blue', 'red', 'blue', 'blue', 'blue',  'red',  'red']])
-        self.assertEqual(self.strategy_two.return_column(board), 4)
+        self.assertEqual(self.strategy_two.return_column(board, self.color), 4)
 
     def test_strategy_two_raises_exception_when_board_is_full(self):
         """If it turns that the board is full, but the return_column message from
@@ -85,4 +85,4 @@ class TestStrategyTwo(unittest.TestCase):
                     ['red',  'blue',  'red', 'blue',  'red', 'blue',  'red'],
                     ['blue',  'red', 'blue',  'red',  'red',  'red',  'red']])
         with self.assertRaises(BoardIsFull):
-            self.strategy_two.return_column(board)
+            self.strategy_two.return_column(board, self.color)
