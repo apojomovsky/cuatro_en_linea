@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import numpy
 from itertools import groupby
+from copy import copy
 
 class ColumnIsFull(Exception):
 
@@ -27,8 +28,11 @@ class GameBoard(object):
     def __eq__(self, other_board):
         """ Checks if the _matrix from both gameboards have the same shape and elements"""
         if isinstance(other_board, self.__class__):
-            return numpy.array_equal(self.retrieve_matrix(),
-                                     other_board.retrieve_matrix())
+            other_board_iter = other_board._get_entries()
+            for entry in self._get_entries():
+                if not entry == other_board_iter.next():
+                    return False
+            return True
         return False
 
     def __ne__(self, other_board):
@@ -154,18 +158,30 @@ class GameBoard(object):
         """Checks whether the game is over or not"""
         return self.winner_exists() or self.board_is_full()
 
-    def retrieve_matrix(self):
-        return self._matrix
+    def get_rows(self):
+        """Returns an iterator object that will get all the rows from the board"""
+        for row in self._matrix:
+            yield list(row.tolist())
 
-    def get_matrix_after_doing(self, function = lambda x: x):
-        """Returns a copy of the gameboard matrix after
-           applying a function to each of the entries
+    def _get_entries(self):
+        """Returns an iterator object that will get all the entries from the board"""
+        for row in self._matrix:
+            for entry in row:
+                yield copy(entry)
+
+    def _get_columns(self):
+        """Returns an iterator object that will get all the columns from the board"""
+        for column_index in range(1, self.COLUMNSCOUNT + 1):
+            yield list(self._retrieve_column(column_index))
+
+    def _get_diagonals(self):
+        """Returns an iterator object that will get all the diagonals with more
+           than 3 elements from the board
         """
-        items = self._matrix.tolist()
-        board_array = []
-        for row in items:
-            board_array.append(map(function, row))
-        return board_array
+        for i in range(-2, 4):
+            yield list(self._matrix.diagonal(i))
+        for i in range(-2, 4):
+            yield list(numpy.flipud(self._matrix).diagonal(i))
 
     @classmethod
     def from_matrix(cls, external_matrix):
@@ -249,23 +265,25 @@ class GameBoard(object):
 
     def _check_rows_for_winner(self):
         """Check if there's a winner row-wise"""
-        for i in range(self.ROWSCOUNT):
-            if self._winner_in_array(self._matrix[i]):
+        rows_iter = self.get_rows()
+        for row in rows_iter:
+            if self._winner_in_array(numpy.asarray(row)):
                 return True
         return False
 
     def _check_columns_for_winner(self):
         """Check if there's a winner column-wise"""
-        for i in range(self.COLUMNSCOUNT):
-            if self._winner_in_array(self._retrieve_column(i)):
+        columns_iter = self._get_columns()
+        for column in columns_iter:
+            if self._winner_in_array(numpy.asarray(column)):
                 return True
         return False
 
     def _check_diagonals_for_winner(self):
         """Check if there's a winner diagonal-wise"""
-        for i in range(-2, 4):
-            if self._winner_in_array(self._matrix.diagonal(i)) or \
-               self._winner_in_array(numpy.flipud(self._matrix).diagonal(i)):
+        diag_iter = self._get_diagonals()
+        for diagonal in diag_iter:
+            if self._winner_in_array(numpy.asarray(diagonal)):
                 return True
         return False
 

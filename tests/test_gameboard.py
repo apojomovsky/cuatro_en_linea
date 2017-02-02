@@ -264,43 +264,17 @@ class TestGameBoard(unittest.TestCase):
                     ['red',   'red',  'red', 'blue',  'red', 'blue', 'blue']])
         self.assertTrue(board_1 != board_2)
 
-    def test_get_matrix_after_doing(self):
-        """Iterates over gameboard matrix and applies the upper function to it.
-           Expects a copy of the matrix with the same elements uppercase
+    def test_get_rows(self):
+        """Sets a gameboard matrix from a reference test_matrix, and then compares
+           the value returned by the rows_iterator against each of its rows
         """
-        upper = lambda x: x.upper() if x is not None else None
-        board = GameBoard.from_matrix([
-                    [None,    None, None, None, None, None, None],
-                    [None,    None, None, None, None, None, None],
-                    [None,    None, None, None, None, None, None],
-                    [None,    None, None, None, None, None, None],
-                    [None,   'red', None, None, None, None, None],
-                    ['red', 'blue', None, None, None, None, None]])
-        expected_matrix = [
-                    [None,    None, None, None, None, None, None],
-                    [None,    None, None, None, None, None, None],
-                    [None,    None, None, None, None, None, None],
-                    [None,    None, None, None, None, None, None],
-                    [None,   'RED', None, None, None, None, None],
-                    ['RED', 'BLUE', None, None, None, None, None]]
-        self.assertEqual(expected_matrix, board.get_matrix_after_doing(upper))
-
-    def test_get_matrix_after_doing_nothing(self):
-        """Test get_matrix_after_doing method with no argument.
-           Expects a copy of the gameboard matrix
-        """
-        board = GameBoard.from_matrix([
-                    [None,    None, None, None, None, None, None],
-                    [None,    None, None, None, None, None, None],
-                    [None,    None, None, None, None, None, None],
-                    [None,    None, None, None, None, None, None],
-                    [None,   'red', None, None, None, None, None],
-                    ['red', 'blue', None, None, None, None, None]])
-        expected_matrix = [
-                    [None,    None, None, None, None, None, None],
-                    [None,    None, None, None, None, None, None],
-                    [None,    None, None, None, None, None, None],
-                    [None,    None, None, None, None, None, None],
-                    [None,   'red', None, None, None, None, None],
-                    ['red', 'blue', None, None, None, None, None]]
-        self.assertEqual(expected_matrix, board.get_matrix_after_doing())
+        test_matrix = [['blue', 'blue', 'blue',  'red',   None,   None,  None],
+                       ['red',   'red',  'red', 'blue', 'blue',   None,  None],
+                       ['blue',  'red', 'blue',  'red', 'blue',   None,  None],
+                       ['blue',  'red', 'blue',  'red',  'red',  'red',  None],
+                       ['blue', 'blue',  'red', 'blue',  'red', 'blue',  None],
+                       ['red',   'red',  'red', 'blue',  'red', 'blue', 'blue']]
+        board = GameBoard.from_matrix(test_matrix)
+        rows_iter = board.get_rows()
+        for index, row in enumerate(rows_iter):
+            self.assertEqual(row, test_matrix[index])
