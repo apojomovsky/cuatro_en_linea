@@ -263,3 +263,17 @@ class TestGameBoard(unittest.TestCase):
                     ['blue', 'blue',  'red', 'blue',  'red', 'blue',  None],
                     ['red',   'red',  'red', 'blue',  'red', 'blue', 'blue']])
         self.assertTrue(board_1 != board_2)
+
+    def test_get_rows(self):
+        """Sets a gameboard matrix from a reference test_matrix, and then compares
+           the value returned by the rows_iterator against each of its rows
+        """
+        test_matrix = [['blue', 'blue', 'blue',  'red',   None,   None,  None],
+                       ['red',   'red',  'red', 'blue', 'blue',   None,  None],
+                       ['blue',  'red', 'blue',  'red', 'blue',   None,  None],
+                       ['blue',  'red', 'blue',  'red',  'red',  'red',  None],
+                       ['blue', 'blue',  'red', 'blue',  'red', 'blue',  None],
+                       ['red',   'red',  'red', 'blue',  'red', 'blue', 'blue']]
+        board = GameBoard.from_matrix(test_matrix)
+        for index, row in enumerate(board.get_rows()):
+            self.assertEqual(row, test_matrix[index])

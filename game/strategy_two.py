@@ -1,4 +1,4 @@
-from game.strategy import Strategy
+from strategy import Strategy
 
 class StrategyTwo(Strategy):
     def return_column(self, board, color):
