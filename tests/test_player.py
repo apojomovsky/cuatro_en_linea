@@ -2,6 +2,7 @@
 import unittest
 from game.player import Player
 from game.gameboard import GameBoard
+from game.gameboard import BoardIsFull
 from game.gameboard import OutOfIndex
 from game.strategy_one import StrategyOne
 from mock import MagicMock
@@ -54,7 +55,7 @@ class TestPlayer(unittest.TestCase):
         self.player_blue.play(board)
         self.assertEqual(board, expected_board)
 
-    def test_player_play_when_strategy_returns_column_zero_raises_exception(self):
+    def test_player_play_when_strategy_returns_zero_raises_exception(self):
         self.strategy_dummy.return_column = MagicMock(return_value = 0)
         self.player_blue = Player('blue', self.strategy_dummy)
         board = GameBoard() # empty board
@@ -68,7 +69,18 @@ class TestPlayer(unittest.TestCase):
         with self.assertRaises(OutOfIndex):
             self.player_blue.play(board)
 
-    def test_player_is_winner_when_is_true(self):
+    def test_player_raises_exception_when_attempts_to_play_on_full_board(self):
+        board = GameBoard.from_matrix([
+                    ['red',  'blue',  'red',  'red', 'blue', 'blue',  'red'],
+                    ['red',   'red', 'blue',  'red',  'red', 'blue',  'red'],
+                    ['red',  'blue',  'red',  'red', 'blue', 'blue', 'blue'],
+                    ['blue', 'blue',  'red', 'blue',  'red',  'red', 'blue'],
+                    ['red',  'blue',  'red', 'blue',  'red', 'blue',  'red'],
+                    ['blue',  'red', 'blue',  'red',  'red',  'red',  'red']])
+        with self.assertRaises(BoardIsFull):
+            self.player_blue.play(board)
+
+    def test_player_is_winner_if_it_has_actually_won(self):
         board = GameBoard.from_matrix([
                     [None,   None, None,  None,  None, None, None],
                     [None,   None, None,  None,  None, None, None],
@@ -78,7 +90,7 @@ class TestPlayer(unittest.TestCase):
                     ['blue', None, None, 'red', 'red', None, None]])
         self.assertTrue(self.player_blue.is_winner(board))
 
-    def test_player_is_winner_when_is_false(self):
+    def test_player_is_winner_when_has_not_won(self):
         board = GameBoard.from_matrix([
                     [None,   None, None,  None,  None, None, None],
                     [None,   None, None,  None,  None, None, None],

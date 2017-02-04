@@ -4,13 +4,14 @@ from itertools import groupby
 from copy import copy
 
 class ColumnIsFull(Exception):
-
     def __init___(self, column_index):
         self.failedcolumn_index = column_index
 
+class BoardIsFull(Exception):
+    def __init___(self, matrix):
+        self.matrix = matrix
 
 class OutOfIndex(Exception):
-
     def __init___(self, errArguments):
         self.array_type = errArguments['type']
         self.index = errArguments['index']
@@ -46,6 +47,7 @@ class GameBoard(object):
             column_index: the column where the chip is being put
             color: the color of the chip
         """
+        self._raise_if_board_is_full()
         if not self.column_is_full(column_index):
             rowIndex = self.ROWSCOUNT - \
                 list(self._retrieve_column(column_index)).index(None) - 1
@@ -57,6 +59,7 @@ class GameBoard(object):
         """Returns the index of the first non-full column
            found, looking from left to right on the board
         """
+        self._raise_if_board_is_full()
         index_list = range(1, self.COLUMNSCOUNT + 1)
         for index in index_list:
             if not self.column_is_full(index):
@@ -65,6 +68,7 @@ class GameBoard(object):
     def retrieve_emptiest_column(self):
         """Returns the index of the emptiest column found on the board
         """
+        self._raise_if_board_is_full()
         rows_index_list = range(1, self.ROWSCOUNT + 1)
         columns_index_list = range(1, self.COLUMNSCOUNT + 1)
         for row_index in rows_index_list:
@@ -98,17 +102,6 @@ class GameBoard(object):
         if not self.column_is_full(column_index):
             return consecutive_groups[-1][0]
         return 0
-
-    def _retrieve_consecutive_elements_from_array(self, array):
-        """Reads the consecutive elements from a given array
-        Args:
-            array: a numpy array
-        Returns
-            a list of elements conformed by: (element, number_of_repetitions)
-            element: object of the same kind as the one from the array
-            number_of_repetitions: the number of consecutive repetitions
-        """
-        return [(sum(1 for occurrence in iterator), entry) for entry, iterator in groupby(array)]
 
 
     def read_entry(self, rowIndex, column_index):
@@ -163,26 +156,6 @@ class GameBoard(object):
         for row in self._matrix:
             yield list(row.tolist())
 
-    def _get_entries(self):
-        """Returns an iterator object that will get all the entries from the board"""
-        for row in self._matrix:
-            for entry in row:
-                yield copy(entry)
-
-    def _get_columns(self):
-        """Returns an iterator object that will get all the columns from the board"""
-        for column_index in range(1, self.COLUMNSCOUNT + 1):
-            yield list(self._retrieve_column(column_index))
-
-    def _get_diagonals(self):
-        """Returns an iterator object that will get all the diagonals with more
-           than 3 elements from the board
-        """
-        for i in range(-2, 4):
-            yield list(self._matrix.diagonal(i))
-        for i in range(-2, 4):
-            yield list(numpy.flipud(self._matrix).diagonal(i))
-
     @classmethod
     def from_matrix(cls, external_matrix):
         """Returns an instance of GameBoard with a custom _matrix attribute"""
@@ -229,6 +202,41 @@ class GameBoard(object):
             if not entry:
                 return False
         return True
+
+    def _retrieve_consecutive_elements_from_array(self, array):
+        """Reads the consecutive elements from a given array
+        Args:
+            array: a numpy array
+        Returns
+            a list of elements conformed by: (element, number_of_repetitions)
+            element: object of the same kind as the one from the array
+            number_of_repetitions: the number of consecutive repetitions
+        """
+        return [(sum(1 for occurrence in iterator), entry) for entry, iterator in groupby(array)]
+
+    def _get_entries(self):
+        """Returns an iterator object that will get all the entries from the board"""
+        for row in self._matrix:
+            for entry in row:
+                yield copy(entry)
+
+    def _get_columns(self):
+        """Returns an iterator object that will get all the columns from the board"""
+        for column_index in range(1, self.COLUMNSCOUNT + 1):
+            yield list(self._retrieve_column(column_index))
+
+    def _get_diagonals(self):
+        """Returns an iterator object that will get all the diagonals with more
+           than 3 elements from the board
+        """
+        for i in range(-2, 4):
+            yield list(self._matrix.diagonal(i))
+        for i in range(-2, 4):
+            yield list(numpy.flipud(self._matrix).diagonal(i))
+
+    def _raise_if_board_is_full(self):
+        if self.board_is_full():
+            raise BoardIsFull(self._matrix)
 
     def _retrieve_column(self, column_index):
         """Returns an inverted column for a given index"""
