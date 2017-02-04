@@ -265,24 +265,21 @@ class GameBoard(object):
 
     def _check_rows_for_winner(self):
         """Check if there's a winner row-wise"""
-        rows_iter = self.get_rows()
-        for row in rows_iter:
+        for row in self.get_rows():
             if self._winner_in_array(numpy.asarray(row)):
                 return True
         return False
 
     def _check_columns_for_winner(self):
         """Check if there's a winner column-wise"""
-        columns_iter = self._get_columns()
-        for column in columns_iter:
+        for column in self._get_columns():
             if self._winner_in_array(numpy.asarray(column)):
                 return True
         return False
 
     def _check_diagonals_for_winner(self):
         """Check if there's a winner diagonal-wise"""
-        diag_iter = self._get_diagonals()
-        for diagonal in diag_iter:
+        for diagonal in self._get_diagonals():
             if self._winner_in_array(numpy.asarray(diagonal)):
                 return True
         return False

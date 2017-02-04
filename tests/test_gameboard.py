@@ -275,6 +275,5 @@ class TestGameBoard(unittest.TestCase):
                        ['blue', 'blue',  'red', 'blue',  'red', 'blue',  None],
                        ['red',   'red',  'red', 'blue',  'red', 'blue', 'blue']]
         board = GameBoard.from_matrix(test_matrix)
-        rows_iter = board.get_rows()
-        for index, row in enumerate(rows_iter):
+        for index, row in enumerate(board.get_rows()):
             self.assertEqual(row, test_matrix[index])
