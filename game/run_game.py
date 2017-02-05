@@ -6,12 +6,12 @@ from match import Match
 from gameboard import GameBoard
 from gameboard_view import GameBoardView
 from player import Player
-from strategy_one import StrategyOne
-from strategy_two import StrategyTwo
+from strategy_first_non_full_column import StrategyFirstNonFullColumn
+from strategy_emptiest_column import StrategyEmptiestColumn
 
 lookup_strategies = {
-    'strategy_one': StrategyOne,
-    'strategy_two': StrategyTwo,
+    'first_non_full': StrategyFirstNonFullColumn,
+    'emptiest_column': StrategyEmptiestColumn,
 #    'strategy_three': StrategyThree
 }
 

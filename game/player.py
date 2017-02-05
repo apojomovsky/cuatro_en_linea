@@ -1,11 +1,9 @@
 #!/usr/bin/env python
 from game.gameboard import GameBoard
 from game.gameboard import OutOfIndex
-from game.strategy_one import StrategyOne
 from game.gameboard import BoardIsFull
 
 class Player(object):
-
     def __init__(self, color, strategy):
         self._color = color.lower()
         self._strategy = strategy
