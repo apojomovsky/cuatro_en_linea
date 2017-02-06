@@ -7,12 +7,13 @@ from gameboard import GameBoard
 from gameboard_view import GameBoardView
 from player import Player
 from strategy_first_non_full_column import StrategyFirstNonFullColumn
+from strategy_column_closest_to_win import StrategyColumnClosestToWin
 from strategy_emptiest_column import StrategyEmptiestColumn
 
 lookup_strategies = {
     'first_non_full': StrategyFirstNonFullColumn,
     'emptiest_column': StrategyEmptiestColumn,
-#    'strategy_three': StrategyThree
+    'column_closest_to_win': StrategyColumnClosestToWin
 }
 
 def run(player_one, player_two, rate):

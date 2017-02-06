@@ -1,7 +1,7 @@
 from game.strategy import Strategy
 from game.gameboard import GameBoard
 
-class StrategyThree(Strategy):
+class StrategyColumnClosestToWin(Strategy):
     """Look for the column that is closest to win in a vertical
        line for a given color, as long as a four-in-a-row could be completed.
        Returns first non full column otherwise
