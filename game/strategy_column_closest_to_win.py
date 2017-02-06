@@ -4,7 +4,7 @@ from game.gameboard import GameBoard
 class StrategyColumnClosestToWin(Strategy):
     """Look for the column that is closest to win in a vertical
        line for a given color, as long as a four-in-a-row could be completed.
-       Returns first non full column otherwise
+       Returns the first non full column otherwise.
     """
     def _can_complete_four(self, board, column_index, color):
         same_color_on_top = board.count_same_color_on_top(column_index, color)
