@@ -3,14 +3,14 @@ import unittest
 from game.match import Match
 from game.match import GameIsOver
 from game.player import Player
-from game.strategy_one import StrategyOne
-from game.strategy_two import StrategyTwo
+from game.first_non_full_column_strategy import FirstNonFullColumnStrategy
+from game.emptiest_column_strategy import EmptiestColumnStrategy
 from game.gameboard import GameBoard
 
 class TestMatch(unittest.TestCase):
     def setUp(self):
-        self.player_red = Player('red', StrategyOne())
-        self.player_blue = Player('blue', StrategyTwo())
+        self.player_red = Player('red', FirstNonFullColumnStrategy())
+        self.player_blue = Player('blue', EmptiestColumnStrategy())
         self.match = Match(self.player_red, self.player_blue, GameBoard())
 
     def test_play_next_turn_on_running_match(self):
