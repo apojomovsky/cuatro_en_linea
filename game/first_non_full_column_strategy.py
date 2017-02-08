@@ -1,6 +1,6 @@
 from game.strategy import Strategy
 
-class StrategyFirstNonFullColumn(Strategy):
+class FirstNonFullColumnStrategy(Strategy):
     """This strategy simply looks for the first non full
        column by looking from left to right.
     """

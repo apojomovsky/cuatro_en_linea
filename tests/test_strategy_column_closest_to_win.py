@@ -2,11 +2,11 @@
 import unittest
 from game.player import Player
 from game.gameboard import GameBoard
-from game.strategy_closest_to_win_column import StrategyClosestToWinColumn
+from game.closest_to_win_column_strategy import ClosestToWinColumnStrategy
 
 class TestPlayer(unittest.TestCase):
     def setUp(self):
-        self.strategy = StrategyClosestToWinColumn()
+        self.strategy = ClosestToWinColumnStrategy()
         self.color = 'blue'
 
     def test_strategy_choses_leftmost_column_from_empty_board(self):

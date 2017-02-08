@@ -4,12 +4,12 @@ from game.player import Player
 from game.gameboard import GameBoard
 from game.gameboard import BoardIsFull
 from game.gameboard import OutOfIndex
-from game.strategy_emptiest_column import StrategyEmptiestColumn
+from game.emptiest_column_strategy import EmptiestColumnStrategy
 from mock import MagicMock
 
 class TestPlayer(unittest.TestCase):
     def setUp(self):
-        self.strategy_dummy = StrategyEmptiestColumn()
+        self.strategy_dummy = EmptiestColumnStrategy()
         self.strategy_dummy.return_column = MagicMock(return_value = 1)
         self.player_blue = Player('blue', self.strategy_dummy)
 

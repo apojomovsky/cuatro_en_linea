@@ -4,7 +4,7 @@ from game.gameboard import GameBoard
 from game.gameboard import BoardIsFull
 from game.emptiest_column import EmptiestColumn
 
-class TestStrategyEmptiestColumn(unittest.TestCase):
+class TestEmptiestColumnStrategy(unittest.TestCase):
     def setUp(self):
         self.strategy = EmptiestColumn()
         self.color = 'blue'
