@@ -2,11 +2,11 @@
 import unittest
 from game.gameboard import GameBoard
 from game.gameboard import BoardIsFull
-from game.emptiest_column import EmptiestColumn
+from game.emptiest_column_strategy import EmptiestColumnStrategy
 
 class TestEmptiestColumnStrategy(unittest.TestCase):
     def setUp(self):
-        self.strategy = EmptiestColumn()
+        self.strategy = EmptiestColumnStrategy()
         self.color = 'blue'
 
     def test_strategy_choses_leftmost_column_on_empty_board(self):
