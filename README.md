@@ -52,8 +52,7 @@ $ pip install numpy
 ```
 $ python setup.py develop
 ```
-- Verify tests and pep8 are passing:
+- Verify tests are passing:
 ```
 ./run_tests.sh
-./run_pep8.sh
 ```
