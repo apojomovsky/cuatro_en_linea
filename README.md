@@ -3,9 +3,9 @@ Basic implementation of the `connect four` game, using the OOP paradigm.
 
 ## Install with virtualenv
 Builds are performed against Ubuntu 16.04 and Python 2.7.9. Follow these steps to get such a setup in a separate virtual environment:
-- Install dependencies:
+- Install virtualenv:
 ```
-$ sudo apt-get install git wget python-virtualenv python-scipy
+$ sudo apt-get install wget python-virtualenv
 ```
 - Download and compile Python 2.7.9:
 ```
@@ -17,7 +17,7 @@ $ tar xfz Python-2.7.9.tgz
 $ cd Python-2.7.9/
 $ ./configure --prefix /usr/local/lib/python2.7.9 --enable-ipv6
 $ make
-$ make install
+$ sudo make install
 ```
 - Just to be sure things went ok:
 ```
@@ -44,20 +44,11 @@ Installing setuptools, pip...done.
 ```
 $ source env/bin/activate
 ```
-- Install pep 8:
-```
-$ pip install pep8==1.7.0
-Downloading/unpacking pep8==1.7.0
-  Downloading pep8-1.7.0-py2.py3-none-any.whl (41kB): 41kB downloaded
-Installing collected packages: pep8
-Successfully installed pep8
-Cleaning up...
-```
 - Unfortunately, we need to install numpy by hand (see https://github.com/numpy/numpy/issues/2434):
 ```
 $ pip install numpy
 ```
-- Setup project dependencies:
+- Setup the other project dependencies:
 ```
 $ python setup.py develop
 ```
