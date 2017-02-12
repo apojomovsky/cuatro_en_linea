@@ -46,7 +46,7 @@ $ source env/bin/activate
 ```
 - Unfortunately, we need to install numpy by hand (see https://github.com/numpy/numpy/issues/2434):
 ```
-$ pip install numpy
+$ pip install numpy==1.12.0
 ```
 - Setup the other project dependencies:
 ```
