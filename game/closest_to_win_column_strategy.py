@@ -1,5 +1,5 @@
-from game.strategy import Strategy
-from game.gameboard import GameBoard
+from strategy import Strategy
+from gameboard import GameBoard
 
 class ClosestToWinColumnStrategy(Strategy):
     """Look for the column that is closest to win in a vertical

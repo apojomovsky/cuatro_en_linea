@@ -1,4 +1,4 @@
-from game.strategy import Strategy
+from strategy import Strategy
 
 class FirstNonFullColumnStrategy(Strategy):
     """This strategy simply looks for the first non full
