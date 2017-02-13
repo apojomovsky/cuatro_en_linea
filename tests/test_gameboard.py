@@ -363,11 +363,71 @@ class TestGameBoard(unittest.TestCase):
             test_board.undo_move()
         self.assertEqual(self.empty_board, test_board)
 
+    def test_winner_color_in_columns(self):
+        self._test_winner_in_columns('winner_color')
+
     def test_winner_color_in_rows(self):
-        board = self.builder.build_from_moves([1,6,2,6,3,7,4,7])
-        self.assertEquals(board.winner_color(), 'blue')
+        self._test_winner_in_rows('winner_color')
 
     def test_winner_color_in_diagonals(self):
+        self._test_winner_in_diagonals('winner_color')
+
+    def test_winner_color_in_last_move_in_columns(self):
+        self._test_winner_in_columns('winner_color_in_last_move')
+
+    def test_winner_color_in_last_move_in_rows(self):
+        self._test_winner_in_rows('winner_color_in_last_move')
+
+    def test_winner_color_in_last_move_in_diagonals(self):
+        self._test_winner_in_diagonals('winner_color_in_last_move')
+
+    def _test_winner_in_columns(self, winner_method):
+        board = self.builder.build_from_moves([1,2,1,3,1,4,1])
+        """
+        . . . . . . .
+        . . . . . . .
+        B . . . . . .
+        B . . . . . .
+        B . . . . . .
+        B R R R . . .
+        """
+        self.assertEquals(getattr(board, winner_method)(), 'blue')
+
+        board = self.builder.build_from_moves([7,1,7,7,1,7,2,7,3,7])
+        """
+        . . . . . . R
+        . . . . . . R
+        . . . . . . R
+        . . . . . . R
+        B . . . . . B
+        R B B . . . B
+        """
+        self.assertEquals(getattr(board, winner_method)(), 'red')
+
+    def _test_winner_in_rows(self, winner_method):
+        board = self.builder.build_from_moves([1,6,2,6,3,7,4])
+        """
+        . . . . . . .
+        . . . . . . .
+        . . . . . . .
+        . . . . . . .
+        . . . . . R .
+        B B B B . R R
+        """
+        self.assertEquals(getattr(board, winner_method)(), 'blue')
+
+        board = self.builder.build_from_moves([7,6,5,4,6,5,4,7,5,4,7,6,5,4,7,6,6,5,4,7,1,7,2,6,1,5,2,4])
+        """
+        . . . R R R R
+        . . . B R B R
+        . . . R B R B
+        . . . R B R B
+        B B . B R B R
+        B B . R B R B
+        """
+        self.assertEquals(getattr(board, winner_method)(), 'red')
+
+    def _test_winner_in_diagonals(self, winner_method):
         board = self.builder.build_from_moves([1,1,1,2,1,2,2,3,3,7,4])
         """
         . . . . . . .
@@ -377,7 +437,7 @@ class TestGameBoard(unittest.TestCase):
         R R B . . . .
         B R R B . . R
         """
-        self.assertEquals(board.winner_color(), 'blue')
+        self.assertEquals(getattr(board, winner_method)(), 'blue')
 
         board = self.builder.build_from_moves([1,1,1,1,1,1,2,3,2,2,2,2,3,3,4,3,4,4])
         """
@@ -388,7 +448,7 @@ class TestGameBoard(unittest.TestCase):
         R B B B . . .
         B B R B . . .
         """
-        self.assertEquals(board.winner_color(), 'red')
+        self.assertEquals(getattr(board, winner_method)(), 'red')
 
         board = self.builder.build_from_moves([1,7,6,6,5,4,5,5,4,4,1,4])
         """
@@ -399,7 +459,7 @@ class TestGameBoard(unittest.TestCase):
         B . . B B R .
         B . . R B B R
         """
-        self.assertEquals(board.winner_color(), 'red')
+        self.assertEquals(getattr(board, winner_method)(), 'red')
 
         board = self.builder.build_from_moves([7,7,7,6,6,6,6,5,5,5,1,5,5,4,4,4,4,2,4,2,4])
         """
@@ -410,7 +470,7 @@ class TestGameBoard(unittest.TestCase):
         . R . B B B R
         B R . R R R B
         """
-        self.assertEquals(board.winner_color(), 'blue')
+        self.assertEquals(getattr(board, winner_method)(), 'blue')
 
         board = self.builder.build_from_moves([7,7,7,6,7,6,6,5,5,1,4])
         """
@@ -421,7 +481,7 @@ class TestGameBoard(unittest.TestCase):
         . . . . B R R
         R . . B R R B
         """
-        self.assertEquals(board.winner_color(), 'blue')
+        self.assertEquals(getattr(board, winner_method)(), 'blue')
 
 
         board = self.builder.build_from_moves([7,7,7,7,7,7,6,5,6,6,6,6,5,5,4,5,4,4])
@@ -433,7 +493,7 @@ class TestGameBoard(unittest.TestCase):
         . . . B B B R
         . . . B R B B
         """
-        self.assertEquals(board.winner_color(), 'red')
+        self.assertEquals(getattr(board, winner_method)(), 'red')
 
         board = self.builder.build_from_moves([1,1,1,2,2,2,2,3,3,3,7,3,3,4,4,4,4,6,4,6,4])
         """
@@ -444,7 +504,7 @@ class TestGameBoard(unittest.TestCase):
         R B B B . R .
         B R R R . R B
         """
-        self.assertEquals(board.winner_color(), 'blue')
+        self.assertEquals(getattr(board, winner_method)(), 'blue')
 
         board = self.builder.build_from_moves([1,1,1,2,2,2,2,4,4,4,7,4,4,3,3,3,3,6,3,6,4])
         """
@@ -455,4 +515,4 @@ class TestGameBoard(unittest.TestCase):
         R B B B . R .
         B R R R . R B
         """
-        self.assertEquals(board.winner_color(), 'blue')
+        self.assertEquals(getattr(board, winner_method)(), 'blue')
