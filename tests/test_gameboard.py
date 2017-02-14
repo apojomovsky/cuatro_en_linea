@@ -86,9 +86,19 @@ class TestGameBoard(unittest.TestCase):
         self.assertTrue(self.board_test_diagonals.column_is_full(7))
 
     def test_board_is_full(self):
-        self.assertFalse(self.board_test_columns.board_is_full())
-        self.board_almost_full.put_chip(4, 'blue')
-        self.assertTrue(self.board_almost_full.board_is_full())
+        board = self.builder.build_from_moves(
+            [1,1,2,2,1,1,2,2,1,1,2,2,4,3,4,4,3,3,4,4,3,
+             3,4,3,5,5,5,5,5,6,6,6,6,6,6,7,7,7,7,7,7])
+        """
+        R R R B . R R
+        B B R R B B B
+        R R B B R R R
+        B B R R B B B
+        R R B B R R R
+        B B R B B B B
+        """
+        board.put_chip(5, 'red')
+        self.assertTrue(board.board_is_full())
 
     def test_game_over_on_full_board(self):
         self.assertFalse(self.board_test_columns.is_game_over())
