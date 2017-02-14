@@ -2,12 +2,14 @@
 import unittest
 from game.gameboard import GameBoard
 from game.gameboard import BoardIsFull
+from board_builder import BoardBuilder
 from game.first_non_full_column_strategy import FirstNonFullColumnStrategy
 
 class TestFirstNonFullColumnStrategy(unittest.TestCase):
     def setUp(self):
         self.strategy = FirstNonFullColumnStrategy()
         self.color = 'blue'
+        self.builder = BoardBuilder('blue', 'red')
 
     def test_strategy_choses_leftmost_column_on_empty_board(self):
         """
@@ -76,12 +78,16 @@ class TestFirstNonFullColumnStrategy(unittest.TestCase):
         """If it turns that the board is full, but the return_column message from
            the strategy is called, a BoardIsFull exception will be raised.
         """
-        board = GameBoard.from_matrix([
-                    ['red',  'blue',  'red',  'red', 'blue', 'blue', 'blue'],
-                    ['red',   'red', 'blue',  'red', 'blue',  'red',  'red'],
-                    ['red',  'blue',  'red',  'red', 'blue', 'blue', 'blue'],
-                    ['blue', 'blue',  'red', 'blue',  'red',  'red', 'blue'],
-                    ['red',  'blue',  'red', 'blue',  'red', 'blue',  'red'],
-                    ['blue',  'red', 'blue',  'red',  'red',  'red',  'red']])
+        board = self.builder.build_from_moves(
+            [1,1,2,2,1,1,2,2,1,1,2,2,4,3,4,4,3,3,4,4,3,
+             3,4,3,5,5,5,5,5,5,6,6,6,6,6,6,7,7,7,7,7,7])
+        """
+        R R R B R R R
+        B B R R B B B
+        R R B B R R R
+        B B R R B B B
+        R R B B R R R
+        B B R B B B B
+        """
         with self.assertRaises(BoardIsFull):
             self.strategy.return_column(board, self.color)

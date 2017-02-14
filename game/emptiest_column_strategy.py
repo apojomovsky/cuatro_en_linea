@@ -1,4 +1,4 @@
-from game.strategy import Strategy
+from strategy import Strategy
 
 class EmptiestColumnStrategy(Strategy):
     """This strategy simply looks for the column that have more empty spaces

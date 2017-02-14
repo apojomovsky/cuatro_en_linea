@@ -25,6 +25,7 @@ class GameBoard(object):
         self._matrix = self.generate_matrix(
             self.ROWSCOUNT, self.COLUMNSCOUNT, None)
         self._winner = None
+        self._moves = []
 
     def __eq__(self, other_board):
         """ Checks if the _matrix from both gameboards have the same shape and elements"""
@@ -40,6 +41,44 @@ class GameBoard(object):
         """ Checks if the _matrix from both gameboards are differents"""
         return not self.__eq__(other_board)
 
+    def __str__(self):
+        representation = ''
+        for row in self.get_rows():
+            for entry in row:
+                if entry is None:
+                    representation = representation + '. '
+                elif entry == 'red':
+                    representation = representation + 'R '
+                elif entry == 'blue':
+                    representation = representation + 'B '
+            representation = representation + "\n"
+        return representation
+
+    def columns_count(self):
+        return self.COLUMNSCOUNT
+
+    def is_column_full(self, column_number):
+        return self._matrix[0, column_number - 1] is not None
+
+    def playable_positions(self):
+        positions = []
+        for position in range(1, self.COLUMNSCOUNT + 1):
+            if not self.is_column_full(position):
+                positions.append(position)
+        return positions
+
+    def undo_move(self):
+        move = self._moves.pop(-1)
+        self._matrix[move[0]][move[1]] = None
+
+    def copy(self):
+        # Avoid calling __init__ and hence creating an unneeded matrix
+        clone = GameBoard.__new__(GameBoard)
+        clone._matrix = self._matrix.copy()
+        clone._moves = list(self._moves)
+        clone._winner = self._winner
+        return clone
+
     def put_chip(self, column_index, color):
         """Inserts a new chip into the game matrix
 
@@ -49,9 +88,11 @@ class GameBoard(object):
         """
         self._raise_if_board_is_full()
         if not self.column_is_full(column_index):
-            rowIndex = self.ROWSCOUNT - \
-                list(self._retrieve_column(column_index)).index(None) - 1
-            self._matrix[rowIndex][column_index - 1] = color.lower()
+            for row in range(self.ROWSCOUNT - 1, -1, -1):
+                if self._matrix[row][column_index - 1] is None:
+                    self._matrix[row][column_index - 1] = color
+                    self._moves.append((row, column_index - 1, color))
+                    return row
         else:
             raise ColumnIsFull(column_index)
 
@@ -103,7 +144,6 @@ class GameBoard(object):
             return consecutive_groups[-1][0]
         return 0
 
-
     def read_entry(self, rowIndex, column_index):
         """Read a determined entry from the game matrix
 
@@ -124,28 +164,119 @@ class GameBoard(object):
         return entry
 
     def winner_exists(self):
-        """Check if there's a winner of the game and prints a message"""
-        self._check_rows_for_winner()
-        self._check_columns_for_winner()
-        self._check_diagonals_for_winner()
-        if self._winner:
-            return True
-        else:
-            return False
+        return self.winner_color() is not None
 
     def winner_color(self):
-        """Returns the color of the winner if it exists"""
-        if self.winner_exists():
-            return self._winner
+        """
+        Check if there is a winner of any color. Note that this is very
+        inefficient as we need to scan the complete board twice, one for each
+        color. When possible, use winner_color_in_last_move, which is has way
+        better performance.
+        """
+        if self._wins_in_any_row('red'):
+            return 'red'
+        if self._wins_in_any_row('blue'):
+            return 'blue'
+
+        if self._wins_in_any_column('red'):
+            return 'red'
+        if self._wins_in_any_column('blue'):
+            return 'blue'
+
+        if self._wins_in_any_diagonal('red'):
+            return 'red'
+        if self._wins_in_any_diagonal('blue'):
+            return 'blue'
+
+        return None
+
+    def winner_color_in_last_move(self):
+        """
+        Answers if the last move generated a winner. We currently only use
+        knowledge of the last move to search for a winner of that color.
+        TODO: Restrict the search to only use the row/column/diagonals that
+        involve the last played matrix cell.
+        """
+        (last_row, last_column, last_color) = self._moves[-1]
+        if self._wins_in_row(last_color, last_row) or \
+           self._wins_in_column(last_color, last_column) or \
+           self._wins_in_any_diagonal(last_color):
+            return last_color
+        return None
+
+    def _wins_in_any_row(self, color):
+        for row in range(self.ROWSCOUNT - 1, -1, -1):
+            if self._wins_in_row(color, row):
+                return True
         return False
+
+    def _wins_in_row(self, color, row):
+        for column in range(0, self.COLUMNSCOUNT - 3):
+            if self._matrix[row][column] == color and \
+               self._matrix[row][column + 1] == color and \
+               self._matrix[row][column + 2] == color and \
+               self._matrix[row][column + 3] == color:
+                return True
+        return False
+
+    def _wins_in_any_column(self, color):
+        for column in range(0, self.COLUMNSCOUNT):
+            if self._wins_in_column(color, column):
+                return True
+        return False
+
+    def _wins_in_column(self, color, column):
+        for row in range(0, self.ROWSCOUNT - 3):
+            if self._matrix[row][column] == color and \
+               self._matrix[row + 1][column] == color and \
+               self._matrix[row + 2][column] == color and \
+               self._matrix[row + 3][column] == color:
+                return True
+        return False
+
+    def _wins_in_any_diagonal(self, color):
+        """
+        This definitely requires some love and be defined in terms of
+        COLUMNSCOUNT and ROWSCOUNT.
+        """
+        return self._connects_four_in(color, (2, 0), (3, 1), (4, 2), (5, 3)) or \
+               self._connects_four_in(color, (2, 1), (3, 2), (4, 3), (5, 4)) or \
+               self._connects_four_in(color, (2, 2), (3, 3), (4, 4), (5, 5)) or \
+               self._connects_four_in(color, (2, 3), (3, 4), (4, 5), (5, 6)) or \
+               self._connects_four_in(color, (1, 0), (2, 1), (3, 2), (4, 3)) or \
+               self._connects_four_in(color, (1, 1), (2, 2), (3, 3), (4, 4)) or \
+               self._connects_four_in(color, (1, 2), (2, 3), (3, 4), (4, 5)) or \
+               self._connects_four_in(color, (1, 3), (2, 4), (3, 5), (4, 6)) or \
+               self._connects_four_in(color, (0, 0), (1, 1), (2, 2), (3, 3)) or \
+               self._connects_four_in(color, (0, 1), (1, 2), (2, 3), (3, 4)) or \
+               self._connects_four_in(color, (0, 2), (1, 3), (2, 4), (3, 5)) or \
+               self._connects_four_in(color, (0, 3), (1, 4), (2, 5), (3, 6)) or \
+               self._connects_four_in(color, (2, 6), (3, 5), (4, 4), (5, 3)) or \
+               self._connects_four_in(color, (2, 5), (3, 4), (4, 3), (5, 2)) or \
+               self._connects_four_in(color, (2, 4), (3, 3), (4, 2), (5, 1)) or \
+               self._connects_four_in(color, (2, 3), (3, 2), (4, 1), (5, 0)) or \
+               self._connects_four_in(color, (1, 6), (2, 5), (3, 4), (4, 3)) or \
+               self._connects_four_in(color, (1, 5), (2, 4), (3, 3), (4, 2)) or \
+               self._connects_four_in(color, (1, 4), (2, 3), (3, 2), (4, 1)) or \
+               self._connects_four_in(color, (1, 3), (2, 2), (3, 1), (4, 0)) or \
+               self._connects_four_in(color, (0, 6), (1, 5), (2, 4), (3, 3)) or \
+               self._connects_four_in(color, (0, 5), (1, 4), (2, 3), (3, 2)) or \
+               self._connects_four_in(color, (0, 4), (1, 3), (2, 2), (3, 1)) or \
+               self._connects_four_in(color, (0, 3), (1, 2), (2, 1), (3, 0))
+
+
+    def _connects_four_in(self, color, position_1, position_2, position_3, position_4):
+        """
+        Only used in _wins_in_any_diagonal, maybe will go away in the future.
+        """
+        return self._matrix[position_1[0]][position_1[1]] == color and \
+               self._matrix[position_2[0]][position_2[1]] == color and \
+               self._matrix[position_3[0]][position_3[1]] == color and \
+               self._matrix[position_4[0]][position_4[1]] == color
 
     def board_is_full(self):
         """Checks whether a board is full or not"""
-        for row in self._matrix:
-            for entry in row:
-                if entry is None:
-                    return False
-        return True
+        return len(self._moves) == 42
 
     def is_game_over(self):
         """Checks whether the game is over or not"""
@@ -194,7 +325,7 @@ class GameBoard(object):
 
     def column_is_full(self, column_index):
         """Checks if the column on a given index is full or not"""
-        return self._retrieve_column(column_index)[5] is not None
+        return self._matrix[0][column_index - 1] is not None
 
     def row_is_full(self, row_index):
         """Checks if the row on a given index is full or not"""
@@ -258,39 +389,6 @@ class GameBoard(object):
                 continue
         return False
 
-    def _winner_in_array(self, testing_array):
-        """Check if there's a four-in-a-row occurrence on a given array"""
-        FOUR_RED_IN_A_ROW = numpy.full(4, 'red', dtype=object)
-        FOUR_BLUE_IN_A_ROW = numpy.full(4, 'blue', dtype=object)
-        if self._array_contains(FOUR_RED_IN_A_ROW, testing_array):
-            self._winner = 'red'
-            return True
-        elif self._array_contains(FOUR_BLUE_IN_A_ROW, testing_array):
-            self._winner = 'blue'
-            return True
-        else:
-            return False
-
-    def _check_rows_for_winner(self):
-        """Check if there's a winner row-wise"""
-        for row in self.get_rows():
-            if self._winner_in_array(numpy.asarray(row)):
-                return True
-        return False
-
-    def _check_columns_for_winner(self):
-        """Check if there's a winner column-wise"""
-        for column in self._get_columns():
-            if self._winner_in_array(numpy.asarray(column)):
-                return True
-        return False
-
-    def _check_diagonals_for_winner(self):
-        """Check if there's a winner diagonal-wise"""
-        for diagonal in self._get_diagonals():
-            if self._winner_in_array(numpy.asarray(diagonal)):
-                return True
-        return False
 
     def _validate_matrix(self, matrix_to_test):
         """Checks if an input matrix have valid characters and structure
