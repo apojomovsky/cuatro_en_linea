@@ -4,7 +4,7 @@ from gameboard import BoardIsFull
 
 class Player(object):
     def __init__(self, color, strategy):
-        self._color = color.lower()
+        self._color = color.upper()
         self._strategy = strategy
 
     def color(self):

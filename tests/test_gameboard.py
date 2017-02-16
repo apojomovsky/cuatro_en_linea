@@ -90,12 +90,12 @@ class TestGameBoard(unittest.TestCase):
             [1,1,2,2,1,1,2,2,1,1,2,2,4,3,4,4,3,3,4,4,3,
              3,4,3,5,5,5,5,5,6,6,6,6,6,6,7,7,7,7,7,7])
         """
-        R R R B . R R
-        B B R R B B B
-        R R B B R R R
-        B B R R B B B
-        R R B B R R R
-        B B R B B B B
+        W W W B . W B
+        B B W W B B B
+        W W B B W W B
+        B B W W B B B
+        W W B B W W B
+        B B W B B B B
         """
         board.put_chip(5, 'W')
         self.assertTrue(board.board_is_full())
@@ -399,18 +399,18 @@ class TestGameBoard(unittest.TestCase):
         B . . . . . .
         B . . . . . .
         B . . . . . .
-        B R R R . . .
+        B W W W . . .
         """
         self.assertEquals(getattr(board, winner_method)(), 'B')
 
         board = self.builder.build_from_moves([7,1,7,7,1,7,2,7,3,7])
         """
-        . . . . . . R
-        . . . . . . R
-        . . . . . . R
-        . . . . . . R
+        . . . . . . B
+        . . . . . . B
+        . . . . . . B
+        . . . . . . B
         B . . . . . B
-        R B B . . . B
+        W B B . . . B
         """
         self.assertEquals(getattr(board, winner_method)(), 'W')
 
@@ -421,19 +421,19 @@ class TestGameBoard(unittest.TestCase):
         . . . . . . .
         . . . . . . .
         . . . . . . .
-        . . . . . R .
-        B B B B . R R
+        . . . . . W .
+        B B B B . W B
         """
         self.assertEquals(getattr(board, winner_method)(), 'B')
 
         board = self.builder.build_from_moves([7,6,5,4,6,5,4,7,5,4,7,6,5,4,7,6,6,5,4,7,1,7,2,6,1,5,2,4])
         """
-        . . . R R R R
-        . . . B R B R
-        . . . R B R B
-        . . . R B R B
-        B B . B R B R
-        B B . R B R B
+        . . . W W W B
+        . . . B W B B
+        . . . W B W B
+        . . . W B W B
+        B B . B W B B
+        B B . W B W B
         """
         self.assertEquals(getattr(board, winner_method)(), 'W')
 
@@ -444,19 +444,19 @@ class TestGameBoard(unittest.TestCase):
         . . . . . . .
         B . . . . . .
         B B . . . . .
-        R R B . . . .
-        B R R B . . R
+        W W B . . . .
+        B W W B . . B
         """
         self.assertEquals(getattr(board, winner_method)(), 'B')
 
         board = self.builder.build_from_moves([1,1,1,1,1,1,2,3,2,2,2,2,3,3,4,3,4,4])
         """
-        R . . . . . .
-        B R . . . . .
-        R B R . . . .
-        B R R R . . .
-        R B B B . . .
-        B B R B . . .
+        W . . . . . .
+        B W . . . . .
+        W B W . . . .
+        B W W W . . .
+        W B B B . . .
+        B B W B . . .
         """
         self.assertEquals(getattr(board, winner_method)(), 'W')
 
@@ -464,10 +464,10 @@ class TestGameBoard(unittest.TestCase):
         """
         . . . . . . .
         . . . . . . .
-        . . . R . . .
-        . . . R R . .
-        B . . B B R .
-        B . . R B B R
+        . . . W . . .
+        . . . W W . .
+        B . . B B W .
+        B . . W B B B
         """
         self.assertEquals(getattr(board, winner_method)(), 'W')
 
@@ -475,10 +475,10 @@ class TestGameBoard(unittest.TestCase):
         """
         . . . B . . .
         . . . B B . .
-        . . . B R B .
-        . . . R R R B
-        . R . B B B R
-        B R . R R R B
+        . . . B W B .
+        . . . W W W B
+        . W . B B B B
+        B W . W W W B
         """
         self.assertEquals(getattr(board, winner_method)(), 'B')
 
@@ -488,20 +488,20 @@ class TestGameBoard(unittest.TestCase):
         . . . . . . .
         . . . . . . B
         . . . . . B B
-        . . . . B R R
-        R . . B R R B
+        . . . . B W B
+        W . . B W W B
         """
         self.assertEquals(getattr(board, winner_method)(), 'B')
 
 
         board = self.builder.build_from_moves([7,7,7,7,7,7,6,5,6,6,6,6,5,5,4,5,4,4])
         """
-        . . . . . . R
-        . . . . . R B
-        . . . . R B R
-        . . . R R R B
-        . . . B B B R
-        . . . B R B B
+        . . . . . . B
+        . . . . . W B
+        . . . . W B B
+        . . . W W W B
+        . . . B B B B
+        . . . B W B B
         """
         self.assertEquals(getattr(board, winner_method)(), 'W')
 
@@ -509,10 +509,10 @@ class TestGameBoard(unittest.TestCase):
         """
         . . . B . . .
         . . B B . . .
-        . B R B . . .
-        B R R R . . .
-        R B B B . R .
-        B R R R . R B
+        . B W B . . .
+        B W W W . . .
+        W B B B . W .
+        B W W W . W B
         """
         self.assertEquals(getattr(board, winner_method)(), 'B')
 
@@ -520,9 +520,9 @@ class TestGameBoard(unittest.TestCase):
         """
         . . . B . . .
         . . B B . . .
-        . B B R . . .
-        B R R R . . .
-        R B B B . R .
-        B R R R . R B
+        . B B W . . .
+        B W W W . . .
+        W B B B . W .
+        B W W W . W B
         """
         self.assertEquals(getattr(board, winner_method)(), 'B')

@@ -47,11 +47,11 @@ class TestMatch(unittest.TestCase):
 
     def test_play_match_and_black_wins(self):
         match_black_win_with_row = Match(self.player_black, self.player_white,
-                                        GameBoard.from_matrix([
-                    [None,   None, None, None, None, None,   None],
-                    ['B', None, None, None, None, None, 'B'],
-                    ['B', None, None, None, None, None, 'B'],
-                    ['B', None, None, None, None, None, 'B'],
+                                         GameBoard.from_matrix([
+                    [None, None, None, None, None, None, None],
+                    ['B',  None, None, None, None, None,  'B'],
+                    ['B',  None, None, None, None, None,  'B'],
+                    ['B',  None, None, None, None, None,  'B'],
                     ['W',  None, None, None, None, None,  'W'],
                     ['W',  None, None, None, None, None,  'W']]))
         self.assertFalse(match_black_win_with_row.is_over())

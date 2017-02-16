@@ -82,12 +82,12 @@ class TestFirstNonFullColumnStrategy(unittest.TestCase):
             [1,1,2,2,1,1,2,2,1,1,2,2,4,3,4,4,3,3,4,4,3,
              3,4,3,5,5,5,5,5,5,6,6,6,6,6,6,7,7,7,7,7,7])
         """
-        R R R B R R R
-        B B R R B B B
-        R R B B R R R
-        B B R R B B B
-        R R B B R R R
-        B B R B B B B
+        W W W B W W W
+        B B W W B B B
+        W W B B W W W
+        B B W W B B B
+        W W B B W W W
+        B B W B B B B
         """
         with self.assertRaises(BoardIsFull):
             self.strategy.return_column(board, self.color)
