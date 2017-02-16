@@ -48,9 +48,9 @@ class GameBoard(object):
                 if entry is None:
                     representation = representation + '. '
                 elif entry == 'B':
-                    representation = representation + 'R '
-                elif entry == 'W':
                     representation = representation + 'B '
+                elif entry == 'W':
+                    representation = representation + 'W '
             representation = representation + "\n"
         return representation
 

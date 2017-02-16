@@ -14,7 +14,7 @@ class TestEmptiestColumnStrategy(unittest.TestCase):
     def test_strategy_choses_leftmost_column_on_empty_board(self):
         """
         Strategy_two will return the first column (leftmost)
-        if the board is emtpy
+        if the board is empty
         """
         board = GameBoard()
         self.assertEqual(self.strategy.return_column(board, self.color), 1)

@@ -14,7 +14,7 @@ class TestFirstNonFullColumnStrategy(unittest.TestCase):
     def test_strategy_choses_leftmost_column_on_empty_board(self):
         """
         This strategy returns the first column (leftmost)
-        when the board is emtpy
+        when the board is empty
         """
         board = GameBoard()
         self.assertEqual(self.strategy.return_column(board, self.color), 1)
