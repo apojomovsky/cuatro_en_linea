@@ -21,6 +21,7 @@ class TestGameBoard(unittest.TestCase):
         W W B B W B B
         B B W B B W W
         """
+
         self.board_full = self.builder.build_from_moves(
             [1,1,2,2,1,1,2,2,1,1,2,2,4,3,4,4,3,3,4,4,3,
              3,4,3,5,5,5,5,5,6,6,6,6,6,6,7,7,7,7,7,7,5])
@@ -32,6 +33,18 @@ class TestGameBoard(unittest.TestCase):
         W W B B W B B
         B B W B B W W
         """
+
+        self.board_white_about_to_win = self.builder.build_from_moves(
+            [1,2,1,2,1,2])
+        """
+        . . . . . . .
+        . . . . . . .
+        . . . . . . .
+        W B . . . . .
+        W B . . . . .
+        W B . . . . .
+        """
+
         self.board_test_rows = GameBoard.from_matrix([
                     [None, 'B', 'B', 'B', None, None, None],
                     ['B',  'W', 'B', 'W', None, None, None],
@@ -157,8 +170,15 @@ class TestGameBoard(unittest.TestCase):
         self.assertTrue(self.board_full.is_game_over())
 
     def test_game_over_on_winner(self):
-        self.assertEqual(self.board_test_rows.is_game_over(), False)
-        self.board_test_rows.put_chip(1, 'B')
+        """
+        . . . . . . .
+        . . . . . . .
+        . . . . . . .
+        W B . . . . .
+        W B . . . . .
+        W B . . . . .
+        """
+        self.board_test_rows.put_chip(1, 'W')
         self.assertEqual(self.board_test_rows.is_game_over(), True)
 
     def test_winner_exists_from_rows_on_left_corner(self):
