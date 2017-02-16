@@ -8,8 +8,8 @@ from game.first_non_full_column_strategy import FirstNonFullColumnStrategy
 class TestFirstNonFullColumnStrategy(unittest.TestCase):
     def setUp(self):
         self.strategy = FirstNonFullColumnStrategy()
-        self.color = 'B'
-        self.builder = BoardBuilder('B', 'W')
+        self.color = 'W'
+        self.builder = BoardBuilder('W', 'B')
 
     def test_strategy_choses_leftmost_column_on_empty_board(self):
         """
@@ -30,7 +30,7 @@ class TestFirstNonFullColumnStrategy(unittest.TestCase):
                     [None,   None, None, None, None, None, None],
                     [None,   None, None, None, None, None, None],
                     [None,   None, None, None, None, None, None],
-                    ['B', None, None, None, None, None, None]])
+                    ['W', None, None, None, None, None, None]])
         self.assertEqual(self.strategy.return_column(board, self.color), 1)
 
     def test_strategy_on_near_full_column(self):
@@ -40,11 +40,11 @@ class TestFirstNonFullColumnStrategy(unittest.TestCase):
         """
         board = GameBoard.from_matrix([
                     [None,   None, None, None, None, None, None],
-                    ['B', None, None, None, None, None, None],
-                    ['W',  None, None, None, None, None, None],
-                    ['B', None, None, None, None, None, None],
-                    ['W',  None, None, None, None, None, None],
-                    ['B', None, None, None, None, None, None]])
+                    ['W', None, None, None, None, None, None],
+                    ['B',  None, None, None, None, None, None],
+                    ['W', None, None, None, None, None, None],
+                    ['B',  None, None, None, None, None, None],
+                    ['W', None, None, None, None, None, None]])
         self.assertEqual(self.strategy.return_column(board, self.color), 1)
 
     def test_strategy_choses_leftmost_non_full_column(self):
@@ -53,12 +53,12 @@ class TestFirstNonFullColumnStrategy(unittest.TestCase):
         that is not full
         """
         board = GameBoard.from_matrix([
-                    ['W',  None, None, None, None, None, None],
-                    ['B', None, None, None, None, None, None],
-                    ['W',  None, None, None, None, None, None],
-                    ['B', None, None, None, None, None, None],
-                    ['W',  None, None, None, None, None, None],
-                    ['B', None, None, None, None, None, None]])
+                    ['B',  None, None, None, None, None, None],
+                    ['W', None, None, None, None, None, None],
+                    ['B',  None, None, None, None, None, None],
+                    ['W', None, None, None, None, None, None],
+                    ['B',  None, None, None, None, None, None],
+                    ['W', None, None, None, None, None, None]])
         self.assertEqual(self.strategy.return_column(board, self.color), 2)
 
     def test_strategy_choses_the_only_non_full_column(self):
@@ -66,12 +66,12 @@ class TestFirstNonFullColumnStrategy(unittest.TestCase):
            whole board
         """
         board = GameBoard.from_matrix([
-                    ['W',  'B',  'W',  None,  'B', 'B', 'B'],
-                    ['W',   'W', 'B',  None,  'B',  'W',  'W'],
-                    ['W',  'B',  'W',  None,  'B', 'B', 'B'],
-                    ['B', 'B',  'W', 'B',  'W',  'W', 'B'],
-                    ['W',  'B',  'W', 'B',  'W', 'B',  'W'],
-                    ['B',  'W', 'B',  'W',  'W',  'W',  'W']])
+                    ['B',  'W',  'B',  None,  'W', 'W', 'W'],
+                    ['B',   'B', 'W',  None,  'W',  'B',  'B'],
+                    ['B',  'W',  'B',  None,  'W', 'W', 'W'],
+                    ['W', 'W',  'B', 'W',  'B',  'B', 'W'],
+                    ['B',  'W',  'B', 'W',  'B', 'W',  'B'],
+                    ['W',  'B', 'W',  'B',  'B',  'B',  'B']])
         self.assertEqual(self.strategy.return_column(board, self.color), 4)
 
     def test_strategy_raises_exception_on_full_board(self):

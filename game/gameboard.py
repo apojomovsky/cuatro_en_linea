@@ -47,9 +47,9 @@ class GameBoard(object):
             for entry in row:
                 if entry is None:
                     representation = representation + '. '
-                elif entry == 'W':
-                    representation = representation + 'R '
                 elif entry == 'B':
+                    representation = representation + 'R '
+                elif entry == 'W':
                     representation = representation + 'B '
             representation = representation + "\n"
         return representation
@@ -175,20 +175,20 @@ class GameBoard(object):
         color. When possible, use winner_color_in_last_move, which is has way
         better performance.
         """
-        if self._wins_in_any_row('W'):
-            return 'W'
         if self._wins_in_any_row('B'):
             return 'B'
-
-        if self._wins_in_any_column('W'):
+        if self._wins_in_any_row('W'):
             return 'W'
+
         if self._wins_in_any_column('B'):
             return 'B'
-
-        if self._wins_in_any_diagonal('W'):
+        if self._wins_in_any_column('W'):
             return 'W'
+
         if self._wins_in_any_diagonal('B'):
             return 'B'
+        if self._wins_in_any_diagonal('W'):
+            return 'W'
 
         return None
 
@@ -416,5 +416,5 @@ class GameBoard(object):
 
     def _is_valid_cell_value(self, entry):
         """Checks if a given value is a valid entry"""
-        valid_entries = (None, 'B', 'W')
+        valid_entries = (None, 'W', 'B')
         return entry in valid_entries

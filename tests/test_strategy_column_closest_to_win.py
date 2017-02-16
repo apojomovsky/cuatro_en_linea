@@ -7,7 +7,7 @@ from game.closest_to_win_column_strategy import ClosestToWinColumnStrategy
 class TestPlayer(unittest.TestCase):
     def setUp(self):
         self.strategy = ClosestToWinColumnStrategy()
-        self.color = 'B'
+        self.color = 'W'
 
     def test_strategy_choses_leftmost_column_from_empty_board(self):
         """return_column will chose the leftmost column from a group of same level
@@ -23,9 +23,9 @@ class TestPlayer(unittest.TestCase):
                     [None,  None,   None, None, None, None, None],
                     [None,  None,   None, None, None, None, None],
                     [None,  None,   None, None, None, None, None],
-                    ['W', None,   None, None, None, None, None],
-                    ['W', None, 'B', None, None, None, None],
-                    ['W', None, 'B', None, None, None, None]])
+                    ['B', None,   None, None, None, None, None],
+                    ['B', None, 'W', None, None, None, None],
+                    ['B', None, 'W', None, None, None, None]])
         self.assertEqual(self.strategy.return_column(board, self.color), 3)
 
     def test_strategy_choses_sixth_column_because_unable_to_win_on_leftmost(self):
@@ -34,11 +34,11 @@ class TestPlayer(unittest.TestCase):
         """
         board = GameBoard.from_matrix([
                     [None,   None, None, None, None,  None,  None],
-                    ['B', None, None, None, None,  None,  None],
-                    ['B', None, None, None, None,  None,  None],
-                    ['W',  None, None, None, None,  None,  None],
-                    ['W',  None, None, None, None,  None,  None],
-                    ['W',  None, None, None, None, 'B', None]])
+                    ['W', None, None, None, None,  None,  None],
+                    ['W', None, None, None, None,  None,  None],
+                    ['B',  None, None, None, None,  None,  None],
+                    ['B',  None, None, None, None,  None,  None],
+                    ['B',  None, None, None, None, 'W', None]])
         self.assertEqual(6, self.strategy.return_column(board, self.color))
 
     def test_strategy_choses_leftmost_column_when_more_than_one_are_equal(self):
@@ -50,8 +50,8 @@ class TestPlayer(unittest.TestCase):
                     [None,   None,   None,   None,  None, None,  None],
                     [None,   None,   None,   None,  None, None,  None],
                     [None,   None,   None,   None,  None, None,  None],
-                    [None,   None, 'B', 'B',  None, None,  None],
-                    ['W', 'W', 'B', 'B', 'W', 'W', None]])
+                    [None,   None, 'W', 'W',  None, None,  None],
+                    ['B', 'B', 'W', 'W', 'B', 'B', None]])
         self.assertEqual(self.strategy.return_column(board, self.color), 3)
 
     def test_strategy_choses_first_non_full_column_when_unable_to_win(self):
@@ -60,9 +60,9 @@ class TestPlayer(unittest.TestCase):
         """
         board = GameBoard.from_matrix([
                     [None,     None,   None,   None,   None,   None,   None],
-                    ['W',   'W', 'B',  'W',  'W',  'W', 'B'],
-                    ['W',  'B',  'W',  'W', 'B', 'B', 'B'],
-                    ['B', 'B',  'W', 'B',  'W',  'W',  'W'],
-                    ['W',  'B',  'W', 'B',  'W', 'B',  'W'],
-                    ['B',  'W', 'B',  'W',  'W',  'W',  'W']])
+                    ['B',   'B', 'W',  'B',  'B',  'B', 'W'],
+                    ['B',  'W',  'B',  'B', 'W', 'W', 'W'],
+                    ['W', 'W',  'B', 'W',  'B',  'B',  'B'],
+                    ['B',  'W',  'B', 'W',  'B', 'W',  'B'],
+                    ['W',  'B', 'W',  'B',  'B',  'B',  'B']])
         self.assertEqual(1, self.strategy.return_column(board, self.color))
