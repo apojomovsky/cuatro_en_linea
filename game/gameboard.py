@@ -86,7 +86,6 @@ class GameBoard(object):
             column_index: the column where the chip is being put
             color: the color of the chip
         """
-        self._raise_if_board_is_full()
         if not self.column_is_full(column_index):
             for row in range(self.ROWSCOUNT - 1, -1, -1):
                 if self._matrix[row][column_index - 1] is None:
