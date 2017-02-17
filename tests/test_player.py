@@ -2,7 +2,7 @@
 import unittest
 from game.player import Player
 from game.gameboard import GameBoard
-from game.gameboard import BoardIsFull
+from game.gameboard import ColumnIsFull
 from game.gameboard import OutOfIndex
 from board_builder import BoardBuilder
 from game.emptiest_column_strategy import EmptiestColumnStrategy
@@ -71,7 +71,7 @@ class TestPlayer(unittest.TestCase):
         with self.assertRaises(OutOfIndex):
             self.player_blue.play(board)
 
-    def test_player_raises_exception_when_attempts_to_play_on_full_board(self):
+    def test_player_raises_exception_when_attempts_to_play_on_full_column(self):
         board = self.builder.build_from_moves(
             [1,1,2,2,1,1,2,2,1,1,2,2,4,3,4,4,3,3,4,4,3,
              3,4,3,5,5,5,5,5,5,6,6,6,6,6,6,7,7,7,7,7,7])
@@ -83,7 +83,7 @@ class TestPlayer(unittest.TestCase):
         R R B B R R R
         B B R B B B B
         """
-        with self.assertRaises(BoardIsFull):
+        with self.assertRaises(ColumnIsFull):
             self.player_blue.play(board)
 
     def test_player_is_winner_if_it_has_actually_won(self):
