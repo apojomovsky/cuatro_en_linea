@@ -25,12 +25,12 @@ class TestFirstNonFullColumnStrategy(unittest.TestCase):
         The test expects the first column because it's not full.
         """
         board = GameBoard.from_matrix([
-                    [None,   None, None, None, None, None, None],
-                    [None,   None, None, None, None, None, None],
-                    [None,   None, None, None, None, None, None],
-                    [None,   None, None, None, None, None, None],
-                    [None,   None, None, None, None, None, None],
-                    ['W', None, None, None, None, None, None]])
+                    [None, None, None, None, None, None, None],
+                    [None, None, None, None, None, None, None],
+                    [None, None, None, None, None, None, None],
+                    [None, None, None, None, None, None, None],
+                    [None, None, None, None, None, None, None],
+                    [ 'W', None, None, None, None, None, None]])
         self.assertEqual(self.strategy.return_column(board, self.color), 1)
 
     def test_strategy_on_near_full_column(self):
@@ -39,12 +39,12 @@ class TestFirstNonFullColumnStrategy(unittest.TestCase):
         if it's the leftmost non full
         """
         board = GameBoard.from_matrix([
-                    [None,   None, None, None, None, None, None],
-                    ['W', None, None, None, None, None, None],
-                    ['B',  None, None, None, None, None, None],
-                    ['W', None, None, None, None, None, None],
-                    ['B',  None, None, None, None, None, None],
-                    ['W', None, None, None, None, None, None]])
+                    [None, None, None, None, None, None, None],
+                    [ 'W', None, None, None, None, None, None],
+                    [ 'B', None, None, None, None, None, None],
+                    [ 'W', None, None, None, None, None, None],
+                    [ 'B', None, None, None, None, None, None],
+                    [ 'W', None, None, None, None, None, None]])
         self.assertEqual(self.strategy.return_column(board, self.color), 1)
 
     def test_strategy_choses_leftmost_non_full_column(self):
@@ -53,11 +53,11 @@ class TestFirstNonFullColumnStrategy(unittest.TestCase):
         that is not full
         """
         board = GameBoard.from_matrix([
-                    ['B',  None, None, None, None, None, None],
+                    ['B', None, None, None, None, None, None],
                     ['W', None, None, None, None, None, None],
-                    ['B',  None, None, None, None, None, None],
+                    ['B', None, None, None, None, None, None],
                     ['W', None, None, None, None, None, None],
-                    ['B',  None, None, None, None, None, None],
+                    ['B', None, None, None, None, None, None],
                     ['W', None, None, None, None, None, None]])
         self.assertEqual(self.strategy.return_column(board, self.color), 2)
 
@@ -66,12 +66,12 @@ class TestFirstNonFullColumnStrategy(unittest.TestCase):
            whole board
         """
         board = GameBoard.from_matrix([
-                    ['B',  'W',  'B',  None,  'W', 'W', 'W'],
-                    ['B',   'B', 'W',  None,  'W',  'B',  'B'],
-                    ['B',  'W',  'B',  None,  'W', 'W', 'W'],
-                    ['W', 'W',  'B', 'W',  'B',  'B', 'W'],
-                    ['B',  'W',  'B', 'W',  'B', 'W',  'B'],
-                    ['W',  'B', 'W',  'B',  'B',  'B',  'B']])
+                    ['B', 'W', 'B', None, 'W', 'W', 'W'],
+                    ['B', 'B', 'W', None, 'W', 'B', 'B'],
+                    ['B', 'W', 'B', None, 'W', 'W', 'W'],
+                    ['W', 'W', 'B',  'W', 'B', 'B', 'W'],
+                    ['B', 'W', 'B',  'W', 'B', 'W', 'B'],
+                    ['W', 'B', 'W',  'B', 'B', 'B', 'B']])
         self.assertEqual(self.strategy.return_column(board, self.color), 4)
 
     def test_strategy_raises_exception_on_full_board(self):

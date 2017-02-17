@@ -20,12 +20,12 @@ class TestPlayer(unittest.TestCase):
         """return_column will chose column three because is the closest
            column to win for color black"""
         board = GameBoard.from_matrix([
-                    [None,  None,   None, None, None, None, None],
-                    [None,  None,   None, None, None, None, None],
-                    [None,  None,   None, None, None, None, None],
-                    ['B', None,   None, None, None, None, None],
-                    ['B', None, 'W', None, None, None, None],
-                    ['B', None, 'W', None, None, None, None]])
+                    [None, None, None, None, None, None, None],
+                    [None, None, None, None, None, None, None],
+                    [None, None, None, None, None, None, None],
+                    ['B',  None, None, None, None, None, None],
+                    ['B',  None,  'W', None, None, None, None],
+                    ['B',  None,  'W', None, None, None, None]])
         self.assertEqual(self.strategy.return_column(board, self.color), 3)
 
     def test_strategy_choses_sixth_column_because_unable_to_win_on_leftmost(self):
@@ -33,12 +33,12 @@ class TestPlayer(unittest.TestCase):
            suppossed to be closer to win, it can't because of lack of free entries
         """
         board = GameBoard.from_matrix([
-                    [None,   None, None, None, None,  None,  None],
-                    ['W', None, None, None, None,  None,  None],
-                    ['W', None, None, None, None,  None,  None],
+                    [None, None, None, None, None,  None,  None],
+                    ['W',  None, None, None, None,  None,  None],
+                    ['W',  None, None, None, None,  None,  None],
                     ['B',  None, None, None, None,  None,  None],
                     ['B',  None, None, None, None,  None,  None],
-                    ['B',  None, None, None, None, 'W', None]])
+                    ['B',  None, None, None, None,   'W',  None]])
         self.assertEqual(6, self.strategy.return_column(board, self.color))
 
     def test_strategy_choses_leftmost_column_when_more_than_one_are_equal(self):
@@ -46,12 +46,12 @@ class TestPlayer(unittest.TestCase):
            column four have the same ammount of black chips, leftmost is priorized
         """
         board = GameBoard.from_matrix([
-                    [None,   None,   None,   None,  None, None,  None],
-                    [None,   None,   None,   None,  None, None,  None],
-                    [None,   None,   None,   None,  None, None,  None],
-                    [None,   None,   None,   None,  None, None,  None],
-                    [None,   None, 'W', 'W',  None, None,  None],
-                    ['B', 'B', 'W', 'W', 'B', 'B', None]])
+                    [None, None, None, None, None, None, None],
+                    [None, None, None, None, None, None, None],
+                    [None, None, None, None, None, None, None],
+                    [None, None, None, None, None, None, None],
+                    [None, None,  'W',  'W', None, None, None],
+                    [ 'B',  'B',  'W',  'W',  'B',  'B', None]])
         self.assertEqual(self.strategy.return_column(board, self.color), 3)
 
     def test_strategy_choses_first_non_full_column_when_unable_to_win(self):
@@ -59,10 +59,10 @@ class TestPlayer(unittest.TestCase):
            return the first non full column.
         """
         board = GameBoard.from_matrix([
-                    [None,     None,   None,   None,   None,   None,   None],
-                    ['B',   'B', 'W',  'B',  'B',  'B', 'W'],
-                    ['B',  'W',  'B',  'B', 'W', 'W', 'W'],
-                    ['W', 'W',  'B', 'W',  'B',  'B',  'B'],
-                    ['B',  'W',  'B', 'W',  'B', 'W',  'B'],
-                    ['W',  'B', 'W',  'B',  'B',  'B',  'B']])
+                    [None, None, None, None, None, None, None],
+                    ['B',   'B',  'W',  'B',  'B',  'B',  'W'],
+                    ['B',   'W',  'B',  'B',  'W',  'W',  'W'],
+                    ['W',   'W',  'B',  'W',  'B',  'B',  'B'],
+                    ['B',   'W',  'B',  'W',  'B',  'W',  'B'],
+                    ['W',   'B',  'W',  'B',  'B',  'B',  'B']])
         self.assertEqual(1, self.strategy.return_column(board, self.color))

@@ -20,12 +20,12 @@ class TestPlayer(unittest.TestCase):
         self.player_black = Player('W', self.strategy_dummy)
         board = GameBoard() # empty board
         expected_board = GameBoard.from_matrix([
-                    [None,   None, None, None, None, None, None],
-                    [None,   None, None, None, None, None, None],
-                    [None,   None, None, None, None, None, None],
-                    [None,   None, None, None, None, None, None],
-                    [None,   None, None, None, None, None, None],
-                    ['W', None, None, None, None, None, None]])
+                    [None, None, None, None, None, None, None],
+                    [None, None, None, None, None, None, None],
+                    [None, None, None, None, None, None, None],
+                    [None, None, None, None, None, None, None],
+                    [None, None, None, None, None, None, None],
+                    ['W',  None, None, None, None, None, None]])
         self.player_black.play(board)
         self.assertEqual(board, expected_board)
 
@@ -34,12 +34,12 @@ class TestPlayer(unittest.TestCase):
         self.player_black = Player('W', self.strategy_dummy)
         board = GameBoard() # empty board
         expected_board = GameBoard.from_matrix([
-                    [None, None, None, None,   None, None, None],
-                    [None, None, None, None,   None, None, None],
-                    [None, None, None, None,   None, None, None],
-                    [None, None, None, None,   None, None, None],
-                    [None, None, None, None,   None, None, None],
-                    [None, None, None, 'W', None, None, None]])
+                    [None, None, None, None, None, None, None],
+                    [None, None, None, None, None, None, None],
+                    [None, None, None, None, None, None, None],
+                    [None, None, None, None, None, None, None],
+                    [None, None, None, None, None, None, None],
+                    [None, None, None,  'W', None, None, None]])
         self.player_black.play(board)
         self.assertEqual(board, expected_board)
 
@@ -48,12 +48,12 @@ class TestPlayer(unittest.TestCase):
         self.player_black = Player('W', self.strategy_dummy)
         board = GameBoard() # empty board
         expected_board = GameBoard.from_matrix([
-                    [None, None, None, None, None, None,   None],
-                    [None, None, None, None, None, None,   None],
-                    [None, None, None, None, None, None,   None],
-                    [None, None, None, None, None, None,   None],
-                    [None, None, None, None, None, None,   None],
-                    [None, None, None, None, None, None, 'W']])
+                    [None, None, None, None, None, None, None],
+                    [None, None, None, None, None, None, None],
+                    [None, None, None, None, None, None, None],
+                    [None, None, None, None, None, None, None],
+                    [None, None, None, None, None, None, None],
+                    [None, None, None, None, None, None,  'W']])
         self.player_black.play(board)
         self.assertEqual(board, expected_board)
 
@@ -100,10 +100,10 @@ class TestPlayer(unittest.TestCase):
 
     def test_player_is_winner_when_has_not_won(self):
         board = GameBoard.from_matrix([
-                    [None,   None, None,  None,  None, None, None],
-                    [None,   None, None,  None,  None, None, None],
-                    [None,   None, None,  None,  None, None, None],
-                    ['W', None, None,  None,  None, None, None],
-                    ['W', None, None,  None, 'B', None, None],
-                    ['W', None, None, 'B', 'B', None, None]])
+                    [None, None, None, None, None, None, None],
+                    [None, None, None, None, None, None, None],
+                    [None, None, None, None, None, None, None],
+                    ['W',  None, None, None, None, None, None],
+                    ['W',  None, None, None,  'B', None, None],
+                    ['W',  None, None,  'B',  'B', None, None]])
         self.assertFalse(self.player_black.is_winner(board))

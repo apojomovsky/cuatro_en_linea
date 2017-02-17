@@ -25,12 +25,12 @@ class TestEmptiestColumnStrategy(unittest.TestCase):
         strategy_two will choose the rightmost column, because it's the emptiest
         """
         board = GameBoard.from_matrix([
-                    [None,    None,   None,   None,  None, None,   None],
-                    [None,    None,   None,   None,  None, None,   None],
-                    [None,    None,   None,   None,  None, None,   None],
-                    [None,    None,   None,   None,  None, None,   None],
-                    [None,    None,   None,   None,  None, None,   None],
-                    ['B', 'W', 'W', 'W', 'B', 'W', None]])
+                    [None, None, None, None, None, None, None],
+                    [None, None, None, None, None, None, None],
+                    [None, None, None, None, None, None, None],
+                    [None, None, None, None, None, None, None],
+                    [None, None, None, None, None, None, None],
+                    [ 'B',  'W',  'W',  'W',  'B',  'W', None]])
         self.assertEqual(self.strategy.return_column(board, self.color), 7)
 
     def test_strategy_choses_emptiest_leftmost_column(self):
@@ -39,12 +39,12 @@ class TestEmptiestColumnStrategy(unittest.TestCase):
         strategy_two will choose the leftmost column, because it's the emptiest
         """
         board = GameBoard.from_matrix([
-                    [None,   None,   None,   None,  None,   None,  None],
-                    [None,   None,   None,   None,  None,   None,  None],
-                    [None,   None,   None,   None,  None,   None,  None],
-                    [None,   None,   None,   None,  None,   None,  None],
-                    [None,   None,   None,   None,  None,   None,  None],
-                    [None, 'W', 'W', 'W', 'B', 'W', 'B']])
+                    [None, None, None, None, None, None, None],
+                    [None, None, None, None, None, None, None],
+                    [None, None, None, None, None, None, None],
+                    [None, None, None, None, None, None, None],
+                    [None, None, None, None, None, None, None],
+                    [None,  'W',  'W',  'W',  'B',  'W',  'B']])
         self.assertEqual(self.strategy.return_column(board, self.color), 1)
 
     def test_strategy_choses_leftmost_empty_when_more_than_one_equally_empty(self):
@@ -53,12 +53,12 @@ class TestEmptiestColumnStrategy(unittest.TestCase):
         will priorize the leftmost. In this case will choose column 3 instead of 4
         """
         board = GameBoard.from_matrix([
-                    [None,     None, None,  None,  None,   None,   None],
-                    [None,     None, None,  None,  None,   None,   None],
-                    [None,     None, None,  None,  None,   None,   None],
-                    [None,     None, None,  None,  None,   None,   None],
-                    ['B',  'W', None,  None, 'W', 'B', 'W'],
-                    ['W',  'B', 'B', 'B', 'B', 'W', 'B']])
+                    [None, None, None, None, None, None, None],
+                    [None, None, None, None, None, None, None],
+                    [None, None, None, None, None, None, None],
+                    [None, None, None, None, None, None, None],
+                    [ 'B',  'W', None,  None, 'W',  'B',  'W'],
+                    [ 'W',  'B',  'B',   'B', 'B',  'W',  'B']])
         self.assertEqual(self.strategy.return_column(board, self.color), 3)
 
     def test_strategy_choses_emptiests_column_from_mid_loaded_board(self):
@@ -67,12 +67,12 @@ class TestEmptiestColumnStrategy(unittest.TestCase):
         will choose the one that is emptier than the rest.
         """
         board = GameBoard.from_matrix([
-                    [None,    None,   None,   None,   None,   None,   None],
-                    [None,    None,   None,   None,   None,   None,   None],
-                    [None,    None,   None,   None,   None,   None,   None],
-                    ['B', 'W',  'B',   None,  'B', 'W', 'W'],
-                    ['B', 'W',  'B',  'B', 'W', 'W', 'W'],
-                    ['W', 'B', 'W', 'W', 'W',  'B',  'B']])
+                    [None, None, None, None, None, None, None],
+                    [None, None, None, None, None, None, None],
+                    [None, None, None, None, None, None, None],
+                    [ 'B',  'W',  'B', None,  'B',  'W',  'W'],
+                    [ 'B',  'W',  'B',  'B',  'W',  'W',  'W'],
+                    [ 'W',  'B',  'W',  'W',  'W',  'B',  'B']])
         self.assertEqual(self.strategy.return_column(board, self.color), 4)
 
     def test_strategy_raises_exception_when_board_is_full(self):

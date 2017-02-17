@@ -189,30 +189,30 @@ class TestGameBoard(unittest.TestCase):
 
     def test_validate_matrix_with_valid_matrix(self):
         self.assertTrue(self.board_empty.set_board_from_matrix([
-            ['W', 'W', 'W',  'B',   None,   None, None],
-            ['B',   'B',  'B', 'W', 'W',   None, None],
-            ['W',  'B', 'W',  'B', 'W',   None, None],
-            ['W',  'B', 'W',  'B',  'B',  'B', None],
-            ['W', 'W',  'B', 'W',  'B', 'W', None],
-            ['B',   'B',  'B', 'W',  'B', 'W', None]]))
+            ['W', 'W', 'W', 'B',  None, None, None],
+            ['B', 'B', 'B', 'W',   'W', None, None],
+            ['W', 'B', 'W', 'B',   'W', None, None],
+            ['W', 'B', 'W', 'B',   'B',  'B', None],
+            ['W', 'W', 'B', 'W',   'B',  'W', None],
+            ['B', 'B', 'B', 'W',   'B',  'W', None]]))
 
     def test_validate_matrix_with_invalid_matrix_wrong_color(self):
         self.assertFalse(self.board_empty.set_board_from_matrix([
-            ['W', 'W', 'W',  'B',   None,     None, None],
-            ['B',   'B',  'B', 'W', 'W',     None, None],
-            ['W',  'B', 'W',  'B', 'W', 'yellow', None],
-            ['W',  'B', 'W',  'B',  'B',    'B', None],
-            ['W', 'W',  'B', 'W',  'B',   'W', None],
-            ['B',   'B',  'B', 'W',  'B',   'W', None]]))
+            ['W', 'W', 'W', 'B', None,     None, None],
+            ['B', 'B', 'B', 'W',  'W',     None, None],
+            ['W', 'B', 'W', 'B',  'W', 'yellow', None],
+            ['W', 'B', 'W', 'B',  'B',      'B', None],
+            ['W', 'W', 'B', 'W',  'B',      'W', None],
+            ['B', 'B', 'B', 'W',  'B',      'W', None]]))
 
     def test_validate_matrix_with_invalid_matrix_wrong_structure(self):
         self.assertFalse(self.board_empty.set_board_from_matrix([
-            ['W', 'W', 'W',  'B',   None,     None,  None],
-            ['B',   'B',  'B', 'W', 'W',     None, 'W'],
-            ['W',  'B', 'W',  'B', 'W',     None,  None],
-            ['W',  'B', 'W',  'B',  'B',    'B',  None],
-            ['W', 'W',  'B', 'W',  'B',   'W',  None],
-            ['B',   'B',  'B', 'W',  'B',   'W',  None]]))
+            ['W', 'W', 'W', 'B', None, None, None],
+            ['B', 'B', 'B', 'W',  'W', None,  'W'],
+            ['W', 'B', 'W', 'B',  'W', None, None],
+            ['W', 'B', 'W', 'B',  'B',  'B', None],
+            ['W', 'W', 'B', 'W',  'B',  'W', None],
+            ['B', 'B', 'B', 'W',  'B',  'W', None]]))
 
     def test_count_same_color_on_top_of_empty_column(self):
         board = GameBoard() # empty board
@@ -300,12 +300,12 @@ class TestGameBoard(unittest.TestCase):
         self.assertTrue(board_1 == board_2)
 
     def test_equality_of_boards_loaded_with_a_same_given_matrix(self):
-        matrix = [['W', 'W', 'W',  'B',   None,   None, None],
-                  ['B',   'B',  'B', 'W', 'W',   None, None],
-                  ['W',  'B', 'W',  'B', 'W',   None, None],
-                  ['W',  'B', 'W',  'B',  'B',  'B', None],
-                  ['W', 'W',  'B', 'W',  'B', 'W', None],
-                  ['B',   'B',  'B', 'W',  'B', 'W', None]]
+        matrix = [['W', 'W', 'W', 'B', None, None, None],
+                  ['B', 'B', 'B', 'W',  'W', None, None],
+                  ['W', 'B', 'W', 'B',  'W', None, None],
+                  ['W', 'B', 'W', 'B',  'B',  'B', None],
+                  ['W', 'W', 'B', 'W',  'B',  'W', None],
+                  ['B', 'B', 'B', 'W',  'B',  'W', None]]
         board_1 = GameBoard.from_matrix(matrix)
         board_2 = GameBoard.from_matrix(matrix)
         self.assertTrue(board_1 == board_2)

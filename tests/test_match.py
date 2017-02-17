@@ -16,12 +16,12 @@ class TestMatch(unittest.TestCase):
     def test_play_next_turn_on_running_match(self):
         match_black_win_from_row = Match(self.player_white, self.player_black,
                                             GameBoard.from_matrix([
-                    [None,   'B',  'B',  'B',   None,   None, None],
-                    ['B', 'W',  'B', 'W',   None,   None, None],
-                    ['W', 'B', 'W',  'B',   None,   None, None],
-                    ['W', 'B',  'B', 'W',   None,   None, None],
-                    ['B', 'W',  'B', 'W',   None,   None, None],
-                    ['W', 'B', 'W',  'B',  'B',  'B', None]]))
+                    [None, 'B', 'B', 'B', None, None, None],
+                    ['B',  'W', 'B', 'W', None, None, None],
+                    ['W',  'B', 'W', 'B', None, None, None],
+                    ['W',  'B', 'B', 'W', None, None, None],
+                    ['B',  'W', 'B', 'W', None, None, None],
+                    ['W',  'B', 'W', 'B',  'B',  'B', None]]))
         self.assertFalse(match_black_win_from_row.is_over())
         match_black_win_from_row.play_next_turn()
         self.assertTrue(match_black_win_from_row.is_over())
@@ -29,12 +29,12 @@ class TestMatch(unittest.TestCase):
     def test_play_next_turn_after_match_has_finished(self):
         match_white_won_from_row = Match(self.player_white, self.player_black,
                                        GameBoard.from_matrix([
-                    ['B',  'B',  'B',  'B',   None,   None, None],
-                    ['B', 'W',  'B', 'W',   None,   None, None],
-                    ['W', 'B', 'W',  'B',   None,   None, None],
-                    ['W', 'B',  'B', 'W',   None,   None, None],
-                    ['B', 'W',  'B', 'W',   None,   None, None],
-                    ['W', 'B', 'W',  'B',  'B',  'B', None]]))
+                    ['B', 'B', 'B', 'B', None, None, None],
+                    ['B', 'W', 'B', 'W', None, None, None],
+                    ['W', 'B', 'W', 'B', None, None, None],
+                    ['W', 'B', 'B', 'W', None, None, None],
+                    ['B', 'W', 'B', 'W', None, None, None],
+                    ['W', 'B', 'W', 'B',  'B',  'B', None]]))
         self.assertTrue(match_white_won_from_row.is_over())
         with self.assertRaises(GameIsOver):
             match_white_won_from_row.play_next_turn()
@@ -62,12 +62,12 @@ class TestMatch(unittest.TestCase):
     def test_who_won_when_black_won(self):
         match_with_almost_full_board = Match(self.player_white, self.player_black,
                          GameBoard.from_matrix([
-                    ['W', 'W',  'B',   None, 'W', 'W', 'W'],
-                    ['B',   'B', 'W',  'B', 'W',  'B', 'W'],
-                    ['W', 'W',  'B', 'W',  'B', 'W',  'B'],
-                    ['B',  'W',  'B',  'B',  'B', 'W', 'W'],
-                    ['W',  'B', 'W', 'W', 'W',  'B',  'B'],
-                    ['B',  'W', 'W',  'B', 'W',  'B', 'W']]))
+                    ['W', 'W', 'B', None, 'W', 'W', 'W'],
+                    ['B', 'B', 'W',  'B', 'W', 'B', 'W'],
+                    ['W', 'W', 'B',  'W', 'B', 'W', 'B'],
+                    ['B', 'W', 'B',  'B', 'B', 'W', 'W'],
+                    ['W', 'B', 'W',  'W', 'W', 'B', 'B'],
+                    ['B', 'W', 'W',  'B', 'W', 'B', 'W']]))
         self.assertFalse(match_with_almost_full_board.is_over())
         match_with_almost_full_board.play_next_turn()
         self.assertTrue(match_with_almost_full_board.is_over())
