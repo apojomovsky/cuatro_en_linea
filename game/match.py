@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 from player import Player
 from itertools import cycle
-from copy import copy
 
 class GameIsOver(Exception):
     def __init___(self, winner):
@@ -39,13 +38,13 @@ class Match(object):
         return None
 
     def retrieve_board(self):
-        return copy(self._board)
+        return self._board.copy()
 
     def _players(self):
         return [self._player_one, self._player_two]
 
     def get_players(self):
-        return [copy(self._player_one), copy(self._player_two)]
+        return (self._player_one, self._player_two)
 
     def _switch_to_next_player(self):
         self._active_player = self._player_iterator.next()

@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-from copy import copy
 from gameboard import GameBoard
 from gameboard import OutOfIndex
 from gameboard import BoardIsFull
@@ -13,7 +12,7 @@ class Player(object):
         return self._color
 
     def get_strategy_name(self):
-        return copy(type(self._strategy).__name__)
+        return type(self._strategy).__name__
 
     def is_winner(self, board):
         return board.is_game_over() and board.winner_color() == self._color
