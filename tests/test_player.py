@@ -12,12 +12,12 @@ class TestPlayer(unittest.TestCase):
     def setUp(self):
         self.strategy_dummy = EmptiestColumnStrategy()
         self.strategy_dummy.return_column = MagicMock(return_value = 1)
-        self.player_black = Player('W', self.strategy_dummy)
+        self.black_player = Player('W', self.strategy_dummy)
         self.builder = BoardBuilder('W', 'B')
 
     def test_player_play_on_leftmost_column(self):
         self.strategy_dummy.return_column = MagicMock(return_value = 1)
-        self.player_black = Player('W', self.strategy_dummy)
+        self.black_player = Player('W', self.strategy_dummy)
         board = GameBoard() # empty board
         expected_board = GameBoard.from_matrix([
                     [None, None, None, None, None, None, None],
@@ -26,12 +26,12 @@ class TestPlayer(unittest.TestCase):
                     [None, None, None, None, None, None, None],
                     [None, None, None, None, None, None, None],
                     ['W',  None, None, None, None, None, None]])
-        self.player_black.play(board)
+        self.black_player.play(board)
         self.assertEqual(board, expected_board)
 
     def test_player_play_on_column_in_the_middle(self):
         self.strategy_dummy.return_column = MagicMock(return_value = 4)
-        self.player_black = Player('W', self.strategy_dummy)
+        self.black_player = Player('W', self.strategy_dummy)
         board = GameBoard() # empty board
         expected_board = GameBoard.from_matrix([
                     [None, None, None, None, None, None, None],
@@ -40,12 +40,12 @@ class TestPlayer(unittest.TestCase):
                     [None, None, None, None, None, None, None],
                     [None, None, None, None, None, None, None],
                     [None, None, None,  'W', None, None, None]])
-        self.player_black.play(board)
+        self.black_player.play(board)
         self.assertEqual(board, expected_board)
 
     def test_player_play_on_rightmost(self):
         self.strategy_dummy.return_column = MagicMock(return_value = 7)
-        self.player_black = Player('W', self.strategy_dummy)
+        self.black_player = Player('W', self.strategy_dummy)
         board = GameBoard() # empty board
         expected_board = GameBoard.from_matrix([
                     [None, None, None, None, None, None, None],
@@ -54,22 +54,22 @@ class TestPlayer(unittest.TestCase):
                     [None, None, None, None, None, None, None],
                     [None, None, None, None, None, None, None],
                     [None, None, None, None, None, None,  'W']])
-        self.player_black.play(board)
+        self.black_player.play(board)
         self.assertEqual(board, expected_board)
 
     def test_player_play_when_strategy_returns_zero_raises_exception(self):
         self.strategy_dummy.return_column = MagicMock(return_value = 0)
-        self.player_black = Player('W', self.strategy_dummy)
+        self.black_player = Player('W', self.strategy_dummy)
         board = GameBoard() # empty board
         with self.assertRaises(OutOfIndex):
-            self.player_black.play(board)
+            self.black_player.play(board)
 
     def test_player_play_when_strategy_returns_column_eight_raises_exception(self):
         self.strategy_dummy.return_column = MagicMock(return_value = 8)
-        self.player_black = Player('W', self.strategy_dummy)
+        self.black_player = Player('W', self.strategy_dummy)
         board = GameBoard() # empty board
         with self.assertRaises(OutOfIndex):
-            self.player_black.play(board)
+            self.black_player.play(board)
 
     def test_player_raises_exception_when_attempts_to_play_on_full_column(self):
         board = self.builder.build_from_moves(
@@ -84,7 +84,7 @@ class TestPlayer(unittest.TestCase):
         B B W B B B B
         """
         with self.assertRaises(ColumnIsFull):
-            self.player_black.play(board)
+            self.black_player.play(board)
 
     def test_player_is_winner_if_it_has_actually_won(self):
         board = self.builder.build_from_moves([1,4,1,5,1,5,1])
@@ -96,7 +96,7 @@ class TestPlayer(unittest.TestCase):
         B . . . W . .
         B . . W W . .
         """
-        self.assertTrue(self.player_black.is_winner(board))
+        self.assertTrue(self.black_player.is_winner(board))
 
     def test_player_is_winner_when_has_not_won(self):
         board = GameBoard.from_matrix([
@@ -106,4 +106,4 @@ class TestPlayer(unittest.TestCase):
                     ['W',  None, None, None, None, None, None],
                     ['W',  None, None, None,  'B', None, None],
                     ['W',  None, None,  'B',  'B', None, None]])
-        self.assertFalse(self.player_black.is_winner(board))
+        self.assertFalse(self.black_player.is_winner(board))

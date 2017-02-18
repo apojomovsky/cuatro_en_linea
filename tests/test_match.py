@@ -9,12 +9,12 @@ from game.gameboard import GameBoard
 
 class TestMatch(unittest.TestCase):
     def setUp(self):
-        self.player_white = Player('W', FirstNonFullColumnStrategy())
-        self.player_black = Player('B', EmptiestColumnStrategy())
-        self.match = Match(self.player_white, self.player_black, GameBoard())
+        self.white_player = Player('W', FirstNonFullColumnStrategy())
+        self.black_player = Player('B', EmptiestColumnStrategy())
+        self.match = Match(self.white_player, self.black_player, GameBoard())
 
     def test_play_next_turn_on_running_match(self):
-        match_black_win_from_row = Match(self.player_white, self.player_black,
+        match_black_win_from_row = Match(self.white_player, self.black_player,
                                             GameBoard.from_matrix([
                     [None, 'B', 'B', 'B', None, None, None],
                     ['B',  'W', 'B', 'W', None, None, None],
@@ -27,7 +27,7 @@ class TestMatch(unittest.TestCase):
         self.assertTrue(match_black_win_from_row.is_over())
 
     def test_play_next_turn_after_match_has_finished(self):
-        match_white_won_from_row = Match(self.player_white, self.player_black,
+        match_white_won_from_row = Match(self.white_player, self.black_player,
                                        GameBoard.from_matrix([
                     ['B', 'B', 'B', 'B', None, None, None],
                     ['B', 'W', 'B', 'W', None, None, None],
@@ -43,10 +43,10 @@ class TestMatch(unittest.TestCase):
         self.assertFalse(self.match.is_over())
         self.match.play_full_match()
         self.assertTrue(self.match.is_over())
-        self.assertEqual(self.match.who_won(), self.player_white)
+        self.assertEqual(self.match.who_won(), self.white_player)
 
     def test_play_match_and_black_wins(self):
-        match_white_win_with_row = Match(self.player_black, self.player_white,
+        match_white_win_with_row = Match(self.black_player, self.white_player,
                                          GameBoard.from_matrix([
                     [None, None, None, None, None, None, None],
                     ['W',  None, None, None, None, None,  'W'],
@@ -57,10 +57,10 @@ class TestMatch(unittest.TestCase):
         self.assertFalse(match_white_win_with_row.is_over())
         match_white_win_with_row.play_full_match()
         self.assertTrue(match_white_win_with_row.is_over())
-        self.assertEqual(match_white_win_with_row.who_won(), self.player_white)
+        self.assertEqual(match_white_win_with_row.who_won(), self.white_player)
 
     def test_who_won_when_black_won(self):
-        match_with_almost_full_board = Match(self.player_white, self.player_black,
+        match_with_almost_full_board = Match(self.white_player, self.black_player,
                          GameBoard.from_matrix([
                     ['W', 'W', 'B', None, 'W', 'W', 'W'],
                     ['B', 'B', 'W',  'B', 'W', 'B', 'W'],
@@ -71,4 +71,4 @@ class TestMatch(unittest.TestCase):
         self.assertFalse(match_with_almost_full_board.is_over())
         match_with_almost_full_board.play_next_turn()
         self.assertTrue(match_with_almost_full_board.is_over())
-        self.assertEqual(match_with_almost_full_board.who_won(), self.player_white)
+        self.assertEqual(match_with_almost_full_board.who_won(), self.white_player)

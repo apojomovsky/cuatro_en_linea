@@ -45,12 +45,8 @@ class GameBoard(object):
         representation = ''
         for row in self.get_rows():
             for entry in row:
-                if entry is None:
-                    representation = representation + '. '
-                elif entry == 'B':
-                    representation = representation + 'B '
-                elif entry == 'W':
-                    representation = representation + 'W '
+                if entry is None: entry = "."
+                representation = representation + entry + ' '
             representation = representation + "\n"
         return representation
 
