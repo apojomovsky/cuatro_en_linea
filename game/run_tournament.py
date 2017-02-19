@@ -21,4 +21,4 @@ if __name__ == "__main__":
     tournament.run()
     tournament_view = TournamentView(tournament)
     tournament_view.show_results_table()
-    tournament_view.show_statistics()
+    tournament_view.show_summary()
