@@ -526,3 +526,11 @@ class TestGameBoard(unittest.TestCase):
         B R R R . R B
         """
         self.assertEquals(getattr(board, winner_method)(), 'blue')
+
+    def test_is_valid_move_on_valid_column(self):
+        test_board = self.builder.build_from_moves([1,1,1,1,1])
+        self.assertTrue(test_board.is_valid_move(1))
+
+    def test_is_valid_move_on_invalid_column(self):
+        test_board = self.builder.build_from_moves([2,2,2,2,2,2])
+        self.assertFalse(test_board.is_valid_move(2))
