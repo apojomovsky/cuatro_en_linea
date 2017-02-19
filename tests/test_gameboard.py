@@ -529,8 +529,24 @@ class TestGameBoard(unittest.TestCase):
 
     def test_is_valid_move_on_valid_column(self):
         test_board = self.builder.build_from_moves([1,1,1,1,1])
+        """
+        . R . . . . .
+        . B . . . . .
+        . R . . . . .
+        . B . . . . .
+        . R . . . . .
+        . B . . . . .
+        """
         self.assertTrue(test_board.is_valid_move(1))
 
     def test_is_valid_move_on_invalid_column(self):
         test_board = self.builder.build_from_moves([2,2,2,2,2,2])
+        """
+        . . . . . . .
+        B . . . . . .
+        R . . . . . .
+        B . . . . . .
+        R . . . . . .
+        B . . . . . .
+        """
         self.assertFalse(test_board.is_valid_move(2))
