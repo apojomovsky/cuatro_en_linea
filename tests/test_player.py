@@ -11,50 +11,55 @@ from mock import MagicMock
 class TestPlayer(unittest.TestCase):
     def setUp(self):
         self.strategy_dummy = EmptiestColumnStrategy()
-        self.strategy_dummy.return_column = MagicMock(return_value = 1)
         self.black_player = Player('W', self.strategy_dummy)
         self.builder = BoardBuilder('W', 'B')
 
     def test_player_play_on_leftmost_column(self):
         self.strategy_dummy.return_column = MagicMock(return_value = 1)
-        self.black_player = Player('W', self.strategy_dummy)
+        white_player = Player('W', self.strategy_dummy)
         board = GameBoard() # empty board
-        expected_board = GameBoard.from_matrix([
-                    [None, None, None, None, None, None, None],
-                    [None, None, None, None, None, None, None],
-                    [None, None, None, None, None, None, None],
-                    [None, None, None, None, None, None, None],
-                    [None, None, None, None, None, None, None],
-                    ['W',  None, None, None, None, None, None]])
-        self.black_player.play(board)
+        expected_board = self.builder.build_from_moves([1])
+        """
+        . . . . . . .
+        . . . . . . .
+        . . . . . . .
+        . . . . . . .
+        . . . . . . .
+        W . . . . . .
+        """
+        white_player.play(board)
         self.assertEqual(board, expected_board)
 
     def test_player_play_on_column_in_the_middle(self):
         self.strategy_dummy.return_column = MagicMock(return_value = 4)
-        self.black_player = Player('W', self.strategy_dummy)
+        white_player = Player('W', self.strategy_dummy)
         board = GameBoard() # empty board
-        expected_board = GameBoard.from_matrix([
-                    [None, None, None, None, None, None, None],
-                    [None, None, None, None, None, None, None],
-                    [None, None, None, None, None, None, None],
-                    [None, None, None, None, None, None, None],
-                    [None, None, None, None, None, None, None],
-                    [None, None, None,  'W', None, None, None]])
-        self.black_player.play(board)
+        expected_board = self.builder.build_from_moves([4])
+        """
+        . . . . . . .
+        . . . . . . .
+        . . . . . . .
+        . . . . . . .
+        . . . . . . .
+        . . . W . . .
+        """
+        white_player.play(board)
         self.assertEqual(board, expected_board)
 
     def test_player_play_on_rightmost(self):
         self.strategy_dummy.return_column = MagicMock(return_value = 7)
-        self.black_player = Player('W', self.strategy_dummy)
+        white_player = Player('W', self.strategy_dummy)
         board = GameBoard() # empty board
-        expected_board = GameBoard.from_matrix([
-                    [None, None, None, None, None, None, None],
-                    [None, None, None, None, None, None, None],
-                    [None, None, None, None, None, None, None],
-                    [None, None, None, None, None, None, None],
-                    [None, None, None, None, None, None, None],
-                    [None, None, None, None, None, None,  'W']])
-        self.black_player.play(board)
+        expected_board = self.builder.build_from_moves([7])
+        """
+        . . . . . . .
+        . . . . . . .
+        . . . . . . .
+        . . . . . . .
+        . . . . . . .
+        . . . . . . W
+        """
+        white_player.play(board)
         self.assertEqual(board, expected_board)
 
     def test_player_play_when_strategy_returns_zero_raises_exception(self):
@@ -99,11 +104,13 @@ class TestPlayer(unittest.TestCase):
         self.assertTrue(self.black_player.is_winner(board))
 
     def test_player_is_winner_when_has_not_won(self):
-        board = GameBoard.from_matrix([
-                    [None, None, None, None, None, None, None],
-                    [None, None, None, None, None, None, None],
-                    [None, None, None, None, None, None, None],
-                    ['W',  None, None, None, None, None, None],
-                    ['W',  None, None, None,  'B', None, None],
-                    ['W',  None, None,  'B',  'B', None, None]])
+        board = self.builder.build_from_moves([1,4,1,5,1,5])
+        """
+        . . . . . . .
+        . . . . . . .
+        . . . . . . .
+        B . . . . . .
+        B . . . W . .
+        B . . W W . .
+        """
         self.assertFalse(self.black_player.is_winner(board))

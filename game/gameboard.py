@@ -285,29 +285,6 @@ class GameBoard(object):
         for row in self._matrix:
             yield list(row.tolist())
 
-    @classmethod
-    def from_matrix(cls, external_matrix):
-        """Returns an instance of GameBoard with a custom _matrix attribute"""
-        board = GameBoard()
-        if board.set_board_from_matrix(external_matrix):
-            return board
-        else:
-            return None
-
-    def set_board_from_matrix(self, matrix):
-        """Set the internal game matrix with an external one, only if valid
-
-        Args:
-            external_matrix: numpy array with dtype=object
-        Returns
-            a boolean value
-        """
-        numpy_matrix = numpy.asarray(matrix)
-        if self._validate_matrix(numpy_matrix):
-            self._matrix = numpy_matrix
-            return True
-        return False
-
     def generate_matrix(self, rows, columns, fill):
         """Return a numpy matrix of the desired dimensions
 
@@ -386,31 +363,3 @@ class GameBoard(object):
             else:
                 continue
         return False
-
-
-    def _validate_matrix(self, matrix_to_test):
-        """Checks if an input matrix have valid characters and structure
-
-        Args:
-            matrix_to_test: list
-        Returns
-            a boolean value
-        """
-        matrix_to_test = numpy.asarray(matrix_to_test)
-        if matrix_to_test.shape != (6,7):
-            return False
-        for row in matrix_to_test:
-            if not all(self._is_valid_cell_value(entry) for entry in row):
-                return False
-        for column_index in range(self.COLUMNSCOUNT):
-            column = matrix_to_test[:, column_index]
-            indices = [index for index, entry in enumerate(column) if entry == None]
-            if indices:
-                if indices != [number for number in range(len(indices))]:
-                    return False
-        return True
-
-    def _is_valid_cell_value(self, entry):
-        """Checks if a given value is a valid entry"""
-        valid_entries = (None, 'W', 'B')
-        return entry in valid_entries

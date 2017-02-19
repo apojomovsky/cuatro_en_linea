@@ -13,5 +13,3 @@ class BoardBuilder(object):
         for move in array_of_moves:
             board.put_chip(move, color_cycle.next())
         return board
-
-
