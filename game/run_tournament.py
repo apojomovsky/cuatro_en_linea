@@ -5,11 +5,13 @@ from tournament_view import TournamentView
 from first_non_full_column_strategy import FirstNonFullColumnStrategy
 from emptiest_column_strategy import EmptiestColumnStrategy
 from closest_to_win_column_strategy import ClosestToWinColumnStrategy
+from random_column_strategy import RandomColumnStrategy
 
 strategies = (
     FirstNonFullColumnStrategy,
     EmptiestColumnStrategy,
-    ClosestToWinColumnStrategy
+    ClosestToWinColumnStrategy,
+    RandomColumnStrategy
 )
 
 if __name__ == "__main__":

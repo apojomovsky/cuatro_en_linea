@@ -40,16 +40,18 @@ class Tournament(object):
         for match in self._matches:
             match.play_full_match()
             players = match.get_players()
+            player_one_strategy_name = players[0].get_strategy_name()
+            player_two_strategy_name = players[1].get_strategy_name()
             if match.who_won() is not None:
                 self._scores_dict[match.who_won().get_strategy_name()] += 3
                 self._results_table.append((
-                    players[0].get_strategy_name(),
-                    players[1].get_strategy_name(),
+                    player_one_strategy_name,
+                    player_two_strategy_name,
                     match.who_won().get_strategy_name()))
             else:
-                self._scores_dict[players[0].get_strategy_name()] += 1
-                self._scores_dict[players[1].get_strategy_name()] += 1
+                self._scores_dict[player_one_strategy_name] += 1
+                self._scores_dict[player_two_strategy_name] += 1
                 self._results_table.append([
-                    players[0].get_strategy_name(),
-                    players[1].get_strategy_name(),
+                    player_one_strategy_name,
+                    player_two_strategy_name,
                     None])
