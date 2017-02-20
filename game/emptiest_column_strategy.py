@@ -5,5 +5,5 @@ class EmptiestColumnStrategy(Strategy):
        on top. In case there are more than one columns with the same amount
        of empty spaces, the strategy will chose the leftmost one.
     """
-    def return_column(self, board, color):
+    def return_column(self, board):
         return board.retrieve_emptiest_column()

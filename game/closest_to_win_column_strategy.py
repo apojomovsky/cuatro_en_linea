@@ -6,6 +6,16 @@ class ClosestToWinColumnStrategy(Strategy):
        line for a given color, as long as a four-in-a-row could be completed.
        Returns the first non full column otherwise.
     """
+
+    def prepare(self, color, workers_pool):
+        self._color = color
+
+    def return_column(self, board):
+        closest = self._get_closest_to_win_column(board, self._color)
+        if closest:
+            return closest
+        return board.retrieve_first_non_full_column()
+
     def _can_complete_four(self, board, column_index, color):
         same_color_on_top = board.count_same_color_on_top(column_index, color)
         current_free_entries = board.count_free_entries_on_column(column_index)
@@ -23,9 +33,3 @@ class ClosestToWinColumnStrategy(Strategy):
         if current_max_count > 0:
             return current_max_index
         return None
-
-    def return_column(self, board, color):
-        closest = self._get_closest_to_win_column(board, color)
-        if closest:
-            return closest
-        return board.retrieve_first_non_full_column()

@@ -10,6 +10,7 @@ class TestEmptiestColumnStrategy(unittest.TestCase):
         self.strategy = EmptiestColumnStrategy()
         self.color = 'W'
         self.builder = BoardBuilder('W', 'B')
+        self.strategy.prepare(self.color, None)
 
     def test_strategy_choses_leftmost_column_on_empty_board(self):
         """
@@ -17,7 +18,7 @@ class TestEmptiestColumnStrategy(unittest.TestCase):
         if the board is empty
         """
         board = GameBoard()
-        self.assertEqual(self.strategy.return_column(board, self.color), 1)
+        self.assertEqual(self.strategy.return_column(board), 1)
 
     def test_strategy_choses_emptiest_rightmost_column(self):
         """
@@ -33,7 +34,7 @@ class TestEmptiestColumnStrategy(unittest.TestCase):
         . . . . . . .
         W B B W W B .
         """
-        self.assertEqual(self.strategy.return_column(test_board, self.color), 7)
+        self.assertEqual(self.strategy.return_column(test_board), 7)
 
     def test_strategy_choses_emptiest_leftmost_column(self):
         """
@@ -49,7 +50,7 @@ class TestEmptiestColumnStrategy(unittest.TestCase):
         . . . . . . .
         . W W B B W B
         """
-        self.assertEqual(self.strategy.return_column(test_board, self.color), 1)
+        self.assertEqual(self.strategy.return_column(test_board), 1)
 
     def test_strategy_choses_leftmost_empty_when_more_than_one_equally_empty(self):
         """
@@ -65,7 +66,7 @@ class TestEmptiestColumnStrategy(unittest.TestCase):
         W W . . W B W
         W B B B B W B
         """
-        self.assertEqual(self.strategy.return_column(test_board, self.color), 3)
+        self.assertEqual(self.strategy.return_column(test_board), 3)
 
     def test_strategy_choses_emptiests_column_from_mid_loaded_board(self):
         """
@@ -83,7 +84,7 @@ class TestEmptiestColumnStrategy(unittest.TestCase):
         B W W W B W B
         W W B W W B B
         """
-        self.assertEqual(self.strategy.return_column(test_board, self.color), 4)
+        self.assertEqual(self.strategy.return_column(test_board), 4)
 
     def test_strategy_raises_exception_when_board_is_full(self):
         """If it turns that the board is full, but the return_column message from
@@ -101,4 +102,4 @@ class TestEmptiestColumnStrategy(unittest.TestCase):
         B B W B B B B
         """
         with self.assertRaises(BoardIsFull):
-            self.strategy.return_column(board, self.color)
+            self.strategy.return_column(board)

@@ -13,13 +13,14 @@ class TestRandomStrategy(unittest.TestCase):
         self.strategy = FirstNonFullColumnStrategy()
         self.color = 'blue'
         self.builder = BoardBuilder('blue', 'red')
+        self.strategy.prepare(self.color, None)
 
     def test_random_strategy_with_empty_board(self):
         def __return_one():
             return 1
         test_board = GameBoard()
         with mock.patch('random.random', __return_one):
-            self.assertEqual(self.strategy.return_column(test_board, self.color), 1)
+            self.assertEqual(self.strategy.return_column(test_board), 1)
 
     def test_random_strategy_with_full_board(self):
         def __return_one():
@@ -37,7 +38,7 @@ class TestRandomStrategy(unittest.TestCase):
         """
         with mock.patch('random.random', __return_one):
             with self.assertRaises(BoardIsFull):
-                self.assertEqual(self.strategy.return_column(test_board, self.color), 1)
+                self.assertEqual(self.strategy.return_column(test_board), 1)
 
     def test_random_strategy_with_only_one_column_available(self):
         """
@@ -51,4 +52,4 @@ class TestRandomStrategy(unittest.TestCase):
         test_board = self.builder.build_from_moves(
         [5,1,7,2,3,4,3,5,6,1,2,4,6,6,6,7,1,5,7,3,5,
          2,4,3,3,1,2,2,3,1,1,5,7,7,5,2,7,6,6,4])
-        self.assertEqual(self.strategy.return_column(test_board, self.color), 4)
+        self.assertEqual(self.strategy.return_column(test_board), 4)
