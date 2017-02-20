@@ -6,234 +6,271 @@ from game.gameboard import ColumnIsFull
 from game.gameboard import OutOfIndex
 
 class TestGameBoard(unittest.TestCase):
-
     def setUp(self):
-        self.builder = BoardBuilder('blue', 'red')
-        self.empty_board = GameBoard()
-        self.board_test_rows = GameBoard.from_matrix([
-                    [None,   'red',  'red',  'red',   None,   None, None],
-                    ['red', 'blue',  'red', 'blue',   None,   None, None],
-                    ['blue', 'red', 'blue',  'red',   None,   None, None],
-                    ['blue', 'red',  'red', 'blue',   None,   None, None],
-                    ['red', 'blue',  'red', 'blue',   None,   None, None],
-                    ['blue', 'red', 'blue',  'red',  'red',  'red', None]])
-        self.board_test_columns = GameBoard.from_matrix([
-                    [None,   None, None, None, None, None,   None],
-                    ['blue', None, None, None, None, None, 'blue'],
-                    ['blue', None, None, None, None, None, 'blue'],
-                    ['blue', None, None, None, None, None, 'blue'],
-                    ['red',  None, None, None, None, None,  'red'],
-                    ['red',  None, None, None, None, None,  'red']])
-        self.board_test_diagonals = GameBoard.from_matrix([
-                    [None,     None,   None,   None,   None,   None,   None],
-                    ['red',   'red',   None,   None,   None,  'red', 'blue'],
-                    ['blue', 'blue',  'red',   None,  'red', 'blue',  'red'],
-                    ['red',  'blue',  'red',  'red',  'red', 'blue', 'blue'],
-                    ['blue',  'red', 'blue', 'blue', 'blue',  'red',  'red'],
-                    ['red',  'blue', 'blue',  'red', 'blue',  'red', 'blue']])
+        self.builder = BoardBuilder('W', 'B')
+        self.board_empty = GameBoard()
 
-        self.board_almost_full = GameBoard.from_matrix([
-                    ['blue',  'red', 'blue',   None, 'blue',  'red', 'blue'],
-                    ['red',   'red', 'blue',  'red', 'blue',  'red', 'blue'],
-                    ['blue', 'blue',  'red', 'blue',  'red', 'blue',  'red'],
-                    ['red',  'blue',  'red',  'red',  'red', 'blue', 'blue'],
-                    ['blue',  'red', 'blue', 'blue', 'blue',  'red',  'red'],
-                    ['red',  'blue', 'blue',  'red', 'blue',  'red', 'blue']])
+    def get_full_board(self):
+        """
+        B B W W B W W
+        W W B B W B B
+        B B W W B W W
+        W W B B W B B
+        B B W W B W W
+        W W B W B B B
+        """
+        return self.builder.build_from_moves(
+            [1,1,2,2,1,1,2,2,1,1,2,2,4,3,4,4,3,3,4,4,3,
+             3,4,5,3,5,5,5,5,6,6,6,6,6,6,7,7,7,7,7,7,5])
 
-        self.full_board = GameBoard.from_matrix([
-                    ['blue',  'red', 'blue', 'blue', 'blue',  'red', 'blue'],
-                    ['red',   'red', 'blue',  'red', 'blue',  'red', 'blue'],
-                    ['blue', 'blue',  'red', 'blue',  'red', 'blue',  'red'],
-                    ['red',  'blue',  'red',  'red',  'red', 'blue', 'blue'],
-                    ['blue',  'red', 'blue', 'blue', 'blue',  'red',  'red'],
-                    ['red',  'blue', 'blue',  'red', 'blue',  'red', 'blue']])
+    def get_almost_full_board(self):
+        """
+        B B W W . W W
+        W W B B W B B
+        B B W W B W W
+        W W B B W B B
+        B B W W B W W
+        W W B W B B B
+        """
+        return self.builder.build_from_moves(
+            [1,1,2,2,1,1,2,2,1,1,2,2,4,3,4,4,3,3,4,4,3,
+             3,4,5,3,5,5,5,5,6,6,6,6,6,6,7,7,7,7,7,7])
+
+    def get_board_with_white_about_to_win(self):
+        """
+        . . . . . . .
+        . . . . . . .
+        . . . . . . .
+        W B . . . . .
+        W B . . . . .
+        W B . . . . .
+        """
+        return self.builder.build_from_moves([1,2,1,2,1,2])
 
     def test_put_chip_on_empty_board(self):
-        self.empty_board.put_chip(3, 'red')
-        self.assertEqual(self.empty_board.read_entry(1, 3), 'red')
-        self.empty_board.put_chip(3, 'blue')
-        self.assertEqual(self.empty_board.read_entry(2, 3), 'blue')
+        self.assertEqual(self.board_empty.read_entry(1, 3), None)
+        self.board_empty.put_chip(3, 'B')
+        self.assertEqual(self.board_empty.read_entry(1, 3), 'B')
 
     def test_put_chip_on_column_with_one_element(self):
-        self.board_test_rows.put_chip(5, 'red')
-        self.assertEqual(self.board_test_rows.read_entry(2, 5), 'red')
+        board_with_one_element = self.builder.build_from_moves([1])
+        """
+        . . . . . . .
+        . . . . . . .
+        . . . . . . .
+        . . . . . . .
+        . . . . . . .
+        B . . . . . .
+        """
+        self.assertEqual(board_with_one_element.read_entry(2, 1), None)
+        board_with_one_element.put_chip(1, 'B')
+        self.assertEqual(board_with_one_element.read_entry(2, 1), 'B')
 
     def test_put_chip_on_column_almost_full(self):
-        self.board_test_columns.put_chip(1, 'red')
-        self.assertEqual(self.board_test_columns.read_entry(6, 1), 'red')
+        almost_full_board = self.get_almost_full_board()
+        self.assertEqual(almost_full_board.read_entry(6, 5), None)
+        almost_full_board.put_chip(5, 'B')
+        self.assertEqual(almost_full_board.read_entry(6, 5), 'B')
 
     def test_put_chip_on_full_column(self):
+        almost_full_board = self.get_almost_full_board()
         with self.assertRaises(ColumnIsFull):
-            self.board_test_rows.put_chip(2, 'red')
+            almost_full_board.put_chip(2, 'B')
 
-    def test_read_entry_from_valid_position(self):
-        self.assertEqual(self.board_test_diagonals.read_entry(1, 1), 'red')
-        self.assertEqual(self.board_test_diagonals.read_entry(2, 1), 'blue')
-        self.assertEqual(self.board_test_diagonals.read_entry(1, 2), 'blue')
+    def test_read_entry_on_lowest_right_corner(self):
+        almost_full_board = self.get_almost_full_board()
+        self.assertEqual(almost_full_board.read_entry(6, 7), 'W')
 
-    def test_read_entry_from_invalid_position(self):
+    def test_read_entry_on_upper_right_corner(self):
+        full_board = self.get_full_board()
+        self.assertEqual(full_board.read_entry(1, 7), 'B')
+
+    def test_read_entry_on_upper_left_corner(self):
+        full_board = self.get_full_board()
+        self.assertEqual(full_board.read_entry(1, 1), 'W')
+
+    def test_read_entry_from_inexistent_row(self):
         with self.assertRaises(OutOfIndex):
-            self.board_test_diagonals.read_entry(7, 1)
+            self.board_empty.read_entry(7, 1)
+
+    def test_read_entry_from_inexistent_column(self):
         with self.assertRaises(OutOfIndex):
-            self.board_test_diagonals.read_entry(1, 8)
+            self.board_empty.read_entry(3, 8)
 
     def test_column_is_full(self):
-        self.assertFalse(self.board_test_diagonals.column_is_full(1))
-        self.board_test_diagonals.put_chip(1, 'blue')
-        self.assertTrue(self.board_test_diagonals.column_is_full(1))
-        self.assertFalse(self.board_test_diagonals.column_is_full(7))
-        self.board_test_diagonals.put_chip(7, 'blue')
-        self.assertTrue(self.board_test_diagonals.column_is_full(7))
+        test_board = self.get_almost_full_board()
+        self.assertTrue(test_board.column_is_full(7))
+
+    def test_board_is_full_on_empty_board(self):
+        self.assertFalse(self.board_empty.board_is_full())
 
     def test_board_is_full(self):
-        board = self.builder.build_from_moves(
-            [1,1,2,2,1,1,2,2,1,1,2,2,4,3,4,4,3,3,4,4,3,
-             3,4,3,5,5,5,5,5,6,6,6,6,6,6,7,7,7,7,7,7])
-        """
-        R R R B . R R
-        B B R R B B B
-        R R B B R R R
-        B B R R B B B
-        R R B B R R R
-        B B R B B B B
-        """
-        board.put_chip(5, 'red')
-        self.assertTrue(board.board_is_full())
+        full_board = self.get_full_board()
+        self.assertTrue(full_board.board_is_full())
 
     def test_game_over_on_full_board(self):
-        self.assertFalse(self.board_test_columns.is_game_over())
-        self.board_almost_full.put_chip(4, 'blue')
-        self.assertTrue(self.board_almost_full.is_game_over())
+        full_board = self.get_full_board()
+        self.assertTrue(full_board.is_game_over())
 
-    def test_game_over_on_winner(self):
-        self.assertEqual(self.board_test_rows.is_game_over(), False)
-        self.board_test_rows.put_chip(1, 'red')
-        self.assertEqual(self.board_test_rows.is_game_over(), True)
+    def test_game_over_on_board_with_a_winner(self):
+        """
+        . . . . . . .
+        . . . . . . .
+        . . . . . . .
+        W B . . . . .
+        W B . . . . .
+        W B . . . . .
+        """
+        about_to_win_board = self.get_board_with_white_about_to_win()
+        self.assertFalse(about_to_win_board.is_game_over())
+        about_to_win_board.put_chip(1, 'W')
+        self.assertTrue(about_to_win_board.is_game_over())
 
     def test_winner_exists_from_rows_on_left_corner(self):
-        self.assertEqual(self.board_test_rows.winner_exists(), False)
-        self.board_test_rows.put_chip(1, 'red')
-        self.assertEqual(self.board_test_rows.winner_exists(), True)
+        test_board = self.builder.build_from_moves([2,7,3,7,4,7])
+        """
+        . . . . . . .
+        . . . . . . .
+        . . . . . . B
+        . . . . . . B
+        . W W W . . B
+        """
+        self.assertFalse(test_board.winner_exists())
+        test_board.put_chip(1, 'W')
+        self.assertTrue(test_board.winner_exists())
 
     def test_winner_exists_from_rows_on_right_corner(self):
-        self.assertEqual(self.board_test_rows.winner_exists(), False)
-        self.board_test_rows.put_chip(7, 'red')
-        self.assertEqual(self.board_test_rows.winner_exists(), True)
+        test_board = self.builder.build_from_moves([6,1,5,1,4,1])
+        """
+        . . . . . . .
+        . . . . . . .
+        B . . . . . .
+        B . . . . . .
+        B . . W W W .
+        """
+        self.assertFalse(test_board.winner_exists())
+        test_board.put_chip(7, 'W')
+        self.assertTrue(test_board.winner_exists())
 
     def test_winner_exists_from_columns_on_left_corner(self):
-        self.assertEqual(self.board_test_columns.winner_exists(), False)
-        self.board_test_columns.put_chip(1, 'blue')
-        self.assertEqual(self.board_test_columns.winner_exists(), True)
+        test_board = self.builder.build_from_moves([1,2,1,3,1,4])
+        """
+        . . . . . . .
+        . . . . . . .
+        W . . . . . .
+        W . . . . . .
+        W B B B . . .
+        """
+        self.assertFalse(test_board.winner_exists())
+        test_board.put_chip(1, 'W')
+        self.assertTrue(test_board.winner_exists())
 
     def test_winner_exists_from_columns_on_right_corner(self):
-        self.assertEqual(self.board_test_columns.winner_exists(), False)
-        self.board_test_columns.put_chip(7, 'blue')
-        self.assertEqual(self.board_test_columns.winner_exists(), True)
+        test_board = self.builder.build_from_moves([7,1,7,2,7,3])
+        """
+        . . . . . . .
+        . . . . . . .
+        . . . . . . W
+        . . . . . . W
+        B B B . . . W
+        """
+        self.assertFalse(test_board.winner_exists())
+        test_board.put_chip(7, 'W')
+        self.assertTrue(test_board.winner_exists())
 
     def test_winner_exists_from_diagonals_on_left_corner(self):
-        self.assertEqual(self.board_test_diagonals.winner_exists(), False)
-        self.board_test_diagonals.put_chip(1, 'red')
-        self.assertEqual(self.board_test_diagonals.winner_exists(), True)
+        test_board = self.builder.build_from_moves([1,2,1,2,1,2,2,1,6,3,3,6,3,3,7,4,4,7])
+        self.assertFalse(test_board.winner_exists())
+        test_board.put_chip(1, 'W')
+        self.assertTrue(test_board.winner_exists())
 
     def test_winner_exists_from_diagonals_on_right_corner(self):
-        self.assertEqual(self.board_test_diagonals.winner_exists(), False)
-        self.board_test_diagonals.put_chip(7, 'red')
-        self.assertEqual(self.board_test_diagonals.winner_exists(), True)
+        test_board = self.builder.build_from_moves([7,6,7,6,7,6,6,7,2,5,5,2,5,5,1,4,4,1])
+        """
+        . . . . . . .
+        . . . . B W B
+        . . . . W B W
+        B B . W W B W
+        W W . B B B W
+        """
+        self.assertFalse(test_board.winner_exists())
+        test_board.put_chip(7, 'W')
+        self.assertTrue(test_board.winner_exists())
 
-    def test_validate_matrix_with_valid_matrix(self):
-        self.assertTrue(self.empty_board.set_board_from_matrix([
-            ['blue', 'blue', 'blue',  'red',   None,   None, None],
-            ['red',   'red',  'red', 'blue', 'blue',   None, None],
-            ['blue',  'red', 'blue',  'red', 'blue',   None, None],
-            ['blue',  'red', 'blue',  'red',  'red',  'red', None],
-            ['blue', 'blue',  'red', 'blue',  'red', 'blue', None],
-            ['red',   'red',  'red', 'blue',  'red', 'blue', None]]))
-
-    def test_validate_matrix_with_invalid_matrix_wrong_color(self):
-        self.assertFalse(self.empty_board.set_board_from_matrix([
-            ['blue', 'blue', 'blue',  'red',   None,     None, None],
-            ['red',   'red',  'red', 'blue', 'blue',     None, None],
-            ['blue',  'red', 'blue',  'red', 'blue', 'yellow', None],
-            ['blue',  'red', 'blue',  'red',  'red',    'red', None],
-            ['blue', 'blue',  'red', 'blue',  'red',   'blue', None],
-            ['red',   'red',  'red', 'blue',  'red',   'blue', None]]))
-
-    def test_validate_matrix_with_invalid_matrix_wrong_structure(self):
-        self.assertFalse(self.empty_board.set_board_from_matrix([
-            ['blue', 'blue', 'blue',  'red',   None,     None,  None],
-            ['red',   'red',  'red', 'blue', 'blue',     None, 'blue'],
-            ['blue',  'red', 'blue',  'red', 'blue',     None,  None],
-            ['blue',  'red', 'blue',  'red',  'red',    'red',  None],
-            ['blue', 'blue',  'red', 'blue',  'red',   'blue',  None],
-            ['red',   'red',  'red', 'blue',  'red',   'blue',  None]]))
-
-    def test_count_same_color_on_top_of_emtpy_column(self):
-        board = GameBoard() # emtpy board
-        self.assertEqual(0, board.count_same_color_on_top(1, 'blue'))
+    def test_count_same_color_on_top_of_empty_column(self):
+        board = GameBoard() # empty board
+        self.assertEqual(0, board.count_same_color_on_top(1, 'W'))
 
     def test_count_same_color_on_single_element_column(self):
-        board = GameBoard.from_matrix([
-                    [None,   None, None, None, None, None, None],
-                    [None,   None, None, None, None, None, None],
-                    [None,   None, None, None, None, None, None],
-                    [None,   None, None, None, None, None, None],
-                    [None,   None, None, None, None, None, None],
-                    ['blue', None, None, None, None, None, None]])
-        self.assertEqual(1, board.count_same_color_on_top(1, 'blue'))
+        test_board = self.builder.build_from_moves([1])
+        """
+        . . . . . . .
+        . . . . . . .
+        . . . . . . .
+        . . . . . . .
+        W . . . . . .
+        """
+        self.assertEqual(1, test_board.count_same_color_on_top(1, 'W'))
 
     def test_count_same_color_on_column_with_multiple_chips(self):
-        board = GameBoard.from_matrix([
-                    [None,   None, None, None, None, None, None],
-                    [None,   None, None, None, None, None, None],
-                    ['blue', None, None, None, None, None, None],
-                    ['blue', None, None, None, None, None, None],
-                    ['blue', None, None, None, None, None, None],
-                    ['blue', None, None, None, None, None, None]])
-        self.assertEqual(4, board.count_same_color_on_top(1, 'blue'))
+        test_board = self.get_board_with_white_about_to_win()
+        """
+        . . . . . . .
+        . . . . . . .
+        W B . . . . .
+        W B . . . . .
+        W B . . . . .
+        """
+        self.assertEqual(3, test_board.count_same_color_on_top(1, 'W'))
 
-    def test_count_same_color_on_on_column_with_no_elements_of_desired_color(self):
-        board = GameBoard.from_matrix([
-                    [None,  None, None, None, None, None, None],
-                    [None,  None, None, None, None, None, None],
-                    [None,  None, None, None, None, None, None],
-                    [None,  None, None, None, None, None, None],
-                    ['red', None, None, None, None, None, None],
-                    ['red', None, None, None, None, None, None]])
-        self.assertEqual(0, board.count_same_color_on_top(1, 'blue'))
+    def test_count_same_color_on_top_on_column_with_no_elements_of_desired_color(self):
+        test_board = self.get_board_with_white_about_to_win()
+        """
+        . . . . . . .
+        . . . . . . .
+        W B . . . . .
+        W B . . . . .
+        W B . . . . .
+        """
+        self.assertEqual(0, test_board.count_same_color_on_top(1, 'R'))
 
     def test_count_same_color_on_column_with_mixed_colors(self):
-        board = GameBoard.from_matrix([
-                    [None,   None, None, None, None, None, None],
-                    ['blue', None, None, None, None, None, None],
-                    ['blue', None, None, None, None, None, None],
-                    ['blue', None, None, None, None, None, None],
-                    ['red',  None, None, None, None, None, None],
-                    ['red',  None, None, None, None, None, None]])
-        self.assertEqual(3, board.count_same_color_on_top(1, 'blue'))
+        test_board = self.builder.build_from_moves([1,1,1,2,2,1,2])
+        """
+        . . . . . . .
+        B . . . . . .
+        W W . . . . .
+        B W . . . . .
+        W B . . . . .
+        """
+        self.assertEqual(2, test_board.count_same_color_on_top(2, 'W'))
 
     def test_count_free_entries_on_empty_column(self):
-        board = GameBoard() # empty board
+        board = GameBoard()
         self.assertEqual(6, board.count_free_entries_on_column(2))
 
     def test_count_free_entries_on_full_column(self):
-        board = GameBoard.from_matrix([
-                    ['red',  None, None, None, None, None, None],
-                    ['blue', None, None, None, None, None, None],
-                    ['blue', None, None, None, None, None, None],
-                    ['blue', None, None, None, None, None, None],
-                    ['red',  None, None, None, None, None, None],
-                    ['red',  None, None, None, None, None, None]])
-        self.assertEqual(0, board.count_free_entries_on_column(1))
+        test_board = self.builder.build_from_moves([1,1,1,1,1,1])
+        """
+        W . . . . . .
+        B . . . . . .
+        W . . . . . .
+        B . . . . . .
+        W . . . . . .
+        """
+        self.assertEqual(0, test_board.count_free_entries_on_column(1))
 
     def test_count_free_entries_on_almost_free_column(self):
-        board = GameBoard.from_matrix([
-                    [None,  None, None, None, None, None, None],
-                    [None,  None, None, None, None, None, None],
-                    [None,  None, None, None, None, None, None],
-                    [None,  None, None, None, None, None, None],
-                    [None,  None, None, None, None, None, None],
-                    ['red', None, None, None, None, None, None]])
-        self.assertEqual(5, board.count_free_entries_on_column(1))
+        board_with_one_element = self.builder.build_from_moves([1])
+        """
+        . . . . . . .
+        . . . . . . .
+        . . . . . . .
+        . . . . . . .
+        . . . . . . .
+        B . . . . . .
+        """
+        self.assertEqual(5, board_with_one_element.count_free_entries_on_column(1))
 
     def test_equality_of_empty_boards(self):
         board_1 = GameBoard()
@@ -241,110 +278,139 @@ class TestGameBoard(unittest.TestCase):
         self.assertTrue(board_1 == board_2)
 
     def test_equality_of_two_loaded_boards(self):
-        board_1 = GameBoard.from_matrix([
-                    ['blue', 'blue', 'blue',  'red',   None,   None, None],
-                    ['red',   'red',  'red', 'blue', 'blue',   None, None],
-                    ['blue',  'red', 'blue',  'red', 'blue',   None, None],
-                    ['blue',  'red', 'blue',  'red',  'red',  'red', None],
-                    ['blue', 'blue',  'red', 'blue',  'red', 'blue', None],
-                    ['red',   'red',  'red', 'blue',  'red', 'blue', None]])
-        board_2 = GameBoard.from_matrix([
-                    ['blue', 'blue', 'blue',  'red',   None,   None, None],
-                    ['red',   'red',  'red', 'blue', 'blue',   None, None],
-                    ['blue',  'red', 'blue',  'red', 'blue',   None, None],
-                    ['blue',  'red', 'blue',  'red',  'red',  'red', None],
-                    ['blue', 'blue',  'red', 'blue',  'red', 'blue', None],
-                    ['red',   'red',  'red', 'blue',  'red', 'blue', None]])
+        board_1 = self.get_full_board()
+        board_2 = self.get_full_board()
         self.assertTrue(board_1 == board_2)
 
     def test_equality_of_boards_loaded_with_a_same_given_matrix(self):
-        matrix = [['blue', 'blue', 'blue',  'red',   None,   None, None],
-                  ['red',   'red',  'red', 'blue', 'blue',   None, None],
-                  ['blue',  'red', 'blue',  'red', 'blue',   None, None],
-                  ['blue',  'red', 'blue',  'red',  'red',  'red', None],
-                  ['blue', 'blue',  'red', 'blue',  'red', 'blue', None],
-                  ['red',   'red',  'red', 'blue',  'red', 'blue', None]]
-        board_1 = GameBoard.from_matrix(matrix)
-        board_2 = GameBoard.from_matrix(matrix)
-        self.assertTrue(board_1 == board_2)
+        board_1 = self.get_full_board()
+        board_2 = self.get_full_board()
+        self.assertEqual(board_1, board_2)
 
     def test_unequality_of_very_similar_boards(self):
-        board_1 = GameBoard.from_matrix([
-                    ['blue', 'blue', 'blue',  'red',   None,   None, None],
-                    ['red',   'red',  'red', 'blue', 'blue',   None, None],
-                    ['blue',  'red', 'blue',  'red', 'blue',   None, None],
-                    ['blue',  'red', 'blue',  'red',  'red',  'red', None],
-                    ['blue', 'blue',  'red', 'blue',  'red', 'blue', None],
-                    ['red',   'red',  'red', 'blue',  'red', 'blue', 'red']])
-        board_2 = GameBoard.from_matrix([
-                    ['blue', 'blue', 'blue',  'red',   None,   None,  None],
-                    ['red',   'red',  'red', 'blue', 'blue',   None,  None],
-                    ['blue',  'red', 'blue',  'red', 'blue',   None,  None],
-                    ['blue',  'red', 'blue',  'red',  'red',  'red',  None],
-                    ['blue', 'blue',  'red', 'blue',  'red', 'blue',  None],
-                    ['red',   'red',  'red', 'blue',  'red', 'blue', 'blue']])
+        board_1 = self.get_full_board()
+        """
+        W W B B W B B
+        B B W W B W W
+        W W B B W B B
+        B B W W B W W
+        W W B W W B B
+        """
+        board_2 = self.get_almost_full_board()
+        """
+        B B B W . W W
+        W W B B W B B
+        B B W W B W W
+        W W B B W B B
+        B B W W B W W
+        W W B W W B B
+        """
         self.assertTrue(board_1 != board_2)
 
     def test_get_rows(self):
         """Sets a gameboard matrix from a reference test_matrix, and then compares
            the value returned by the rows_iterator against each of its rows
         """
-        test_matrix = [['blue', 'blue', 'blue',  'red',   None,   None,  None],
-                       ['red',   'red',  'red', 'blue', 'blue',   None,  None],
-                       ['blue',  'red', 'blue',  'red', 'blue',   None,  None],
-                       ['blue',  'red', 'blue',  'red',  'red',  'red',  None],
-                       ['blue', 'blue',  'red', 'blue',  'red', 'blue',  None],
-                       ['red',   'red',  'red', 'blue',  'red', 'blue', 'blue']]
-        board = GameBoard.from_matrix(test_matrix)
-        for index, row in enumerate(board.get_rows()):
-            self.assertEqual(row, test_matrix[index])
+        test_board = self.builder.build_from_moves([1,1,2,4,1,3,5,1,3,2,7,7,4,3,6,5,2,7,5,6])
+        """
+        . . . . . . .
+        . . . . . . .
+        B . . . . . .
+        W W B . W . B
+        B B W W B B B
+        W W B B W W W
+        """
+        test_rows = [[None, None,None,None,None,None,None],
+                    [None, None,None,None,None,None,None],
+                    ['B', None, None, None, None, None, None],
+                    ['W', 'W', 'B', None, 'W', None, 'B'],
+                    ['B', 'B', 'W', 'W', 'B', 'B', 'B'],
+                    ['W', 'W', 'B', 'B', 'W', 'W', 'W']]
+        for index, row in enumerate(test_board.get_rows()):
+            self.assertEqual(row, test_rows[index])
 
-    def test_is_column_full(self):
-        self.assertFalse(self.empty_board.is_column_full(1))
-        self.assertFalse(self.empty_board.is_column_full(4))
-        self.assertFalse(self.empty_board.is_column_full(7))
+    def test_is_column_full_when_is_empty(self):
+        test_board = GameBoard()
+        self.assertFalse(test_board.is_column_full(1))
 
-        board = GameBoard.from_matrix([
-                    ['blue', None,   None,   'red',   None,    None,   'red'],
-                    ['red',  'red',  None,   'blue', 'blue',   None,  'blue'],
-                    ['blue', 'blue', 'red',  'red',   'red',  'blue',  'red'],
-                    ['red',  'red',  'blue', 'blue', 'blue',   'red', 'blue'],
-                    ['blue', 'blue',  'red', 'red',   'red',  'blue',  'red'],
-                    ['red',  'red',  'blue', 'blue',  'blue',  'red', 'blue']])
-        self.assertTrue(board.is_column_full(1))
-        self.assertFalse(board.is_column_full(2))
-        self.assertFalse(board.is_column_full(3))
-        self.assertTrue(board.is_column_full(4))
-        self.assertFalse(board.is_column_full(5))
-        self.assertFalse(board.is_column_full(6))
-        self.assertTrue(board.is_column_full(7))
+    def test_is_column_full_when_only_one_element(self):
+        test_board = self.builder.build_from_moves([1])
+        """
+        . . . . . . .
+        . . . . . . .
+        . . . . . . .
+        . . . . . . .
+        . . . . . . .
+        W . . . . . .
+        """
+        self.assertFalse(test_board.is_column_full(1))
+
+    def test_is_column_full_with_two_elements(self):
+        test_board = self.builder.build_from_moves([1,2])
+        """
+        . . . . . . .
+        . . . . . . .
+        . . . . . . .
+        . . . . . . .
+        B . . . . . .
+        W . . . . . .
+        """
+        self.assertFalse(test_board.is_column_full(1))
+
+    def test_is_column_full_when_is_almost_full(self):
+        test_board = self.builder.build_from_moves([1,1,1,1,1])
+        """
+        . . . . . . .
+        W . . . . . .
+        B . . . . . .
+        W . . . . . .
+        B . . . . . .
+        W . . . . . .
+        """
+        self.assertFalse(test_board.is_column_full(1))
+
+    def test_is_column_full_when_is_full(self):
+        test_board = self.builder.build_from_moves([1,1,1,1,1,1])
+        """
+        B . . . . . .
+        W . . . . . .
+        B . . . . . .
+        W . . . . . .
+        B . . . . . .
+        W . . . . . .
+        """
+        self.assertTrue(test_board.is_column_full(1))
 
     def test_playable_positions(self):
-        self.assertEqual(self.empty_board.playable_positions(), [1,2,3,4,5,6,7])
-        self.assertEqual(self.full_board.playable_positions(), [])
-        board = GameBoard.from_matrix([
-                    [None , 'blue',  None,   'red',   None,    'red',  None ],
-                    ['red',  'red',  None,   'blue', 'blue',  'blue', 'blue'],
-                    ['blue', 'blue', 'red',  'red',   'red',  'blue',  'red'],
-                    ['red',  'red',  'blue', 'blue', 'blue',   'red', 'blue'],
-                    ['blue', 'blue',  'red', 'red',   'red',  'blue',  'red'],
-                    ['red',  'red',  'blue', 'blue',  'blue',  'red', 'blue']])
-        self.assertEqual(board.playable_positions(), [1,3,5,7])
+        self.assertEqual(self.board_empty.playable_positions(), [1,2,3,4,5,6,7])
+        self.assertEqual(self.get_full_board().playable_positions(), [])
+        test_board =  self.builder.build_from_moves(
+            [1,1,2,2,1,2,2,1,2,2,4,4,4,3,3,4,4,3,
+             3,4,3,5,5,5,6,6,7,7,7,7,7,7])
+        """
+        . B . B . . B
+        . W W W . . W
+        B W W B . . B
+        W B B W B . W
+        B B W B W B B
+        W W B W B W W
+        """
+        self.assertEqual(test_board.playable_positions(), [1,3,5,6])
 
     def test_copy(self):
-        empty_copy = self.empty_board.copy()
-        self.assertFalse(self.empty_board is empty_copy)
-        self.assertEqual(self.empty_board, empty_copy)
+        empty_copy = self.board_empty.copy()
+        self.assertFalse(self.board_empty is empty_copy)
+        self.assertEqual(self.board_empty, empty_copy)
 
-        self.empty_board.put_chip(1, 'red')
-        self.assertNotEqual(self.empty_board, empty_copy)
-        empty_copy.put_chip(1, 'red')
-        self.assertEqual(self.empty_board, empty_copy)
+        self.board_empty.put_chip(1, 'B')
+        self.assertNotEqual(self.board_empty, empty_copy)
+        empty_copy.put_chip(1, 'B')
+        self.assertEqual(self.board_empty, empty_copy)
 
     def test_undo_move(self):
         board = self.builder.build_from_moves([1])
         board.undo_move()
-        self.assertEqual(self.empty_board, board)
+        self.assertEqual(self.board_empty, board)
 
         test_board = self.builder.build_from_moves([1,2,3,4,5,6,7,1])
         expected_board = self.builder.build_from_moves([1,2,3,4,5,6,7])
@@ -361,7 +427,7 @@ class TestGameBoard(unittest.TestCase):
         test_board.undo_move()
         self.assertEqual(expected_board_1, test_board)
 
-        test_board.put_chip(4, 'blue')
+        test_board.put_chip(4, 'W')
         expected_board_2 = self.builder.build_from_moves([1,2,4])
         self.assertEqual(expected_board_2, test_board)
 
@@ -369,9 +435,9 @@ class TestGameBoard(unittest.TestCase):
         self.assertEqual(expected_board_1, test_board)
 
         test_board = self.builder.build_from_moves([1,2,3,4,5,6,7])
-        for i in range(7):
+        for _ in range(7):
             test_board.undo_move()
-        self.assertEqual(self.empty_board, test_board)
+        self.assertEqual(self.board_empty, test_board)
 
     def test_winner_color_in_columns(self):
         self._test_winner_in_columns('winner_color')
@@ -399,20 +465,20 @@ class TestGameBoard(unittest.TestCase):
         B . . . . . .
         B . . . . . .
         B . . . . . .
-        B R R R . . .
+        B W W W . . .
         """
-        self.assertEquals(getattr(board, winner_method)(), 'blue')
+        self.assertEquals(getattr(board, winner_method)(), 'W')
 
         board = self.builder.build_from_moves([7,1,7,7,1,7,2,7,3,7])
         """
-        . . . . . . R
-        . . . . . . R
-        . . . . . . R
-        . . . . . . R
+        . . . . . . B
+        . . . . . . B
+        . . . . . . B
+        . . . . . . B
         B . . . . . B
-        R B B . . . B
+        W B B . . . B
         """
-        self.assertEquals(getattr(board, winner_method)(), 'red')
+        self.assertEquals(getattr(board, winner_method)(), 'B')
 
     def _test_winner_in_rows(self, winner_method):
         board = self.builder.build_from_moves([1,6,2,6,3,7,4])
@@ -421,21 +487,21 @@ class TestGameBoard(unittest.TestCase):
         . . . . . . .
         . . . . . . .
         . . . . . . .
-        . . . . . R .
-        B B B B . R R
+        . . . . . W .
+        B B B B . W B
         """
-        self.assertEquals(getattr(board, winner_method)(), 'blue')
+        self.assertEquals(getattr(board, winner_method)(), 'W')
 
         board = self.builder.build_from_moves([7,6,5,4,6,5,4,7,5,4,7,6,5,4,7,6,6,5,4,7,1,7,2,6,1,5,2,4])
         """
-        . . . R R R R
-        . . . B R B R
-        . . . R B R B
-        . . . R B R B
-        B B . B R B R
-        B B . R B R B
+        . . . W W W B
+        . . . B W B B
+        . . . W B W B
+        . . . W B W B
+        B B . B W B B
+        B B . W B W B
         """
-        self.assertEquals(getattr(board, winner_method)(), 'red')
+        self.assertEquals(getattr(board, winner_method)(), 'B')
 
     def _test_winner_in_diagonals(self, winner_method):
         board = self.builder.build_from_moves([1,1,1,2,1,2,2,3,3,7,4])
@@ -444,43 +510,43 @@ class TestGameBoard(unittest.TestCase):
         . . . . . . .
         B . . . . . .
         B B . . . . .
-        R R B . . . .
-        B R R B . . R
+        W W B . . . .
+        B W W B . . B
         """
-        self.assertEquals(getattr(board, winner_method)(), 'blue')
+        self.assertEquals(getattr(board, winner_method)(), 'W')
 
         board = self.builder.build_from_moves([1,1,1,1,1,1,2,3,2,2,2,2,3,3,4,3,4,4])
         """
-        R . . . . . .
-        B R . . . . .
-        R B R . . . .
-        B R R R . . .
-        R B B B . . .
-        B B R B . . .
+        W . . . . . .
+        B W . . . . .
+        W B W . . . .
+        B W W W . . .
+        W B B B . . .
+        B B W B . . .
         """
-        self.assertEquals(getattr(board, winner_method)(), 'red')
+        self.assertEquals(getattr(board, winner_method)(), 'B')
 
         board = self.builder.build_from_moves([1,7,6,6,5,4,5,5,4,4,1,4])
         """
         . . . . . . .
         . . . . . . .
-        . . . R . . .
-        . . . R R . .
-        B . . B B R .
-        B . . R B B R
+        . . . W . . .
+        . . . W W . .
+        B . . B B W .
+        B . . W B B B
         """
-        self.assertEquals(getattr(board, winner_method)(), 'red')
+        self.assertEquals(getattr(board, winner_method)(), 'B')
 
         board = self.builder.build_from_moves([7,7,7,6,6,6,6,5,5,5,1,5,5,4,4,4,4,2,4,2,4])
         """
         . . . B . . .
         . . . B B . .
-        . . . B R B .
-        . . . R R R B
-        . R . B B B R
-        B R . R R R B
+        . . . B W B .
+        . . . W W W B
+        . W . B B B B
+        B W . W W W B
         """
-        self.assertEquals(getattr(board, winner_method)(), 'blue')
+        self.assertEquals(getattr(board, winner_method)(), 'W')
 
         board = self.builder.build_from_moves([7,7,7,6,7,6,6,5,5,1,4])
         """
@@ -488,89 +554,41 @@ class TestGameBoard(unittest.TestCase):
         . . . . . . .
         . . . . . . B
         . . . . . B B
-        . . . . B R R
-        R . . B R R B
+        . . . . B W B
+        W . . B W W B
         """
-        self.assertEquals(getattr(board, winner_method)(), 'blue')
+        self.assertEquals(getattr(board, winner_method)(), 'W')
 
 
         board = self.builder.build_from_moves([7,7,7,7,7,7,6,5,6,6,6,6,5,5,4,5,4,4])
         """
-        . . . . . . R
-        . . . . . R B
-        . . . . R B R
-        . . . R R R B
-        . . . B B B R
-        . . . B R B B
+        . . . . . . B
+        . . . . . W B
+        . . . . W B B
+        . . . W W W B
+        . . . B B B B
+        . . . B W B B
         """
-        self.assertEquals(getattr(board, winner_method)(), 'red')
+        self.assertEquals(getattr(board, winner_method)(), 'B')
 
         board = self.builder.build_from_moves([1,1,1,2,2,2,2,3,3,3,7,3,3,4,4,4,4,6,4,6,4])
         """
         . . . B . . .
         . . B B . . .
-        . B R B . . .
-        B R R R . . .
-        R B B B . R .
-        B R R R . R B
+        . B W B . . .
+        B W W W . . .
+        W B B B . W .
+        B W W W . W B
         """
-        self.assertEquals(getattr(board, winner_method)(), 'blue')
+        self.assertEquals(getattr(board, winner_method)(), 'W')
 
         board = self.builder.build_from_moves([1,1,1,2,2,2,2,4,4,4,7,4,4,3,3,3,3,6,3,6,4])
         """
         . . . B . . .
         . . B B . . .
-        . B B R . . .
-        B R R R . . .
-        R B B B . R .
-        B R R R . R B
+        . B B W . . .
+        B W W W . . .
+        W B B B . W .
+        B W W W . W B
         """
-        self.assertEquals(getattr(board, winner_method)(), 'blue')
-
-    def test_is_valid_move_on_empty_board(self):
-        test_board = GameBoard()# Empty board
-        """
-        . . . . . . .
-        . . . . . . .
-        . . . . . . .
-        . . . . . . .
-        . . . . . . .
-        . . . . . . .
-        """
-        self.assertTrue(test_board.is_valid_move(1))
-
-    def test_is_valid_move_on_single_item_column(self):
-        """
-        . . . . . . .
-        . . . . . . .
-        . . . . . . .
-        . . . . . . .
-        . . . . . . .
-        B . . . . . .
-        """
-        test_board = self.builder.build_from_moves([1])
-        self.assertTrue(test_board.is_valid_move(1))
-
-    def test_is_valid_move_on_almost_full_column(self):
-        test_board = self.builder.build_from_moves([1,1,1,1,1])
-        """
-        . . . . . . .
-        B . . . . . .
-        R . . . . . .
-        B . . . . . .
-        R . . . . . .
-        B . . . . . .
-        """
-        self.assertTrue(test_board.is_valid_move(1))
-
-    def test_is_valid_move_on_full_column(self):
-        test_board = self.builder.build_from_moves([2,2,2,2,2,2])
-        """
-        . R . . . . .
-        . B . . . . .
-        . R . . . . .
-        . B . . . . .
-        . R . . . . .
-        . B . . . . .
-        """
-        self.assertFalse(test_board.is_valid_move(2))
+        self.assertEquals(getattr(board, winner_method)(), 'W')
