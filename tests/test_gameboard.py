@@ -526,3 +526,51 @@ class TestGameBoard(unittest.TestCase):
         B R R R . R B
         """
         self.assertEquals(getattr(board, winner_method)(), 'blue')
+
+    def test_is_valid_move_on_empty_board(self):
+        test_board = GameBoard()# Empty board
+        """
+        . . . . . . .
+        . . . . . . .
+        . . . . . . .
+        . . . . . . .
+        . . . . . . .
+        . . . . . . .
+        """
+        self.assertTrue(test_board.is_valid_move(1))
+
+    def test_is_valid_move_on_single_item_column(self):
+        """
+        . . . . . . .
+        . . . . . . .
+        . . . . . . .
+        . . . . . . .
+        . . . . . . .
+        B . . . . . .
+        """
+        test_board = self.builder.build_from_moves([1])
+        self.assertTrue(test_board.is_valid_move(1))
+
+    def test_is_valid_move_on_almost_full_column(self):
+        test_board = self.builder.build_from_moves([1,1,1,1,1])
+        """
+        . . . . . . .
+        B . . . . . .
+        R . . . . . .
+        B . . . . . .
+        R . . . . . .
+        B . . . . . .
+        """
+        self.assertTrue(test_board.is_valid_move(1))
+
+    def test_is_valid_move_on_full_column(self):
+        test_board = self.builder.build_from_moves([2,2,2,2,2,2])
+        """
+        . R . . . . .
+        . B . . . . .
+        . R . . . . .
+        . B . . . . .
+        . R . . . . .
+        . B . . . . .
+        """
+        self.assertFalse(test_board.is_valid_move(2))

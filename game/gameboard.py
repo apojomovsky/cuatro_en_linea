@@ -71,6 +71,9 @@ class GameBoard(object):
         move = self._moves.pop(-1)
         self._matrix[move[0]][move[1]] = None
 
+    def is_valid_move(self, column_index):
+        return self._matrix[0][column_index - 1] is None
+
     def copy(self):
         # Avoid calling __init__ and hence creating an unneeded matrix
         clone = GameBoard.__new__(GameBoard)
