@@ -3,6 +3,7 @@ import unittest
 from game.player import Player
 from game.gameboard import GameBoard
 from game.gameboard import ColumnIsFull
+from game.gameboard import BoardIsFull
 from game.gameboard import OutOfIndex
 from board_builder import BoardBuilder
 from game.emptiest_column_strategy import EmptiestColumnStrategy
@@ -88,7 +89,7 @@ class TestPlayer(unittest.TestCase):
         W W B B W W W
         B B W B B B B
         """
-        with self.assertRaises(ColumnIsFull):
+        with self.assertRaises(BoardIsFull):
             self.black_player.play(board)
 
     def test_player_is_winner_if_it_has_actually_won(self):
