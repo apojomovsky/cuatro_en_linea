@@ -26,8 +26,8 @@ class Tournament(object):
     def generate_matches(self):
         for pair_of_strategies in self._pairs_of_strategies:
             board = GameBoard()
-            player_one = Player('blue', pair_of_strategies[0]())
-            player_two = Player('red', pair_of_strategies[1]())
+            player_one = Player('W', pair_of_strategies[0]())
+            player_two = Player('B', pair_of_strategies[1]())
             self._matches.append(Match(player_one, player_two, board))
 
     def get_results_table(self):
