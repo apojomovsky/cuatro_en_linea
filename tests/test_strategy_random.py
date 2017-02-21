@@ -11,8 +11,8 @@ from board_builder import BoardBuilder
 class TestRandomStrategy(unittest.TestCase):
     def setUp(self):
         self.strategy = FirstNonFullColumnStrategy()
-        self.color = 'blue'
-        self.builder = BoardBuilder('blue', 'red')
+        self.color = 'W'
+        self.builder = BoardBuilder('W', 'B')
         self.strategy.prepare(self.color, None)
 
     def test_random_strategy_with_empty_board(self):
