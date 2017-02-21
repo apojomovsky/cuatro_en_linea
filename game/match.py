@@ -12,6 +12,8 @@ class Match(object):
         self._active_player = None
         self._player_one = player_one
         self._player_two = player_two
+        player_one.prepare()
+        player_two.prepare()
         self._player_iterator = cycle(self.get_players())
         self._switch_to_next_player()
 

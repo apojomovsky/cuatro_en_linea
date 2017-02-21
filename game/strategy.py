@@ -5,6 +5,9 @@ class Strategy(object):
     __metaclass__ = ABCMeta
 
     @abstractmethod
-    def return_column(self, board, color):
+    def return_column(self, board):
         """This method must be overridden"""
+        pass
+
+    def prepare(self, color, workers_pool):
         pass

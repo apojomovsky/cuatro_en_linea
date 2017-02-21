@@ -11,6 +11,7 @@ class TestFirstNonFullColumnStrategy(unittest.TestCase):
         self.strategy = FirstNonFullColumnStrategy()
         self.color = 'W'
         self.builder = BoardBuilder('W', 'B')
+        self.strategy.prepare(self.color, None)
 
     def test_strategy_choses_leftmost_column_on_empty_board(self):
         """
@@ -18,7 +19,7 @@ class TestFirstNonFullColumnStrategy(unittest.TestCase):
         when the board is empty
         """
         board = GameBoard()
-        self.assertEqual(self.strategy.return_column(board, self.color), 1)
+        self.assertEqual(self.strategy.return_column(board), 1)
 
     def test_strategy_on_near_empty_board(self):
         """
@@ -34,7 +35,7 @@ class TestFirstNonFullColumnStrategy(unittest.TestCase):
         . . . . . . .
         W . . . . . .
         """
-        self.assertEqual(self.strategy.return_column(test_board, self.color), 1)
+        self.assertEqual(self.strategy.return_column(test_board), 1)
 
     def test_strategy_on_near_full_column(self):
         """
@@ -50,7 +51,7 @@ class TestFirstNonFullColumnStrategy(unittest.TestCase):
         B . . . . . .
         W . . . . . .
         """
-        self.assertEqual(self.strategy.return_column(test_board, self.color), 1)
+        self.assertEqual(self.strategy.return_column(test_board), 1)
 
     def test_strategy_choses_leftmost_non_full_column(self):
         """
@@ -66,7 +67,7 @@ class TestFirstNonFullColumnStrategy(unittest.TestCase):
         B . . . . . .
         W . . . . . .
         """
-        self.assertEqual(self.strategy.return_column(test_board, self.color), 2)
+        self.assertEqual(self.strategy.return_column(test_board), 2)
 
     def test_strategy_choses_the_only_non_full_column(self):
         """The strategy choses correctly the only column that is not full on the
@@ -84,7 +85,7 @@ class TestFirstNonFullColumnStrategy(unittest.TestCase):
         W B B B W B W
         B W W B W W B
         """
-        self.assertEqual(self.strategy.return_column(test_board, self.color), 4)
+        self.assertEqual(self.strategy.return_column(test_board), 4)
 
     def test_strategy_raises_exception_on_full_board(self):
         """If it turns that the board is full, but the return_column message from
@@ -101,4 +102,4 @@ class TestFirstNonFullColumnStrategy(unittest.TestCase):
         W W B B W W W
         """
         with self.assertRaises(BoardIsFull):
-            self.strategy.return_column(test_board, self.color)
+            self.strategy.return_column(test_board)

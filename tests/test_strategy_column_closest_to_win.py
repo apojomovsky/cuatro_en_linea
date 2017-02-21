@@ -10,13 +10,14 @@ class TestPlayer(unittest.TestCase):
         self.strategy = ClosestToWinColumnStrategy()
         self.color = 'W'
         self.builder = BoardBuilder('W', 'B')
+        self.strategy.prepare(self.color, None)
 
     def test_strategy_choses_leftmost_column_from_empty_board(self):
         """return_column will chose the leftmost column from a group of same level
            columns. So in empty board, as all are the same, choses the leftmost one.
         """
         board = GameBoard()
-        self.assertEqual(1, self.strategy.return_column(board, self.color))
+        self.assertEqual(1, self.strategy.return_column(board))
 
     def test_strategy_choses_closest_to_win_column_for_white(self):
         """return_column will chose column three because is the closest
@@ -30,23 +31,22 @@ class TestPlayer(unittest.TestCase):
         W . B . . . .
         W . B . . . .
         """
-        self.assertEqual(self.strategy.return_column(test_board, self.color), 1)
+        self.assertEqual(1, self.strategy.return_column(test_board))
 
     def test_strategy_choses_sixth_column_because_unable_to_win_on_leftmost(self):
-        """return_column will chose column six because even while the first one is
-           suppossed to be closer to win, it can't because of lack of free entries
+        """return_column will chose column fourth because even while the first one is
+           supposed to be closer to win, it can't because of lack of free entries
         """
-        test_board = self.builder.build_from_moves([1,2,1,4,1,1,2,1])
+        test_board = self.builder.build_from_moves([1,1,4,1,1,2,1,2])
         """
         . . . . . . .
-        B . . . . . .
-        B . . . . . .
         W . . . . . .
-        W W . . . . .
-        W B . B . . .
+        W . . . . . .
+        B . . . . . .
+        B B . . . . .
+        W B . W . . .
         """
-        color = 'B'
-        self.assertEqual(4, self.strategy.return_column(test_board, color))
+        self.assertEqual(4, self.strategy.return_column(test_board))
 
     def test_strategy_choses_leftmost_column_when_more_than_one_are_equal(self):
         """return_column will chose column three because, even while it and
@@ -61,7 +61,7 @@ class TestPlayer(unittest.TestCase):
         . . W W . . .
         B B W W B B .
         """
-        self.assertEqual(self.strategy.return_column(test_board, self.color), 3)
+        self.assertEqual(3, self.strategy.return_column(test_board))
 
     def test_strategy_choses_first_non_full_column_when_unable_to_win(self):
         """If all the columns are unable to make a four-in-a-row, it will
@@ -78,4 +78,4 @@ class TestPlayer(unittest.TestCase):
         B W B B W W W
 
         """
-        self.assertEqual(1, self.strategy.return_column(test_board, self.color))
+        self.assertEqual(1, self.strategy.return_column(test_board))
