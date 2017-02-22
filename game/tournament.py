@@ -10,7 +10,7 @@ class NotEnoughStrategies(Exception):
 
 class Tournament(object):
     def __init__(self, strategies):
-        if len(strategies) < 2:
+        if len(strategies) < 3:
             raise NotEnoughStrategies(len(strategies))
         self._pairs_of_strategies = list(itertools.permutations(strategies, 2))
         self._number_of_matches = len(self._pairs_of_strategies)

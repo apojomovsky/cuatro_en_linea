@@ -28,7 +28,10 @@ def run(player_one, player_two, rate):
         match.play_next_turn()
         view.show()
         time.sleep(rate)
-    print "Color {} won!".format(match.who_won().color())
+    if match.who_won():
+        print "Color {} won!".format(match.who_won().color())
+    else:
+        print "Nobody won!"
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Runs a new match of the Connect Four game')
