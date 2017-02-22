@@ -1,8 +1,10 @@
 import itertools
-from copy import copy
+import signal, os
 from match import Match
 from player import Player
 from gameboard import GameBoard
+from time_to_run import TimeLimitsCalculator
+from time_to_run import TimeLimitReached
 
 class NotEnoughStrategies(Exception):
     def __init___(self, number_of_strategies):
@@ -20,6 +22,12 @@ class Tournament(object):
         self._results_table = []
         self.generate_matches()
         self._scores_dict = {}
+        self.time_calculator = TimeLimitsCalculator()
+        self.time_calculator.run()
+        self._prepare_time_limit = self.time_calculator.get_prepare_limit()
+        self._play_time_limit = self.time_calculator.get_play_limit()
+        print "Prepare time limit: {}".format(self._prepare_time_limit)
+        print "Play time limit: {}".format(self._play_time_limit)
         for name in self._strategies_names:
             self._scores_dict[name] = 0
 
@@ -36,22 +44,52 @@ class Tournament(object):
     def get_scores(self):
         return self._scores_dict
 
+    def timeout_handler(self, arg1, arg2):
+        raise TimeLimitReached
+
     def run(self):
         for match in self._matches:
-            match.play_full_match()
+            abort_current_match = False
+            penalized_player = None
+            signal.signal(signal.SIGALRM, self.timeout_handler)
+            for player in match.get_players():
+                signal.setitimer(signal.ITIMER_REAL,self._prepare_time_limit)
+                try:
+                    player.prepare()
+                except TimeLimitReached:
+                    abort_current_match = True
+                    penalized_player = player
+                signal.alarm(0)
             players = match.get_players()
-            player_one_strategy_name = players[0].get_strategy_name()
-            player_two_strategy_name = players[1].get_strategy_name()
-            if match.who_won() is not None:
-                self._scores_dict[match.who_won().get_strategy_name()] += 3
-                self._results_table.append((
-                    player_one_strategy_name,
-                    player_two_strategy_name,
-                    match.who_won().get_strategy_name()))
+            if not abort_current_match:
+                while not match.is_over():
+                    match.play_next_turn()
+                player_one_strategy_name = players[0].get_strategy_name()
+                player_two_strategy_name = players[1].get_strategy_name()
+                if match.who_won() is not None:
+                    self._scores_dict[match.who_won().get_strategy_name()] += 3
+                    self._results_table.append((
+                        player_one_strategy_name,
+                        player_two_strategy_name,
+                        match.who_won().get_strategy_name()))
+                else:
+                    self._scores_dict[player_one_strategy_name] += 1
+                    self._scores_dict[player_two_strategy_name] += 1
+                    self._results_table.append([
+                        player_one_strategy_name,
+                        player_two_strategy_name,
+                        None])
             else:
-                self._scores_dict[player_one_strategy_name] += 1
-                self._scores_dict[player_two_strategy_name] += 1
+                player_one_strategy_name = players[0].get_strategy_name()
+                player_two_strategy_name = players[1].get_strategy_name()
+                for index, player in enumerate(players):
+                    if penalized_player == player:
+                        penalized_player_strategy_name = players[index].get_strategy_name()
+                    else:
+                        non_penalized_player_strategy_name = players[index].get_strategy_name()
+                self._scores_dict[penalized_player_strategy_name] += 0
+                self._scores_dict[non_penalized_player_strategy_name] += 3
                 self._results_table.append([
-                    player_one_strategy_name,
-                    player_two_strategy_name,
-                    None])
+                        player_one_strategy_name,
+                        player_two_strategy_name,
+                        non_penalized_player_strategy_name])

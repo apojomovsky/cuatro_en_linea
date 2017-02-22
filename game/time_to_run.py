@@ -1,6 +1,10 @@
 import time
 from copy import copy
 
+class TimeLimitReached(Exception):
+    def __init___(self, time_limit):
+        self.time_limit = time_limit
+
 class TimeLimitsCalculator(object):
     def __init__(self):
         self.prepare_time_limit = None
@@ -8,7 +12,7 @@ class TimeLimitsCalculator(object):
 
     def run(self):
         self.prepare_time_limit = self.time_to_complete(35)
-        self.play_time_limit = self.time_to_complete(24)
+        self.play_time_limit = self.time_to_complete(30)
 
     def fib(self, n):
         if n == 0: return 0
