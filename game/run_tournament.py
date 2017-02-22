@@ -18,7 +18,7 @@ if __name__ == "__main__":
     try:
         tournament = Tournament(strategies)
     except NotEnoughStrategies:
-        print "A minimum of 2 strategies is needed to play a tournament"
+        print "A minimum of 3 strategies is needed to play a tournament"
         sys.exit(1)
     tournament.run()
     tournament_view = TournamentView(tournament)
