@@ -63,19 +63,20 @@ $ python setup.py develop
 - To run a new match you should make use of the `run_game.py` script, also placed inside the `game/` directory
 - For this, open the file `run_game.py` on your favorite text editor (vim, for instance :P), and add your strategy class to the list of imports, just as the example below:
 ```
-from my_super_duper_strategy import MySuperDuperStrategyClass
+from super_duper_strategy import SuperDuperStrategyClass
 ```
-- After that, you'll need to add your strategy to the loockup_strategies dictionary, for which we recommend to follow the same convention:
+- After that, you'll need to add your strategy to the lookup_strategies dictionary, for which we recommend to follow the same convention:
 ```
-loockup_strategies = {
+lookup_strategies = {
 		(...)
-    'my_super_duper_strategy': MySuperDuperStrategy
+    'super_duper': SuperDuperStrategy
 }
 ```
-- If everything went OK, now you should be able to play a match against any of the strategies placed inside the loockup dictionary, so let's play a match!
+- If everything went OK, now you should be able to play a match against any of the strategies placed inside the lookup dictionary, so let's play a match!
 - In order to run a match, you'll need to provide both strategies names as arguments, followed by the rate at which you want each move to be done, let's see an example:
 ```
-alexis@alexis-ThinkPad:~/cuatro_en_linea/game$ python run_game.py --player-one closest_to_win_column --player-two my_super_duper_strategy --rate 0.5
+$ cd game/
+$ python run_game.py --player-one closest_to_win_column --player-two my_super_duper_strategy --rate 0.5
 ```
 - This will spawn a new game, and you'll be able to see the evolution of the game turn by turn. An example of what is shown in the middle of a gameplay is shown above:
 ```
@@ -87,7 +88,14 @@ W    None None None None None None
 W    B    B    None None None None
 
 ```
-- After the game has finished you'll see a message with the result of the match
+- After the game has finished you'll see a message with the result of the match, for example:
+```
+Color W won!
+```
+or
+```
+Nobody won!
+```
 
 ## Running a Tournament
 - You can run a tournament between an arbitrary number of strategies.
@@ -95,17 +103,18 @@ W    B    B    None None None None
 ```
 strategies = (
 	ClosestToWinColumn,
-	MySuperDuperStrategy,
+	SuperDuperStrategy,
 	TheBestStrategyEver
 )
 ```
 - A minimum of three strategies are needed in order to run a tournament, an exception will be raised otherwise
 - After filling the list with the desired strategies to play, save the file and run the script in the following way:
 ```
-alexis@alexis-ThinkPad:~/cuatro_en_linea/game$ python run_tournament.py
+$ cd game/
+$ python run_tournament.py
 ```
 - The all the matches will run automatically at this point, one after the other.
-- After all the matches have run, a table with the results of each of them will, followed by a summary with the score earned by each of the strategies and the name of the winner. You can see an example below:
+- After all the matches have run, a table with the results of each of them will be displayed, followed by a summary with the score earned by each of the strategies and the name of the winner. You can see an example below:
 ```
 Results table:
 Player1                     Player2                     Winner
