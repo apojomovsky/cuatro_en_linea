@@ -11,25 +11,21 @@ class NotEnoughStrategies(Exception):
         self.number_of_strategies = number_of_strategies
 
 class Tournament(object):
+    PREPARE_TIME_LIMIT = 5
+    PLAY_TIME_LIMIT = 0.5
     def __init__(self, strategies):
         if len(strategies) < 3:
             raise NotEnoughStrategies(len(strategies))
         self._pairs_of_strategies = list(itertools.permutations(strategies, 2))
         self._number_of_matches = len(self._pairs_of_strategies)
         self._strategies_names = [type(strategy()).__name__ for strategy in strategies]
+        self._scores_dict = {}
+        for name in self._strategies_names:
+            self._scores_dict[name] = 0
         self._matches_per_strategy = 2 * (self._number_of_matches - 1)
         self._matches = []
         self._results_table = []
         self.generate_matches()
-        self._scores_dict = {}
-        self.time_calculator = TimeLimitsCalculator()
-        self.time_calculator.run()
-        self._prepare_time_limit = self.time_calculator.get_prepare_limit()
-        self._play_time_limit = self.time_calculator.get_play_limit()
-        print "Prepare time limit: {}".format(self._prepare_time_limit)
-        print "Play time limit: {}".format(self._play_time_limit)
-        for name in self._strategies_names:
-            self._scores_dict[name] = 0
 
     def generate_matches(self):
         for pair_of_strategies in self._pairs_of_strategies:
@@ -53,7 +49,7 @@ class Tournament(object):
             penalized_player = None
             signal.signal(signal.SIGALRM, self.timeout_handler)
             for player in match.get_players():
-                signal.setitimer(signal.ITIMER_REAL,self._prepare_time_limit)
+                signal.setitimer(signal.ITIMER_REAL,self.PREPARE_TIME_LIMIT)
                 try:
                     player.prepare()
                 except TimeLimitReached:
