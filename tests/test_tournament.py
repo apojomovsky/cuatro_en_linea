@@ -24,7 +24,6 @@ class TestTournament(unittest.TestCase):
             Tournament(list_of_strategies)
 
     def test_generate_matches_with_two_strategies(self):
-        list_of_strategies = [EmptiestColumnStrategy, EmptiestColumnStrategy]
-        Tournament(list_of_strategies)
-
-    #def test_run_
+        with self.assertRaises(NotEnoughStrategies):
+            list_of_strategies = [EmptiestColumnStrategy, EmptiestColumnStrategy]
+            Tournament(list_of_strategies)

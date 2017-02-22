@@ -59,6 +59,7 @@ class Tournament(object):
                 except TimeLimitReached:
                     abort_current_match = True
                     penalized_player = player
+                    break
                 signal.alarm(0)
             players = match.get_players()
             if not abort_current_match:
