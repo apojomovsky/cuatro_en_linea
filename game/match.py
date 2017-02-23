@@ -39,6 +39,9 @@ class Match(object):
                 return player
         return None
 
+    def get_active_player(self):
+        return self._active_player
+        
     def get_players(self):
         return (self._player_one, self._player_two)
 
