@@ -3,7 +3,7 @@ from player import Player
 from itertools import cycle
 
 class GameIsOver(Exception):
-    def __init___(self, winner):
+    def __init__(self, winner):
         self.winner = winner
 
 class Match(object):
