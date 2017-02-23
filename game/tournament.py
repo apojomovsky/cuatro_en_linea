@@ -7,7 +7,7 @@ from time_to_run import TimeLimitsCalculator
 from time_to_run import TimeLimitReached
 
 class NotEnoughStrategies(Exception):
-    def __init___(self, number_of_strategies):
+    def __init__(self, number_of_strategies):
         self.number_of_strategies = number_of_strategies
 
 class Tournament(object):

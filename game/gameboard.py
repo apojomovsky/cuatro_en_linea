@@ -4,15 +4,15 @@ from itertools import groupby
 from copy import copy
 
 class ColumnIsFull(Exception):
-    def __init___(self, column_index):
+    def __init__(self, column_index):
         self.failedcolumn_index = column_index
 
 class BoardIsFull(Exception):
-    def __init___(self, matrix):
+    def __init__(self, matrix):
         self.matrix = matrix
 
 class OutOfIndex(Exception):
-    def __init___(self, errArguments):
+    def __init__(self, errArguments):
         self.array_type = errArguments['type']
         self.index = errArguments['index']
 

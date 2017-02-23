@@ -2,7 +2,7 @@ import time
 from copy import copy
 
 class TimeLimitReached(Exception):
-    def __init___(self, time_limit):
+    def __init__(self, time_limit):
         self.time_limit = time_limit
 
 class TimeLimitsCalculator(object):
