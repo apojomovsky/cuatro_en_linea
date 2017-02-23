@@ -1,4 +1,5 @@
 import sys
+import argparse
 from tournament import Tournament
 from tournament import NotEnoughStrategies
 from tournament_view import TournamentView
@@ -15,8 +16,16 @@ strategies = (
 )
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='Runs a new tournament of the Connect Four game')
+    parser.add_argument('--play-timeout', action='store', dest='play_timeout',
+                        default=0.5, help="Time limit for each play")
+    parser.add_argument('--prepare-timeout', action='store', dest='prepare_timeout',
+                        default=5, help="Time limit for the prepare of each strategy")
+    args = parser.parse_args()
     try:
-        tournament = Tournament(strategies)
+        tournament = Tournament(strategies,
+                                prepare_time_limit = args.prepare_timeout,
+                                play_time_limit = args.play_timeout)
     except NotEnoughStrategies:
         print "A minimum of 3 strategies is needed to play a tournament"
         sys.exit(1)
