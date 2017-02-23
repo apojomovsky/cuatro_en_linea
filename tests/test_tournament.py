@@ -46,9 +46,7 @@ class TestTournament(unittest.TestCase):
            won't win even a single match on the tournament
         """
         strategies = [DummyStrategy1, DummyStrategy4, DummyStrategy3]
-        tournament = Tournament(strategies)
-        # re-defines prepare_time_limits on the fly to make tests run faster
-        tournament.PLAY_TIME_LIMIT = 0.05
+        tournament = Tournament(strategies, play_time_limit=0.05)
         tournament.run()
         results = tournament.get_results_table()
         winners = [result[2] for result in results]
@@ -59,9 +57,7 @@ class TestTournament(unittest.TestCase):
            won't win even a single match on the tournament
         """
         strategies = [DummyStrategy1, DummyStrategy4, DummyStrategy2]
-        tournament = Tournament(strategies)
-        # re-defines prepare_time_limits on the fly to make tests run faster
-        tournament.PREPARE_TIME_LIMIT = 0.05
+        tournament = Tournament(strategies, prepare_time_limit=0.05)
         tournament.run()
         results = tournament.get_results_table()
         winners = [result[2] for result in results]

@@ -11,9 +11,9 @@ class NotEnoughStrategies(Exception):
         self.number_of_strategies = number_of_strategies
 
 class Tournament(object):
-    PREPARE_TIME_LIMIT = 5
-    PLAY_TIME_LIMIT = 0.5
-    def __init__(self, strategies):
+    def __init__(self, strategies, prepare_time_limit=5, play_time_limit=0.5):
+        self.prepare_time_limit = prepare_time_limit
+        self.play_time_limit = play_time_limit
         if len(strategies) < 3:
             raise NotEnoughStrategies(len(strategies))
         self._pairs_of_strategies = list(itertools.permutations(strategies, 2))
@@ -52,7 +52,7 @@ class Tournament(object):
             penalized_player = None
             signal.signal(signal.SIGALRM, self._timeout_handler)
             for player in match.get_players():
-                signal.setitimer(signal.ITIMER_REAL,self.PREPARE_TIME_LIMIT)
+                signal.setitimer(signal.ITIMER_REAL,self.prepare_time_limit)
                 try:
                     player.prepare()
                 except TimeLimitReached:
@@ -63,7 +63,7 @@ class Tournament(object):
             players = match.get_players()
             if not abort_current_match:
                 while not match.is_over():
-                    signal.setitimer(signal.ITIMER_REAL,self.PLAY_TIME_LIMIT)
+                    signal.setitimer(signal.ITIMER_REAL,self.play_time_limit)
                     try:
                         match.play_next_turn()
                     except TimeLimitReached:
