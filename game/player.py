@@ -28,6 +28,6 @@ class Player(object):
             if column_to_play in range(1, GameBoard.COLUMNSCOUNT + 1):
                 board.put_chip(column_to_play, self._color)
             else:
-                raise OutOfIndex
+                raise OutOfIndex({'type': 'column', 'number': column_to_play})
         else:
             raise BoardIsFull
