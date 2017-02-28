@@ -13,8 +13,8 @@ class BoardIsFull(Exception):
 
 class OutOfIndex(Exception):
     def __init__(self, errArguments):
-        self.array_type = errArguments['type']
-        self.index = errArguments['index']
+        self.array_type = errArguments.get('type', None)
+        self.index = errArguments.get('index', None)
 
 
 class GameBoard(object):

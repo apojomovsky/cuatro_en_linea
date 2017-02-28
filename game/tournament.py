@@ -24,6 +24,7 @@ class Tournament(object):
             self._scores_dict[name] = 0
         self._matches_per_strategy = 2 * (self._number_of_matches - 1)
         self._matches = []
+        self._timeout = None
         self._results_table = []
         self._generate_matches()
 
@@ -44,7 +45,7 @@ class Tournament(object):
         return self._scores_dict
 
     def _timeout_handler(self, arg1, arg2):
-        raise TimeLimitReached
+        raise TimeLimitReached(self._timeout)
 
     def run(self):
         for match in self._matches:
@@ -52,6 +53,7 @@ class Tournament(object):
             penalized_player = None
             signal.signal(signal.SIGALRM, self._timeout_handler)
             for player in match.get_players():
+                self._timeout = self.prepare_time_limit
                 signal.setitimer(signal.ITIMER_REAL,self.prepare_time_limit)
                 try:
                     player.prepare()
@@ -63,6 +65,7 @@ class Tournament(object):
             players = match.get_players()
             if not abort_current_match:
                 while not match.is_over():
+                    self._timeout = self.play_time_limit
                     signal.setitimer(signal.ITIMER_REAL,self.play_time_limit)
                     try:
                         match.play_next_turn()
