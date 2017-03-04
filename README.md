@@ -2,13 +2,14 @@
 Basic implementation of the `connect four` game, using the OOP paradigm.
 
 ## Install with virtualenv
-Builds are performed against Ubuntu 16.04 and Python 2.7.9. Follow these steps to get such a setup in a separate virtual environment:
+Builds are performed against Ubuntu 16.04 and Python 2.7.9, but has also been tested working against Ubuntu 14.04. Follow these steps to get such a setup in a separate virtual environment:
 - Install virtualenv:
 ```
 $ sudo apt-get install wget python-virtualenv
 ```
 - Download and compile Python 2.7.9:
 ```
+$ sudo apt-get build-dep python2.7
 $ cd ~
 $ mkdir PythonInstalls
 $ cd PythonInstalls
