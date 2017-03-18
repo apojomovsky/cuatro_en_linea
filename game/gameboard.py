@@ -50,6 +50,20 @@ class GameBoard(object):
             representation = representation + "\n"
         return representation
 
+    def __hash__(self):
+        value = 0
+        for row in self._matrix:
+            row_value = 0
+            for entry in row:
+                if entry == 'W':
+                    row_value += 1
+                elif entry == 'B':
+                    row_value += 2
+                row_value = row_value << 2
+            value += row_value
+            value = value << 6
+        return value
+
     def columns_count(self):
         return self.COLUMNSCOUNT
 
@@ -363,3 +377,4 @@ class GameBoard(object):
             else:
                 continue
         return False
+
